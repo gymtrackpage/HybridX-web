@@ -1,13 +1,15 @@
 
+import React from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle } from '@/components/ui/sheet';
-import { Menu, LogIn, ChevronDown, Route, X, TrendingUp, HeartPulse, Timer } from 'lucide-react'; 
+import { Menu, LogIn, ChevronDown, Route, X, TrendingUp, HeartPulse, Timer, ListChecks } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 
 interface NavItem {
@@ -22,21 +24,24 @@ interface SubNavItem {
   label: string;
   href: string;
   icon?: React.ReactNode;
+  isSeparator?: boolean;
 }
 
 const navItems: NavItem[] = [
   { label: 'Training Plans', href: '#training-plans' },
   { label: 'Our App', href: '#app-promotion' },
   { label: 'Books', href: '#book-promotion' },
-  { 
-    label: 'Calculators', 
-    isDropdown: true, 
+  {
+    label: 'Calculators',
+    isDropdown: true,
     items: [
+      { label: 'Running Calculators Overview', href: '/calculators/running', icon: <ListChecks className="mr-2 h-5 w-5" /> },
+      { isSeparator: true, label: 'separator1', href: '#' }, // Placeholder href for key
       { label: 'Pace Calculator', href: '/calculators/pace-calculator', icon: <Route className="mr-2 h-5 w-5" /> },
       { label: 'Race Time Predictor', href: '/calculators/race-time-predictor', icon: <TrendingUp className="mr-2 h-5 w-5" /> },
       { label: 'Heart Rate Zones', href: '/calculators/heart-rate-zone-calculator', icon: <HeartPulse className="mr-2 h-5 w-5" /> },
       { label: 'Split Time Calculator', href: '/calculators/split-time-calculator', icon: <Timer className="mr-2 h-5 w-5" /> },
-    ] 
+    ]
   },
   { label: 'FAQ', href: '#faq' },
   { label: 'Contact', href: '#contact' },
@@ -60,11 +65,15 @@ export default function Header() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="bg-background border-border/60">
                   {item.items.map(subItem => (
-                    <DropdownMenuItem key={subItem.label} asChild className="hover:bg-accent/10 focus:bg-accent/10">
-                      <Link href={subItem.href} className="font-body text-foreground/90 flex items-center">
-                        {subItem.icon} {subItem.label}
-                      </Link>
-                    </DropdownMenuItem>
+                    subItem.isSeparator ? (
+                      <DropdownMenuSeparator key={subItem.label} className="my-1" />
+                    ) : (
+                      <DropdownMenuItem key={subItem.label} asChild className="hover:bg-accent/10 focus:bg-accent/10">
+                        <Link href={subItem.href} className="font-body text-foreground/90 flex items-center">
+                          {subItem.icon} {subItem.label}
+                        </Link>
+                      </DropdownMenuItem>
+                    )
                   ))}
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -91,7 +100,7 @@ export default function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-[300px] sm:w-[320px] bg-background p-6 border-l-border/60">
-              <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+              <SheetTitle className="sr-only">Mobile Navigation Menu</SheetTitle>
                <div className="flex justify-between items-center mb-8">
                  <Link href="/" className="flex items-center space-x-2">
                     <span className="font-bold font-headline text-xl text-primary">HybridX Hub</span>
@@ -104,21 +113,25 @@ export default function Header() {
                 </SheetClose>
                </div>
               <nav className="flex flex-col space-y-1">
-                {navItems.flatMap((item) => 
+                {navItems.flatMap((item, index) =>
                   item.isDropdown && item.items ? (
-                    <>
+                    <React.Fragment key={`${item.label}-${index}`}>
                       <p className="px-3 py-3 text-base font-headline text-foreground/70">{item.label}</p>
                       {item.items.map(subItem => (
-                        <SheetClose asChild key={subItem.label}>
-                          <Link
-                            href={subItem.href}
-                            className="flex items-center rounded-md px-3 py-3 transition-colors hover:bg-accent/10 text-base font-headline text-foreground/90 ml-3"
-                          >
-                            {subItem.icon} {subItem.label}
-                          </Link>
-                        </SheetClose>
+                        subItem.isSeparator ? (
+                          <hr key={subItem.label} className="my-2 border-border/30" />
+                        ) : (
+                          <SheetClose asChild key={subItem.label}>
+                            <Link
+                              href={subItem.href}
+                              className="flex items-center rounded-md px-3 py-3 transition-colors hover:bg-accent/10 text-base font-headline text-foreground/90 ml-3"
+                            >
+                              {subItem.icon} {subItem.label}
+                            </Link>
+                          </SheetClose>
+                        )
                       ))}
-                    </>
+                    </React.Fragment>
                   ) : (
                     <SheetClose asChild key={item.label}>
                       <Link
