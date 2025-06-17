@@ -6,22 +6,28 @@ import Link from 'next/link';
 
 const books = [
   {
-    id: 'book1',
-    title: 'Hybrid Athlete\'s Deep Dive',
-    description: 'Unlock the science and strategy behind peak hybrid performance. Essential reading for serious athletes.',
-    imageUrl: 'https://placehold.co/300x450.png',
-    imageHint: 'dynamic fitness book',
-    amazonUrl: '#', 
-    ctaText: 'Get Your Copy',
+    id: 'hyrox-12-week-prep',
+    title: "Hyrox 12 Week Training Plan for Hyrox Race Preparation",
+    description: "This comprehensive training guide is designed to help athletes of all levels excel in Hyrox and similar hybrid fitness events. Rooted in science and practical application, the book provides an in-depth approach to mastering Hyrox-specific movements, optimising running performance, and building the strength required to succeed. Each section is packed with expert advice, technique breakdowns, progressive training strategies, and common pitfalls to avoid, ensuring athletes can train effectively and efficiently. Whether you’re preparing for your first race or aiming for a competitive edge, this guide equips you with the knowledge and tools to enhance your fitness, improve your performance, and confidently tackle the demands of hybrid sports.",
+    imageUrl: "https://m.media-amazon.com/images/S/aplus-media-library-service-media/d555d4e2-4284-4579-a41f-2af4bec009bd.__CR250,0,500,666_PT0_SX300_V1___.png",
+    amazonUrl: "https://amzn.to/3SSh8sz",
+    ctaText: "Get Your Copy",
   },
   {
-    id: 'book2',
-    title: 'Cardio & Strength Synergy',
-    description: 'Master the art of concurrent training. Build elite endurance without sacrificing strength gains. Includes advanced protocols.',
-    imageUrl: 'https://placehold.co/300x450.png',
-    imageHint: 'synergy training book',
-    amazonUrl: '#', 
-    ctaText: 'View on Amazon',
+    id: 'elite-hyrox-training-plan',
+    title: "Elite Hyrox Training Plan - 12 Week Training Plan for Hyrox Race Preparation",
+    description: "This comprehensive training guide is designed to help athletes of all levels excel in Hyrox and similar hybrid fitness events. Rooted in science and practical application, the book provides an unique and highly effective approach to training for Hyrox by optimising the energy systems in the most effective method. Building a high level anaerobic strength and power alongside the aerobic capacity required to succeed.",
+    imageUrl: "https://m.media-amazon.com/images/S/aplus-media-library-service-media/b9871c7d-2cc7-4004-8416-c3e18450520e.__CR350,0,1400,1400_PT0_SX300_V1___.png",
+    amazonUrl: "https://amzn.to/44jOd74",
+    ctaText: "Get Your Copy",
+  },
+  {
+    id: 'train-for-hyrox-at-home',
+    title: "Train for Hyrox at Home - 12 Week Training Plan",
+    description: "Prepare for your Hyrox event with \"Train for Hyrox at Home,\" the 12-week beginner's training program designed for results without needing a gym. If you're new to Hyrox or hybrid fitness, this guide introduces you to the 8km of running and 8 functional workout stations, providing a clear, step-by-step path to success. You'll learn how to creatively use minimal equipment – just your own bodyweight, a versatile loaded backpack, durable resistance bands, and a single kettlebell or dumbbell – to build comprehensive functional strength and race-day endurance. This plan features detailed at-home workout alternatives for every Hyrox station, including SkiErg simulations using bands , effective sled push alternatives like towel pushes on smooth surfaces or powerful hill sprints with your backpack , and smart sandbag lunge variations using your weighted backpack. Master the crucial skill of compromised running through engaging outdoor running workouts, leveraging stair climbs for power , park workouts for variety, and integrated bodyweight circuits to boost both strength and conditioning. This full-body workout plan is more than just exercise; it’s a full training plan to uncover your potential, improve your running technique, and achieve your fitness goals, whether that's weight loss, enhanced athletic performance, or completing your first Hyrox event.",
+    imageUrl: "https://m.media-amazon.com/images/I/61kK7bA85OL._SY466_.jpg",
+    amazonUrl: "https://amzn.to/445PMV1",
+    ctaText: "Get Your Copy",
   },
 ];
 
@@ -48,7 +54,6 @@ export default function AmazonBookPromotion() {
                     alt={book.title}
                     layout="fill"
                     objectFit="cover"
-                    data-ai-hint={book.imageHint}
                     className="rounded-t-lg sm:rounded-l-lg sm:rounded-tr-none group-hover:scale-105 transition-transform duration-500 ease-out"
                   />
                 </div>
