@@ -3,13 +3,12 @@ import React from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle } from '@/components/ui/sheet';
-import { Menu, LogIn, ChevronDown, Route, TrendingUp, HeartPulse, Timer, ListChecks, Dumbbell, Target, Trophy, Percent, ClipboardList, Utensils } from 'lucide-react';
+import { Menu, LogIn, ChevronDown, ListChecks, Dumbbell, ClipboardList } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 
 interface NavItem {
@@ -22,9 +21,8 @@ interface NavItem {
 
 interface SubNavItem {
   label: string;
-  href: string; 
+  href: string;
   icon?: React.ReactNode;
-  isSeparator?: boolean;
 }
 
 const navItems: NavItem[] = [
@@ -35,19 +33,9 @@ const navItems: NavItem[] = [
     label: 'Calculators',
     isDropdown: true,
     items: [
-      { label: 'Running Calculators Overview', href: '/calculators/running', icon: <ListChecks className="mr-2 h-5 w-5" /> },
-      { isSeparator: true, label: 'Running Tools', href: '#' }, 
-      { label: 'Pace Calculator', href: '/calculators/pace-calculator', icon: <Route className="mr-2 h-5 w-5" /> },
-      { label: 'Race Time Predictor', href: '/calculators/race-time-predictor', icon: <TrendingUp className="mr-2 h-5 w-5" /> },
-      { label: 'Heart Rate Zones', href: '/calculators/heart-rate-zone-calculator', icon: <HeartPulse className="mr-2 h-5 w-5" /> },
-      { label: 'Split Time Calculator', href: '/calculators/split-time-calculator', icon: <Timer className="mr-2 h-5 w-5" /> },
-      { isSeparator: true, label: 'Strength Tools', href: '#' },
-      { label: '1RM Calculator', href: '/calculators/one-rep-max-calculator', icon: <Dumbbell className="mr-2 h-5 w-5" /> },
-      { label: 'Percentage Weight Calculator', href: '/calculators/percentage-based-weight-calculator', icon: <Target className="mr-2 h-5 w-5" /> },
-      { label: 'Powerlifting Score Calculator', href: '/calculators/powerlifting-score-calculator', icon: <Trophy className="mr-2 h-5 w-5" /> },
-      { isSeparator: true, label: 'General Health Tools', href: '#' },
-      { label: 'Body Fat Calculator', href: '/calculators/body-fat-calculator', icon: <Percent className="mr-2 h-5 w-5" /> },
-      { label: 'Calorie & Macro Calculator', href: '/calculators/calorie-macronutrient-calculator', icon: <Utensils className="mr-2 h-5 w-5" /> },
+      { label: 'Running Calculators', href: '/calculators/running', icon: <ListChecks className="mr-2 h-5 w-5" /> },
+      { label: 'Strength Calculators', href: '/calculators/strength', icon: <Dumbbell className="mr-2 h-5 w-5" /> },
+      { label: 'General Health Calculators', href: '/calculators/general-health', icon: <ClipboardList className="mr-2 h-5 w-5" /> },
     ]
   },
   { label: 'FAQ', href: '#faq' },
@@ -72,29 +60,11 @@ export default function Header() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="bg-background border-border/60">
                   {item.items.map(subItem => (
-                    subItem.isSeparator ? (
-                      subItem.label.toLowerCase().includes("tools") ? (
-                        <React.Fragment key={subItem.label}>
-                          <DropdownMenuSeparator className="my-1" />
-                          <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground flex items-center">
-                            {
-                              subItem.label.toLowerCase().includes("running") ? <ListChecks className="mr-2 h-4 w-4" /> :
-                              subItem.label.toLowerCase().includes("strength") ? <Dumbbell className="mr-2 h-4 w-4" /> :
-                              subItem.label.toLowerCase().includes("health") ? <ClipboardList className="mr-2 h-4 w-4" /> : null
-                            }
-                            {subItem.label}
-                          </p>
-                        </React.Fragment>
-                      ) : (
-                        <DropdownMenuSeparator key={subItem.label} className="my-1" />
-                      )
-                    ) : (
-                      <DropdownMenuItem key={subItem.label} asChild className="hover:bg-accent/10 focus:bg-accent/10">
-                        <Link href={subItem.href} className="font-body text-foreground/90 flex items-center">
-                          {subItem.icon} {subItem.label}
-                        </Link>
-                      </DropdownMenuItem>
-                    )
+                    <DropdownMenuItem key={subItem.label} asChild className="hover:bg-accent/10 focus:bg-accent/10">
+                      <Link href={subItem.href} className="font-body text-foreground/90 flex items-center">
+                        {subItem.icon} {subItem.label}
+                      </Link>
+                    </DropdownMenuItem>
                   ))}
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -128,34 +98,19 @@ export default function Header() {
                </div>
                <SheetTitle className="sr-only">Mobile Navigation</SheetTitle>
               <nav className="flex flex-col space-y-1">
-                {navItems.flatMap((item, index) =>
+                {navItems.map((item, index) =>
                   item.isDropdown && item.items ? (
                     <React.Fragment key={`${item.label}-${index}`}>
                       <p className="px-3 py-3 text-lg font-headline text-primary">{item.label}</p>
                       {item.items.map(subItem => (
-                        subItem.isSeparator ? (
-                          subItem.label.toLowerCase().includes("tools") ? (
-                            <p key={subItem.label} className="px-3 pt-3 pb-1 text-sm font-medium text-foreground/70 ml-1 flex items-center">
-                               {
-                                subItem.label.toLowerCase().includes("running") ? <ListChecks className="mr-2 h-4 w-4" /> :
-                                subItem.label.toLowerCase().includes("strength") ? <Dumbbell className="mr-2 h-4 w-4" /> :
-                                subItem.label.toLowerCase().includes("health") ? <ClipboardList className="mr-2 h-4 w-4" /> : null
-                               }
-                              {subItem.label}
-                            </p>
-                          ) : (
-                            <hr key={subItem.label} className="my-2 border-border/30" />
-                          )
-                        ) : (
-                          <SheetClose asChild key={subItem.label}>
-                            <Link
-                              href={subItem.href}
-                              className="flex items-center rounded-md px-3 py-3 transition-colors hover:bg-accent/10 text-base font-body text-foreground/90 ml-3"
-                            >
-                              {subItem.icon} {subItem.label}
-                            </Link>
-                          </SheetClose>
-                        )
+                        <SheetClose asChild key={subItem.label}>
+                          <Link
+                            href={subItem.href}
+                            className="flex items-center rounded-md px-3 py-3 transition-colors hover:bg-accent/10 text-base font-body text-foreground/90 ml-3"
+                          >
+                            {subItem.icon} {subItem.label}
+                          </Link>
+                        </SheetClose>
                       ))}
                     </React.Fragment>
                   ) : (
