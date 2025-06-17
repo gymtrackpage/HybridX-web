@@ -55,11 +55,18 @@ export default function SplitTimeCalculatorForm() {
 
   useEffect(() => {
     setError(null);
-    if (!gpxFile) { // Only reset splits if GPX file is removed, not on other input changes
-      setCalculatedSplits(null);
-      setParsedGpxData(null);
-    }
-  }, [targetDistance, distanceUnit, targetHours, targetMinutes, targetSeconds, splitInterval, splitUnit, gpxFile]);
+    setCalculatedSplits(null);
+  }, [
+    targetDistance, 
+    distanceUnit, 
+    targetHours, 
+    targetMinutes, 
+    targetSeconds, 
+    splitInterval, 
+    splitUnit, 
+    gpxFile, // if gpxFile presence changes, old splits are invalid
+    parsedGpxData // if parsed data changes (new file), old splits are invalid
+  ]);
 
 
   const parseTimeToSeconds = (h: string, m: string, s: string): number => {
@@ -97,6 +104,7 @@ export default function SplitTimeCalculatorForm() {
       setError(null);
       setParsedGpxData(null);
       setCalculatedSplits(null);
+      setGpxTotalDistanceKm(null); // Reset explicitly before parsing
       setIsLoading(true);
 
       try {
@@ -105,6 +113,8 @@ export default function SplitTimeCalculatorForm() {
         if (gpx.tracks.length === 0 || gpx.tracks[0].points.length === 0) {
           setError('GPX file contains no track points.');
           setIsLoading(false);
+          setGpxFile(null); // Clear file if invalid
+          setGpxFileName('');
           return;
         }
 
@@ -136,9 +146,17 @@ export default function SplitTimeCalculatorForm() {
         setError('Failed to parse GPX file. Please ensure it is a valid GPX.');
         setGpxFile(null);
         setGpxFileName('');
+        setGpxTotalDistanceKm(null);
+        setParsedGpxData(null);
       } finally {
         setIsLoading(false);
       }
+    } else { // No file selected or selection cleared
+        setGpxFile(null);
+        setGpxFileName('');
+        setParsedGpxData(null);
+        setGpxTotalDistanceKm(null);
+        // Optionally clear targetDistance or leave it if user wants to switch to manual
     }
   };
   
@@ -165,7 +183,7 @@ export default function SplitTimeCalculatorForm() {
     }
     // Ensure the last point is included
     const lastPoint = profile[profile.length - 1];
-    if (sampledProfile[sampledProfile.length-1].distanceKm < lastPoint.distanceKm ) {
+    if (sampledProfile.length > 0 && sampledProfile[sampledProfile.length-1].distanceKm < lastPoint.distanceKm ) {
          sampledProfile.push({ distanceKm: lastPoint.distanceKm, elevationMeters: lastPoint.elevation });
     }
     return sampledProfile.filter(p => !isNaN(p.distanceKm) && !isNaN(p.elevationMeters));
@@ -194,12 +212,20 @@ export default function SplitTimeCalculatorForm() {
     const splitIntervalKm = splitUnit === 'km' ? splitIntervalNum : splitIntervalNum * KM_IN_MILES;
 
     let currentTargetDistanceKm: number;
-    if (gpxFile && gpxTotalDistanceKm) {
-        currentTargetDistanceKm = gpxTotalDistanceKm;
-    } else {
+
+    if (gpxFile) { 
+        if (typeof gpxTotalDistanceKm === 'number') { // Check if gpxTotalDistanceKm is a number (can be 0)
+            currentTargetDistanceKm = gpxTotalDistanceKm;
+        } else {
+            // This case means gpxFile is set, but gpxTotalDistanceKm isn't a number (e.g., still null due to parsing issue).
+            setError('Could not determine distance from the uploaded GPX file. Please check the file or remove it to enter distance manually.');
+            setIsLoading(false);
+            return;
+        }
+    } else { // No GPX file, use manual input
         const distNum = parseFloat(targetDistance);
         if (isNaN(distNum) || distNum <= 0) {
-            setError('Please enter a valid target distance if not using GPX.');
+            setError('Please enter a valid target distance.');
             setIsLoading(false);
             return;
         }
@@ -207,12 +233,12 @@ export default function SplitTimeCalculatorForm() {
     }
 
 
-    if (parsedGpxData && parsedGpxData.length > 0) {
+    if (parsedGpxData && parsedGpxData.length > 0 && gpxFile) { // Ensure gpxFile is still considered primary for AI splits
         // AI-powered splits
         try {
             const flowInputData = processGpxDataForFlow(parsedGpxData);
             if (flowInputData.length < 2) {
-                setError('Not enough data points from GPX to determine elevation profile for AI splits. Try basic splits.');
+                setError('Not enough data points from GPX to determine elevation profile for AI splits. Try basic splits or check GPX file.');
                 setIsLoading(false);
                 return;
             }
@@ -227,45 +253,67 @@ export default function SplitTimeCalculatorForm() {
             const formattedAiSplits: CalculatedSplit[] = aiSplits.map(s => ({
                 segment: `Split ${s.splitNumber} (${s.splitDistanceKm.toFixed(2)} km)`,
                 time: formatSecondsToTime(s.recommendedTimeSeconds, totalTimeSec > 3600),
-                pace: `${formatSecondsToTime(s.averagePaceMinPerKm, false)}/km`,
+                pace: `${formatSecondsToTime(s.averagePaceMinPerKm * 60, false)}/km`, // averagePaceMinPerKm to seconds then format
                 notes: s.notes,
             }));
             setCalculatedSplits(formattedAiSplits);
             toast({ title: "AI Splits Generated", description: "Elevation-adjusted splits calculated successfully." });
         } catch (aiError: any) {
             console.error("AI Split Calculation Error:", aiError);
-            setError(`AI split calculation failed: ${aiError.message || 'Unknown error'}. You can try basic splits.`);
+            setError(`AI split calculation failed: ${aiError.message || 'Unknown error'}. You can try basic splits or check the GPX file.`);
             toast({ variant: "destructive", title: "AI Error", description: `Could not generate AI splits: ${aiError.message}` });
         }
     } else {
       // Basic even splits
-      const numSplits = Math.floor(currentTargetDistanceKm / splitIntervalKm);
-      if (numSplits <= 0) {
-        setError('Target distance is less than one split interval.');
+      if (currentTargetDistanceKm === 0 && totalTimeSec > 0) {
+        setError('Cannot calculate splits for a 0 distance with a positive time. Please check your inputs.');
         setIsLoading(false);
         return;
       }
-      const timePerKm = totalTimeSec / currentTargetDistanceKm;
-      const timePerSplit = timePerKm * splitIntervalKm;
+      if (currentTargetDistanceKm < splitIntervalKm && currentTargetDistanceKm > 0) {
+         setError('Total distance is less than one split interval. Cannot calculate splits.');
+         setIsLoading(false);
+         return;
+      }
+       if (currentTargetDistanceKm === 0 && totalTimeSec === 0) {
+        // Handle 0 distance, 0 time case - perhaps show no splits or a specific message
+        setCalculatedSplits([]);
+        toast({ title: "No Splits to Calculate", description: "Distance and time are zero." });
+        setIsLoading(false);
+        return;
+      }
+
+
+      const numSplits = Math.floor(currentTargetDistanceKm / splitIntervalKm);
+      // if (numSplits <= 0 && currentTargetDistanceKm > 0) { // This check is covered by currentTargetDistanceKm < splitIntervalKm
+      //   setError('Target distance is less than one split interval, or results in no full splits.');
+      //   setIsLoading(false);
+      //   return;
+      // }
+      const timePerKm = currentTargetDistanceKm > 0 ? totalTimeSec / currentTargetDistanceKm : 0;
+      const timePerSplitInterval = timePerKm * splitIntervalKm;
       
       const basicSplits: CalculatedSplit[] = [];
       for (let i = 1; i <= numSplits; i++) {
-        const splitEndDistanceDisplay = splitUnit === 'km' ? (i * splitIntervalNum).toFixed(2) : (i * splitIntervalNum).toFixed(2);
+        const splitEndDistanceKm = i * splitIntervalKm;
+        const splitEndDistanceDisplay = splitUnit === 'km' ? splitEndDistanceKm.toFixed(2) : (splitEndDistanceKm / KM_IN_MILES).toFixed(2);
         basicSplits.push({
           segment: `Split ${i} (End: ${splitEndDistanceDisplay} ${splitUnit})`,
-          time: formatSecondsToTime(i * timePerSplit, totalTimeSec > 3600),
-          pace: formatSecondsToTime(timePerSplit / splitIntervalNum, false) + `/${splitUnit}`,
+          time: formatSecondsToTime(i * timePerSplitInterval, totalTimeSec > 3600),
+          pace: formatSecondsToTime(timePerSplitInterval / splitIntervalNum, false) + `/${splitUnit}`,
         });
       }
       
-      const remainingDistance = currentTargetDistanceKm - (numSplits * splitIntervalKm);
-      if (remainingDistance > 0.01) { // Add final partial split if significant
-        const remainingTime = remainingDistance * timePerKm;
+      const remainingDistanceKm = currentTargetDistanceKm - (numSplits * splitIntervalKm);
+      if (remainingDistanceKm > 0.01 * (splitUnit === 'km' ? 1 : KM_IN_MILES)) { // Add final partial split if significant (e.g. > 10m for km)
+        const remainingTime = remainingDistanceKm * timePerKm;
         const finalSplitDistanceDisplay = splitUnit === 'km' ? currentTargetDistanceKm.toFixed(2) : (currentTargetDistanceKm / KM_IN_MILES).toFixed(2);
+        const remainingDistanceInSplitUnit = splitUnit === 'km' ? remainingDistanceKm : remainingDistanceKm / KM_IN_MILES;
+        
         basicSplits.push({
           segment: `Final (End: ${finalSplitDistanceDisplay} ${splitUnit})`,
           time: formatSecondsToTime(totalTimeSec, totalTimeSec > 3600),
-          pace: formatSecondsToTime(remainingTime / (remainingDistance / (splitUnit === 'km' ? 1 : KM_IN_MILES)), false) + `/${splitUnit}`,
+          pace: formatSecondsToTime(remainingTime / remainingDistanceInSplitUnit, false) + `/${splitUnit}`,
         });
       }
       setCalculatedSplits(basicSplits);
@@ -281,11 +329,12 @@ export default function SplitTimeCalculatorForm() {
     setTargetHours('');
     setTargetMinutes('');
     setTargetSeconds('');
-    // setSplitInterval('1');
+    setSplitInterval('1'); // Reset to default
     // setSplitUnit('km'); // Keep user's unit preference or reset
     setGpxFile(null);
     setGpxFileName('');
     setParsedGpxData(null);
+    setGpxTotalDistanceKm(null);
     setCalculatedSplits(null);
     setError(null);
     setIsLoading(false);
@@ -302,37 +351,37 @@ export default function SplitTimeCalculatorForm() {
         <div className="space-y-4 p-4 border border-primary/20 rounded-lg bg-primary/5">
           <h3 className="text-lg font-medium text-primary mb-2">Race &amp; Split Details</h3>
           
-          {!gpxFile && (
-            <div className="grid grid-cols-2 gap-4 items-end">
-                <div>
-                <Label htmlFor="targetDistance" className="text-sm font-medium">Target Distance</Label>
-                <Input
-                    id="targetDistance" type="number" value={targetDistance}
-                    onChange={(e) => setTargetDistance(e.target.value)} placeholder="e.g., 10"
-                    className={`${inputBaseClass} mt-1`} min="0.01" step="0.01"
-                />
-                </div>
-                <div>
-                <Label htmlFor="distanceUnit" className="text-sm font-medium">Unit</Label>
-                <Select value={distanceUnit} onValueChange={(value) => setDistanceUnit(value as UnitOption)}>
-                    <SelectTrigger id="distanceUnit" className={`${inputBaseClass} mt-1`}>
-                    <SelectValue placeholder="Select unit" />
-                    </SelectTrigger>
-                    <SelectContent>
-                    <SelectItem value="km">Kilometers (km)</SelectItem>
-                    <SelectItem value="miles">Miles (mi)</SelectItem>
-                    </SelectContent>
-                </Select>
-                </div>
-            </div>
-          )}
+          <div className="grid grid-cols-2 gap-4 items-end">
+              <div>
+              <Label htmlFor="targetDistance" className="text-sm font-medium">Target Distance</Label>
+              <Input
+                  id="targetDistance" type="number" value={targetDistance}
+                  onChange={(e) => setTargetDistance(e.target.value)} placeholder="e.g., 10"
+                  className={`${inputBaseClass} mt-1`} min="0" step="0.01"
+                  disabled={!!gpxFile} // Disabled if GPX file is loaded
+              />
+              </div>
+              <div>
+              <Label htmlFor="distanceUnit" className="text-sm font-medium">Unit</Label>
+              <Select value={distanceUnit} onValueChange={(value) => setDistanceUnit(value as UnitOption)} disabled={!!gpxFile}>
+                  <SelectTrigger id="distanceUnit" className={`${inputBaseClass} mt-1`}>
+                  <SelectValue placeholder="Select unit" />
+                  </SelectTrigger>
+                  <SelectContent>
+                  <SelectItem value="km">Kilometers (km)</SelectItem>
+                  <SelectItem value="miles">Miles (mi)</SelectItem>
+                  </SelectContent>
+              </Select>
+              </div>
+          </div>
+          
 
           <div>
             <Label className="text-sm font-medium">Target Time (HH:MM:SS) <span className="text-destructive">*</span></Label>
             <div className="grid grid-cols-3 gap-2 mt-1">
               <Input type="number" value={targetHours} onChange={(e) => setTargetHours(e.target.value)} placeholder="HH" className={inputBaseClass} min="0" />
-              <Input type="number" value={targetMinutes} onChange={(e) => setTargetMinutes(e.target.value)} placeholder="MM" className={inputBaseClass} min="0" max="59" required={!targetHours && !targetSeconds} />
-              <Input type="number" value={targetSeconds} onChange={(e) => setTargetSeconds(e.target.value)} placeholder="SS" className={inputBaseClass} min="0" max="59.99" step="0.01" required={!targetHours && !targetMinutes} />
+              <Input type="number" value={targetMinutes} onChange={(e) => setTargetMinutes(e.target.value)} placeholder="MM" className={inputBaseClass} min="0" max="59" required={!targetHours && !targetSeconds && totalTimeSec === 0} />
+              <Input type="number" value={targetSeconds} onChange={(e) => setTargetSeconds(e.target.value)} placeholder="SS" className={inputBaseClass} min="0" max="59.99" step="0.01" required={!targetHours && !targetMinutes && totalTimeSec === 0}/>
             </div>
           </div>
 
@@ -357,13 +406,13 @@ export default function SplitTimeCalculatorForm() {
         {/* GPX Upload Section */}
         <div className="space-y-4 p-4 border border-primary/20 rounded-lg bg-primary/5 flex flex-col justify-center">
           <h3 className="text-lg font-medium text-primary mb-2 flex items-center">
-            Upload GPX (Optional)
+            Upload GPX (Optional for AI Splits)
             <Tooltip delayDuration={100}>
                 <TooltipTrigger asChild>
                     <Button variant="ghost" size="icon" className="h-5 w-5 ml-1 text-muted-foreground hover:text-primary"><Info size={16}/></Button>
                 </TooltipTrigger>
                 <TooltipContent className="max-w-xs bg-popover text-popover-foreground border-border shadow-lg" side="top">
-                    <p>Upload a GPX file from your GPS device or app to get elevation-adjusted split recommendations. Target distance will be auto-filled from the GPX.</p>
+                    <p>Upload a GPX file from your GPS device or app to get AI-powered, elevation-adjusted split recommendations. Target distance will be auto-filled from the GPX.</p>
                 </TooltipContent>
             </Tooltip>
           </h3>
@@ -373,11 +422,11 @@ export default function SplitTimeCalculatorForm() {
               <p className={`mb-1 text-sm ${gpxFile ? 'text-green-500 font-semibold' : 'text-muted-foreground'}`}>
                 {gpxFileName || 'Click to upload or drag and drop'}
               </p>
-              <p className="text-xs text-muted-foreground/70">{gpxFileName ? 'Replace GPX file' : 'GPX file (Max 5MB)'}</p>
+              <p className="text-xs text-muted-foreground/70">{gpxFileName ? `Selected: ${gpxFileName}` : 'GPX file (Max 5MB)'}</p>
             </div>
             <Input id="gpxFile" type="file" className="hidden" onChange={handleFileChange} accept=".gpx" ref={fileInputRef} />
           </Label>
-          {gpxTotalDistanceKm && (
+          {gpxFile && typeof gpxTotalDistanceKm === 'number' && (
             <p className="text-sm text-primary">GPX Route Distance: {gpxTotalDistanceKm.toFixed(2)} km</p>
           )}
         </div>
@@ -405,10 +454,10 @@ export default function SplitTimeCalculatorForm() {
         <Card className="mt-8 shadow-lg border-border/50">
           <CardHeader>
             <CardTitle className="text-2xl text-accent flex items-center">
-              <BarChart3 className="mr-3 h-7 w-7" /> {gpxFile ? 'AI-Powered Race Splits' : 'Calculated Race Splits'}
+              <BarChart3 className="mr-3 h-7 w-7" /> {gpxFile && parsedGpxData ? 'AI-Powered Race Splits' : 'Calculated Race Splits'}
             </CardTitle>
             <CardDescription className="font-body">
-              {gpxFile ? 'These splits are adjusted for elevation changes based on your GPX file.' : 'These are evenly paced splits for your target time and distance.'}
+              {gpxFile && parsedGpxData ? 'These splits are adjusted for elevation changes based on your GPX file.' : 'These are evenly paced splits for your target time and distance.'}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -439,7 +488,7 @@ export default function SplitTimeCalculatorForm() {
                     <th className="p-3 font-headline text-primary">Split</th>
                     <th className="p-3 font-headline text-primary">Cumulative Time</th>
                     <th className="p-3 font-headline text-primary">Pace for Split</th>
-                    {gpxFile && <th className="p-3 font-headline text-primary">Coach Notes</th>}
+                    {gpxFile && parsedGpxData && <th className="p-3 font-headline text-primary">Coach Notes</th>}
                   </tr>
                 </thead>
                 <tbody>
@@ -448,19 +497,32 @@ export default function SplitTimeCalculatorForm() {
                       <td className="p-3">{split.segment}</td>
                       <td className="p-3">{split.time}</td>
                       <td className="p-3">{split.pace}</td>
-                      {gpxFile && <td className="p-3 text-sm text-muted-foreground">{split.notes || 'N/A'}</td>}
+                      {gpxFile && parsedGpxData && <td className="p-3 text-sm text-muted-foreground">{split.notes || 'N/A'}</td>}
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
              <p className="text-xs text-muted-foreground text-center pt-2">
-                {gpxFile ? 'AI-powered splits are estimates. Actual performance may vary.' : 'Paces are based on even distribution of target time over distance.'}
+                {gpxFile && parsedGpxData ? 'AI-powered splits are estimates. Actual performance may vary.' : 'Paces are based on even distribution of target time over distance.'}
             </p>
           </CardContent>
         </Card>
       )}
+       {calculatedSplits && calculatedSplits.length === 0 && !error && (
+          <Card className="mt-8 shadow-lg border-border/50">
+             <CardHeader>
+                <CardTitle className="text-2xl text-accent flex items-center">
+                    <Info className="mr-3 h-7 w-7" /> No Splits to Display
+                </CardTitle>
+            </CardHeader>
+            <CardContent>
+                <p className="text-muted-foreground">Splits could not be calculated with the current inputs (e.g., 0 distance and 0 time, or distance less than one split interval).</p>
+            </CardContent>
+          </Card>
+        )}
     </form>
     </TooltipProvider>
   );
 }
+
