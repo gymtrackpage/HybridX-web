@@ -10,93 +10,93 @@
 
   :root {
     --background: 0 0% 100%; /* White */
-    --foreground: 220 17% 15%; /* Dark blue-gray text */
+    --foreground: 0 0% 0%; /* Black */
 
-    --card: 0 0% 100%;
-    --card-foreground: 220 17% 15%;
+    --card: 0 0% 100%; /* White */
+    --card-foreground: 0 0% 0%; /* Black */
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 17% 15%;
+    --popover: 0 0% 100%; /* White */
+    --popover-foreground: 0 0% 0%; /* Black */
 
-    --primary: 220 60% 50%; /* Premium Blue */
-    --primary-foreground: 0 0% 100%; /* White text */
+    --primary: 0 0% 0%; /* Black */
+    --primary-foreground: 0 0% 100%; /* White */
 
-    --secondary: 0 0% 96.1%; /* Light gray */
-    --secondary-foreground: 220 17% 20%;
+    --secondary: 0 0% 96.1%; /* Light Gray */
+    --secondary-foreground: 0 0% 20%; /* Dark Gray */
 
-    --muted: 0 0% 90%;
-    --muted-foreground: 220 17% 40%;
+    --muted: 0 0% 90%; /* Gray */
+    --muted-foreground: 0 0% 40%; /* Darker Gray */
 
-    --accent: 38 92% 50%; /* Gold */
-    --accent-foreground: 240 10% 4%; /* Dark text for gold */
+    --accent: 47 95% 67%; /* Yellow #fadb5c */
+    --accent-foreground: 0 0% 0%; /* Black */
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 220 60% 50%; /* Premium Blue for focus rings */
+    --border: 0 0% 85%; /* Lighter Gray */
+    --input: 0 0% 85%; /* Lighter Gray */
+    --ring: 47 95% 67%; /* Yellow #fadb5c */
 
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --chart-1: 47 95% 67%; /* Yellow */
+    --chart-2: 0 0% 20%;   /* Dark Gray */
+    --chart-3: 47 95% 50%; /* Darker Yellow */
+    --chart-4: 0 0% 50%;   /* Medium Gray */
+    --chart-5: 47 95% 80%; /* Lighter Yellow */
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 220 17% 20%;
-    --sidebar-primary: 220 60% 50%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 0% 92%;
-    --sidebar-accent-foreground: 220 17% 15%;
-    --sidebar-border: 0 0% 85%;
-    --sidebar-ring: 220 60% 50%;
+    --sidebar-background: 0 0% 100%; /* White */
+    --sidebar-foreground: 0 0% 0%; /* Black */
+    --sidebar-primary: 0 0% 0%; /* Black */
+    --sidebar-primary-foreground: 0 0% 100%; /* White */
+    --sidebar-accent: 47 95% 85%; /* Light Yellow for hover */
+    --sidebar-accent-foreground: 0 0% 0%; /* Black */
+    --sidebar-border: 0 0% 85%; /* Light Gray */
+    --sidebar-ring: 47 95% 67%; /* Yellow */
   }
 
   .dark {
-    --background: 220 17% 10%; /* Deep, dark blue-gray */
-    --foreground: 210 20% 95%; /* Soft white/light gray */
+    --background: 0 0% 0%; /* Black */
+    --foreground: 0 0% 100%; /* White */
 
-    --card: 220 17% 13%;
-    --card-foreground: 210 20% 95%;
+    --card: 0 0% 10%; /* Off-Black / Dark Gray */
+    --card-foreground: 0 0% 100%; /* White */
 
-    --popover: 220 17% 13%;
-    --popover-foreground: 210 20% 95%;
+    --popover: 0 0% 10%; /* Off-Black / Dark Gray */
+    --popover-foreground: 0 0% 100%; /* White */
 
-    --primary: 45 100% 50%; /* Vibrant Gold */
-    --primary-foreground: 220 17% 10%; /* Dark text for gold */
+    --primary: 47 95% 67%; /* Yellow #fadb5c - Main interactive color */
+    --primary-foreground: 0 0% 0%; /* Black */
 
-    --secondary: 220 17% 20%;
-    --secondary-foreground: 210 20% 80%;
+    --secondary: 0 0% 15%; /* Dark Gray */
+    --secondary-foreground: 0 0% 80%; /* Light Gray */
 
-    --muted: 220 17% 25%;
-    --muted-foreground: 210 20% 60%;
+    --muted: 0 0% 20%; /* Darker Gray */
+    --muted-foreground: 0 0% 60%; /* Medium Gray */
 
-    --accent: 200 100% 50%; /* Electric Blue */
-    --accent-foreground: 0 0% 100%; /* White text for blue */
+    --accent: 47 95% 67%; /* Yellow #fadb5c */
+    --accent-foreground: 0 0% 0%; /* Black */
 
     --destructive: 0 80% 55%; /* Strong Red */
     --destructive-foreground: 0 0% 98%;
 
-    --border: 220 17% 20%;
-    --input: 220 17% 20%;
-    --ring: 45 100% 50%; /* Gold for focus rings */
+    --border: 0 0% 20%; /* Dark Gray for borders */
+    --input: 0 0% 20%; /* Dark Gray for input */
+    --ring: 47 95% 67%; /* Yellow #fadb5c for focus rings */
     
-    --chart-1: 180 70% 55%; /* Teal */
-    --chart-2: 280 70% 65%; /* Purple */
-    --chart-3: 25 90% 60%; /* Orange */
-    --chart-4: 200 80% 60%; /* Light Blue */
-    --chart-5: 50 90% 55%; /* Yellow */
+    --chart-1: 47 95% 67%; /* Yellow */
+    --chart-2: 0 0% 80%;   /* Light Gray */
+    --chart-3: 47 95% 50%; /* Darker Yellow */
+    --chart-4: 0 0% 50%;   /* Medium Gray */
+    --chart-5: 47 95% 80%; /* Lighter Yellow */
 
-    --sidebar-background: 220 17% 8%;
-    --sidebar-foreground: 210 20% 85%;
-    --sidebar-primary: 45 100% 50%;
-    --sidebar-primary-foreground: 220 17% 10%;
-    --sidebar-accent: 220 17% 15%;
-    --sidebar-accent-foreground: 210 20% 90%;
-    --sidebar-border: 220 17% 15%;
-    --sidebar-ring: 45 100% 50%;
+    --sidebar-background: 0 0% 0%; /* Black */
+    --sidebar-foreground: 0 0% 100%; /* White */
+    --sidebar-primary: 47 95% 67%; /* Yellow */
+    --sidebar-primary-foreground: 0 0% 0%; /* Black */
+    --sidebar-accent: 0 0% 15%; /* Dark Gray for hover */
+    --sidebar-accent-foreground: 0 0% 100%; /* White */
+    --sidebar-border: 0 0% 20%; /* Dark Gray */
+    --sidebar-ring: 47 95% 67%; /* Yellow */
   }
 }
 
