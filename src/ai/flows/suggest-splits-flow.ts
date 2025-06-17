@@ -19,7 +19,7 @@ const GpxPointSchema = z.object({
 });
 
 // Define the input schema for the Genkit flow
-export const SuggestSplitsInputSchema = z.object({
+const SuggestSplitsInputSchema = z.object({
   gpxRouteProfile: z.array(GpxPointSchema).min(2).describe('An array of points representing the route profile, with cumulative distance and elevation. Must have at least 2 points.'),
   totalTargetTimeSeconds: z.number().positive().describe('The runner\'s total target time for the race in seconds.'),
   splitIntervalKm: z.number().positive().describe('The desired interval for each split in kilometers (e.g., 1 for 1km splits).'),
@@ -27,7 +27,7 @@ export const SuggestSplitsInputSchema = z.object({
 export type SuggestSplitsInput = z.infer<typeof SuggestSplitsInputSchema>;
 
 // Define the schema for a single split suggestion
-export const SplitSuggestionSchema = z.object({
+const SplitSuggestionSchema = z.object({
   splitNumber: z.number().int().positive().describe('The sequential number of the split (e.g., 1, 2, 3).'),
   splitDistanceKm: z.number().positive().describe('The cumulative distance at the end of this split in kilometers.'),
   recommendedTimeSeconds: z.number().positive().describe('The recommended cumulative time to reach the end of this split in seconds.'),
@@ -37,7 +37,7 @@ export const SplitSuggestionSchema = z.object({
 export type SplitSuggestion = z.infer<typeof SplitSuggestionSchema>;
 
 // Define the output schema for the Genkit flow
-export const SuggestSplitsOutputSchema = z.array(SplitSuggestionSchema).describe('An array of split suggestions for the race.');
+const SuggestSplitsOutputSchema = z.array(SplitSuggestionSchema).describe('An array of split suggestions for the race.');
 export type SuggestSplitsOutput = z.infer<typeof SuggestSplitsOutputSchema>;
 
 
@@ -109,3 +109,4 @@ const suggestSplitsFlow = ai.defineFlow(
     return output;
   }
 );
+
