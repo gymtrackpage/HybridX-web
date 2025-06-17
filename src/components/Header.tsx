@@ -3,7 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle } from '@/components/ui/sheet';
-import { Menu, LogIn, ChevronDown, Route, X, TrendingUp, HeartPulse, Timer, ListChecks, Dumbbell } from 'lucide-react';
+import { Menu, LogIn, ChevronDown, Route, X, TrendingUp, HeartPulse, Timer, ListChecks, Dumbbell, Target } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -43,6 +43,7 @@ const navItems: NavItem[] = [
       { label: 'Split Time Calculator', href: '/calculators/split-time-calculator', icon: <Timer className="mr-2 h-5 w-5" /> },
       { isSeparator: true, label: 'separatorStrength', href: '#' },
       { label: '1RM Calculator', href: '/calculators/one-rep-max-calculator', icon: <Dumbbell className="mr-2 h-5 w-5" /> },
+      { label: 'Percentage Weight Calculator', href: '/calculators/percentage-based-weight-calculator', icon: <Target className="mr-2 h-5 w-5" /> },
     ]
   },
   { label: 'FAQ', href: '#faq' },
@@ -89,7 +90,7 @@ export default function Header() {
           ))}
         </nav>
         <div className="flex flex-1 items-center justify-end space-x-2">
-          <Button className="hidden md:inline-flex bg-primary text-primary-foreground hover:bg-primary/90 font-headline" asChild>
+          <Button className="hidden md:inline-flex bg-accent text-accent-foreground hover:bg-accent/90 font-headline" asChild>
             <Link href="https://app.hybridx.club" target="_blank" rel="noopener noreferrer">
               <LogIn className="mr-2 h-4 w-4" /> Login
             </Link>
@@ -102,7 +103,6 @@ export default function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-[300px] sm:w-[320px] bg-background p-6 border-l-border/60">
-              <SheetTitle className="sr-only">Mobile Navigation Menu</SheetTitle>
                <div className="flex justify-between items-center mb-8">
                  <Link href="/" className="flex items-center space-x-2">
                     <span className="font-bold font-headline text-xl text-primary">HybridX Hub</span>
@@ -114,6 +114,7 @@ export default function Header() {
                     </Button>
                 </SheetClose>
                </div>
+               <SheetTitle className="sr-only">Mobile Navigation Menu</SheetTitle>
               <nav className="flex flex-col space-y-1">
                 {navItems.flatMap((item, index) =>
                   item.isDropdown && item.items ? (
