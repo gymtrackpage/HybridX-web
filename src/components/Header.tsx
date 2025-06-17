@@ -22,7 +22,7 @@ interface NavItem {
 
 interface SubNavItem {
   label: string;
-  href: string;
+  href: string; // href is always required for Link, even if it's '#' for separators that become text.
   icon?: React.ReactNode;
   isSeparator?: boolean;
 }
@@ -36,12 +36,12 @@ const navItems: NavItem[] = [
     isDropdown: true,
     items: [
       { label: 'Running Calculators Overview', href: '/calculators/running', icon: <ListChecks className="mr-2 h-5 w-5" /> },
-      { isSeparator: true, label: 'separatorRunning', href: '#' }, 
+      { isSeparator: true, label: 'Running Tools', href: '#' }, 
       { label: 'Pace Calculator', href: '/calculators/pace-calculator', icon: <Route className="mr-2 h-5 w-5" /> },
       { label: 'Race Time Predictor', href: '/calculators/race-time-predictor', icon: <TrendingUp className="mr-2 h-5 w-5" /> },
       { label: 'Heart Rate Zones', href: '/calculators/heart-rate-zone-calculator', icon: <HeartPulse className="mr-2 h-5 w-5" /> },
       { label: 'Split Time Calculator', href: '/calculators/split-time-calculator', icon: <Timer className="mr-2 h-5 w-5" /> },
-      { isSeparator: true, label: 'separatorStrength', href: '#' },
+      { isSeparator: true, label: 'Strength Tools', href: '#' },
       { label: '1RM Calculator', href: '/calculators/one-rep-max-calculator', icon: <Dumbbell className="mr-2 h-5 w-5" /> },
       { label: 'Percentage Weight Calculator', href: '/calculators/percentage-based-weight-calculator', icon: <Target className="mr-2 h-5 w-5" /> },
       { label: 'Powerlifting Score Calculator', href: '/calculators/powerlifting-score-calculator', icon: <Trophy className="mr-2 h-5 w-5" /> },
@@ -70,7 +70,15 @@ export default function Header() {
                 <DropdownMenuContent className="bg-background border-border/60">
                   {item.items.map(subItem => (
                     subItem.isSeparator ? (
-                      <DropdownMenuSeparator key={subItem.label} className="my-1" />
+                       // Use label for section header if it's a separator, else actual separator
+                      subItem.label.toLowerCase().includes("tools") ? (
+                        <React.Fragment key={subItem.label}>
+                          <DropdownMenuSeparator className="my-1" />
+                          <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">{subItem.label}</p>
+                        </React.Fragment>
+                      ) : (
+                        <DropdownMenuSeparator key={subItem.label} className="my-1" />
+                      )
                     ) : (
                       <DropdownMenuItem key={subItem.label} asChild className="hover:bg-accent/10 focus:bg-accent/10">
                         <Link href={subItem.href} className="font-body text-foreground/90 flex items-center">
@@ -108,27 +116,27 @@ export default function Header() {
                  <Link href="/" className="flex items-center space-x-2">
                     <span className="font-bold font-headline text-xl text-primary">HybridX Hub</span>
                  </Link>
-                <SheetClose asChild>
-                    <Button variant="ghost" size="icon" className="text-primary">
-                        <X className="h-5 w-5" />
-                        <span className="sr-only">Close</span>
-                    </Button>
-                </SheetClose>
+                 {/* The default SheetClose from SheetContent component will be used. No need for a duplicate X here. */}
                </div>
                <SheetTitle className="sr-only">Mobile Navigation</SheetTitle>
               <nav className="flex flex-col space-y-1">
                 {navItems.flatMap((item, index) =>
                   item.isDropdown && item.items ? (
                     <React.Fragment key={`${item.label}-${index}`}>
-                      <p className="px-3 py-3 text-base font-headline text-foreground/70">{item.label}</p>
+                      <p className="px-3 py-3 text-lg font-headline text-primary">{item.label}</p>
                       {item.items.map(subItem => (
                         subItem.isSeparator ? (
-                          <hr key={subItem.label} className="my-2 border-border/30" />
+                          // If separator label contains "Tools", render it as a subheading
+                          subItem.label.toLowerCase().includes("tools") ? (
+                            <p key={subItem.label} className="px-3 pt-3 pb-1 text-sm font-medium text-foreground/70 ml-1">{subItem.label}</p>
+                          ) : (
+                            <hr key={subItem.label} className="my-2 border-border/30" />
+                          )
                         ) : (
                           <SheetClose asChild key={subItem.label}>
                             <Link
                               href={subItem.href}
-                              className="flex items-center rounded-md px-3 py-3 transition-colors hover:bg-accent/10 text-base font-headline text-foreground/90 ml-3"
+                              className="flex items-center rounded-md px-3 py-3 transition-colors hover:bg-accent/10 text-base font-body text-foreground/90 ml-3"
                             >
                               {subItem.icon} {subItem.label}
                             </Link>
