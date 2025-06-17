@@ -3,7 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle } from '@/components/ui/sheet';
-import { Menu, LogIn, ChevronDown, Route, TrendingUp, HeartPulse, Timer, ListChecks, Dumbbell, Target, Trophy, Percent, ClipboardList } from 'lucide-react';
+import { Menu, LogIn, ChevronDown, Route, TrendingUp, HeartPulse, Timer, ListChecks, Dumbbell, Target, Trophy, Percent, ClipboardList, Utensils } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -47,6 +47,7 @@ const navItems: NavItem[] = [
       { label: 'Powerlifting Score Calculator', href: '/calculators/powerlifting-score-calculator', icon: <Trophy className="mr-2 h-5 w-5" /> },
       { isSeparator: true, label: 'General Health Tools', href: '#' },
       { label: 'Body Fat Calculator', href: '/calculators/body-fat-calculator', icon: <Percent className="mr-2 h-5 w-5" /> },
+      { label: 'Calorie & Macro Calculator', href: '/calculators/calorie-macronutrient-calculator', icon: <Utensils className="mr-2 h-5 w-5" /> },
     ]
   },
   { label: 'FAQ', href: '#faq' },
