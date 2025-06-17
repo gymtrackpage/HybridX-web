@@ -3,7 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle } from '@/components/ui/sheet';
-import { Menu, LogIn, ChevronDown, Route, X, TrendingUp, HeartPulse, Timer, ListChecks } from 'lucide-react';
+import { Menu, LogIn, ChevronDown, Route, X, TrendingUp, HeartPulse, Timer, ListChecks, Dumbbell } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -36,11 +36,13 @@ const navItems: NavItem[] = [
     isDropdown: true,
     items: [
       { label: 'Running Calculators Overview', href: '/calculators/running', icon: <ListChecks className="mr-2 h-5 w-5" /> },
-      { isSeparator: true, label: 'separator1', href: '#' }, // Placeholder href for key
+      { isSeparator: true, label: 'separatorRunning', href: '#' }, 
       { label: 'Pace Calculator', href: '/calculators/pace-calculator', icon: <Route className="mr-2 h-5 w-5" /> },
       { label: 'Race Time Predictor', href: '/calculators/race-time-predictor', icon: <TrendingUp className="mr-2 h-5 w-5" /> },
       { label: 'Heart Rate Zones', href: '/calculators/heart-rate-zone-calculator', icon: <HeartPulse className="mr-2 h-5 w-5" /> },
       { label: 'Split Time Calculator', href: '/calculators/split-time-calculator', icon: <Timer className="mr-2 h-5 w-5" /> },
+      { isSeparator: true, label: 'separatorStrength', href: '#' },
+      { label: '1RM Calculator', href: '/calculators/one-rep-max-calculator', icon: <Dumbbell className="mr-2 h-5 w-5" /> },
     ]
   },
   { label: 'FAQ', href: '#faq' },
@@ -87,7 +89,7 @@ export default function Header() {
           ))}
         </nav>
         <div className="flex flex-1 items-center justify-end space-x-2">
-          <Button className="hidden md:inline-flex bg-accent text-accent-foreground hover:bg-accent/90 font-headline" asChild>
+          <Button className="hidden md:inline-flex bg-primary text-primary-foreground hover:bg-primary/90 font-headline" asChild>
             <Link href="https://app.hybridx.club" target="_blank" rel="noopener noreferrer">
               <LogIn className="mr-2 h-4 w-4" /> Login
             </Link>
