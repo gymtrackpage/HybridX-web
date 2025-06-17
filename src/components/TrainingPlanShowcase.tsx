@@ -2,33 +2,41 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Activity, HeartPulse, Dumbbell } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import Link from 'next/link';
 
 interface Plan {
   id: string;
   title: string;
   description: string;
   icon: LucideIcon;
-  IconComponent?: React.ElementType; // For custom SVGs if needed
+  ctaText: string;
+  href: string;
 }
 
 const plans: Plan[] = [
   {
     id: 'running',
-    title: 'Hybrid Running',
-    description: 'Optimize your endurance and speed with our specialized running programs, seamlessly integrated with strength work.',
+    title: 'Hybrid Running Mastery',
+    description: 'Crush your PRs. Combine elite running protocols with targeted strength work for explosive speed and endurance.',
     icon: Activity,
+    ctaText: 'View Running Plans',
+    href: '#', // Placeholder, ideally links to specific plan page
   },
   {
     id: 'cardio',
-    title: 'Peak Cardio',
-    description: 'Elevate your cardiovascular health and stamina through diverse and challenging cardio routines.',
+    title: 'Peak Cardio Engine',
+    description: 'Build an unstoppable cardiovascular engine. Diverse, challenging routines to maximize stamina and recovery.',
     icon: HeartPulse,
+    ctaText: 'Explore Cardio Programs',
+    href: '#', // Placeholder
   },
   {
     id: 'weight-training',
-    title: 'Strength Fusion',
-    description: 'Build functional strength and power with comprehensive weight training plans designed for the hybrid athlete.',
+    title: 'Strength & Power Blueprint',
+    description: 'Forge functional power. Comprehensive weight training designed for the demands of hybrid athleticism.',
     icon: Dumbbell,
+    ctaText: 'See Strength Routines',
+    href: '#', // Placeholder
   },
 ];
 
@@ -38,27 +46,27 @@ export default function TrainingPlanShowcase() {
       <div className="container mx-auto px-6">
         <div className="text-center mb-12 md:mb-16">
           <h2 className="text-3xl md:text-4xl font-headline font-bold text-primary mb-3">
-            Explore Our Training Plans
+            Your Path to Elite Hybrid Performance Starts Here
           </h2>
           <p className="text-lg text-muted-foreground font-body max-w-xl mx-auto">
-            Tailored for hybrid athletes, our plans cover running, cardio, and weight training to help you achieve peak performance.
+            Choose your focus or combine them all. Our expertly designed plans are your roadmap to results.
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {plans.map((plan) => (
-            <Card key={plan.id} className="shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col">
-              <CardHeader className="items-center text-center">
-                <div className="p-4 bg-accent/20 rounded-full mb-4">
+            <Card key={plan.id} className="shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col bg-card/80 backdrop-blur-sm">
+              <CardHeader className="items-center text-center pt-8">
+                <div className="p-4 bg-accent/20 rounded-full mb-4 ring-2 ring-accent/30">
                   <plan.icon className="h-10 w-10 text-accent" />
                 </div>
                 <CardTitle className="font-headline text-2xl text-primary">{plan.title}</CardTitle>
               </CardHeader>
               <CardContent className="flex-grow flex flex-col text-center">
-                <CardDescription className="font-body text-muted-foreground mb-6 flex-grow">
+                <CardDescription className="font-body text-muted-foreground mb-6 flex-grow px-2">
                   {plan.description}
                 </CardDescription>
-                <Button variant="outline" className="mt-auto border-accent text-accent hover:bg-accent hover:text-accent-foreground w-full transition-colors duration-300">
-                  Learn More
+                <Button variant="outline" className="mt-auto border-accent text-accent hover:bg-accent hover:text-accent-foreground w-full transition-colors duration-300 font-headline py-3" asChild>
+                  <Link href={plan.href}>{plan.ctaText}</Link>
                 </Button>
               </CardContent>
             </Card>

@@ -5,32 +5,33 @@ import Link from 'next/link';
 
 export default function AppPromotion() {
   return (
-    <section id="app-promotion" className="py-16 md:py-24 bg-background">
+    <section id="app-promotion" className="py-16 md:py-24 bg-secondary/30">
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
           <div className="md:w-1/2 text-center md:text-left">
             <h2 className="text-3xl md:text-4xl font-headline font-bold text-primary mb-6">
-              Take Your Training <span className="text-accent">Anywhere</span>
+              Your Hybrid Coach, <span className="text-accent">In Your Pocket. 24/7.</span>
             </h2>
             <p className="text-lg text-muted-foreground font-body mb-8">
-              Access all your HybridX training plans, track your progress, and stay motivated with our dedicated mobile app.
-              Available now for a seamless training experience.
+              Track every rep, every run, every win. Our app seamlessly integrates your training plans, monitors progress, and keeps you laser-focused on your goals.
             </p>
-            <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg transform hover:scale-105 transition-transform duration-200" asChild>
+            <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg transform hover:scale-105 transition-transform duration-200" asChild>
               <Link href="https://app.hybridx.club" target="_blank" rel="noopener noreferrer">
-                <Smartphone className="mr-2 h-5 w-5" /> Go to HybridX App
+                <Smartphone className="mr-2 h-5 w-5" /> Access the App Now
               </Link>
             </Button>
           </div>
           <div className="md:w-1/2 mt-8 md:mt-0">
-            <div className="relative aspect-video rounded-xl shadow-2xl overflow-hidden">
+            <div className="relative aspect-[16/10] rounded-xl shadow-2xl overflow-hidden group">
               <Image
-                src="https://placehold.co/800x450.png"
-                alt="HybridX App Interface"
+                src="https://placehold.co/800x500.png"
+                alt="HybridX App Interface showing progress tracking"
                 layout="fill"
                 objectFit="cover"
-                data-ai-hint="app interface fitness"
+                data-ai-hint="app interface fitness tracking"
+                className="transform group-hover:scale-105 transition-transform duration-500 ease-out"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
             </div>
           </div>
         </div>
