@@ -3,7 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle } from '@/components/ui/sheet';
-import { Menu, LogIn, ChevronDown, Route, X, TrendingUp, HeartPulse, Timer, ListChecks, Dumbbell, Target, Trophy } from 'lucide-react';
+import { Menu, LogIn, ChevronDown, Route, TrendingUp, HeartPulse, Timer, ListChecks, Dumbbell, Target, Trophy, Percent, ClipboardList } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,7 +22,7 @@ interface NavItem {
 
 interface SubNavItem {
   label: string;
-  href: string; // href is always required for Link, even if it's '#' for separators that become text.
+  href: string; 
   icon?: React.ReactNode;
   isSeparator?: boolean;
 }
@@ -45,6 +45,8 @@ const navItems: NavItem[] = [
       { label: '1RM Calculator', href: '/calculators/one-rep-max-calculator', icon: <Dumbbell className="mr-2 h-5 w-5" /> },
       { label: 'Percentage Weight Calculator', href: '/calculators/percentage-based-weight-calculator', icon: <Target className="mr-2 h-5 w-5" /> },
       { label: 'Powerlifting Score Calculator', href: '/calculators/powerlifting-score-calculator', icon: <Trophy className="mr-2 h-5 w-5" /> },
+      { isSeparator: true, label: 'General Health Tools', href: '#' },
+      { label: 'Body Fat Calculator', href: '/calculators/body-fat-calculator', icon: <Percent className="mr-2 h-5 w-5" /> },
     ]
   },
   { label: 'FAQ', href: '#faq' },
@@ -70,11 +72,17 @@ export default function Header() {
                 <DropdownMenuContent className="bg-background border-border/60">
                   {item.items.map(subItem => (
                     subItem.isSeparator ? (
-                       // Use label for section header if it's a separator, else actual separator
                       subItem.label.toLowerCase().includes("tools") ? (
                         <React.Fragment key={subItem.label}>
                           <DropdownMenuSeparator className="my-1" />
-                          <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">{subItem.label}</p>
+                          <p className="px-2 py-1.5 text-xs font-semibold text-muted-foreground flex items-center">
+                            {
+                              subItem.label.toLowerCase().includes("running") ? <ListChecks className="mr-2 h-4 w-4" /> :
+                              subItem.label.toLowerCase().includes("strength") ? <Dumbbell className="mr-2 h-4 w-4" /> :
+                              subItem.label.toLowerCase().includes("health") ? <ClipboardList className="mr-2 h-4 w-4" /> : null
+                            }
+                            {subItem.label}
+                          </p>
                         </React.Fragment>
                       ) : (
                         <DropdownMenuSeparator key={subItem.label} className="my-1" />
@@ -116,7 +124,6 @@ export default function Header() {
                  <Link href="/" className="flex items-center space-x-2">
                     <span className="font-bold font-headline text-xl text-primary">HybridX Hub</span>
                  </Link>
-                 {/* The default SheetClose from SheetContent component will be used. No need for a duplicate X here. */}
                </div>
                <SheetTitle className="sr-only">Mobile Navigation</SheetTitle>
               <nav className="flex flex-col space-y-1">
@@ -126,9 +133,15 @@ export default function Header() {
                       <p className="px-3 py-3 text-lg font-headline text-primary">{item.label}</p>
                       {item.items.map(subItem => (
                         subItem.isSeparator ? (
-                          // If separator label contains "Tools", render it as a subheading
                           subItem.label.toLowerCase().includes("tools") ? (
-                            <p key={subItem.label} className="px-3 pt-3 pb-1 text-sm font-medium text-foreground/70 ml-1">{subItem.label}</p>
+                            <p key={subItem.label} className="px-3 pt-3 pb-1 text-sm font-medium text-foreground/70 ml-1 flex items-center">
+                               {
+                                subItem.label.toLowerCase().includes("running") ? <ListChecks className="mr-2 h-4 w-4" /> :
+                                subItem.label.toLowerCase().includes("strength") ? <Dumbbell className="mr-2 h-4 w-4" /> :
+                                subItem.label.toLowerCase().includes("health") ? <ClipboardList className="mr-2 h-4 w-4" /> : null
+                               }
+                              {subItem.label}
+                            </p>
                           ) : (
                             <hr key={subItem.label} className="my-2 border-border/30" />
                           )

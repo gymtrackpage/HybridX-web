@@ -1,0 +1,35 @@
+
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import BodyFatCalculatorForm from '@/components/calculators/BodyFatCalculatorForm';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Body Fat Percentage Calculator | HybridX Hub',
+  description: 'Estimate your body fat percentage using the U.S. Navy method. Track your body composition progress.',
+};
+
+export default function BodyFatCalculatorPage() {
+  return (
+    <div className="flex flex-col min-h-screen bg-background text-foreground">
+      <Header />
+      <main className="flex-grow container mx-auto px-4 py-8 md:py-12">
+        <div className="max-w-2xl mx-auto">
+          <Card className="shadow-xl border-border/60">
+            <CardHeader className="text-center pb-4">
+              <CardTitle className="text-3xl md:text-4xl font-headline text-primary">Body Fat Percentage Calculator</CardTitle>
+              <CardDescription className="text-lg text-muted-foreground font-body mt-2">
+                Estimate your body fat percentage using the U.S. Navy formula. All measurements should be taken in a relaxed state.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <BodyFatCalculatorForm />
+            </CardContent>
+          </Card>
+        </div>
+      </main>
+      <Footer />
+    </div>
+  );
+}
