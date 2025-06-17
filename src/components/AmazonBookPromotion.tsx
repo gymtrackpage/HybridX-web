@@ -54,8 +54,9 @@ export default function AmazonBookPromotion() {
                     <Image
                       src={book.imageUrl}
                       alt={book.title}
-                      layout="fill"
-                      objectFit="contain"
+                      fill
+                      style={{ objectFit: 'contain' }}
+                      sizes="(max-width: 767px) 200px, 33vw"
                       className="group-hover:scale-105 transition-transform duration-500 ease-out"
                     />
                   </div>
