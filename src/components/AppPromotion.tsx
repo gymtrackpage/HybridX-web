@@ -29,7 +29,8 @@ export default function AppPromotion() {
                 alt="HybridX App Interface showing progress tracking"
                 width={800}
                 height={500}
-                className="transform object-cover w-full h-full"
+                unoptimized={true}
+                className="object-cover w-full h-full"
                 sizes="(max-width: 767px) 100vw, 50vw"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>

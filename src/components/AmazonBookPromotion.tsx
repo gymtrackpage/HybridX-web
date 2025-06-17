@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -48,20 +49,20 @@ export default function AmazonBookPromotion() {
           {books.map((book) => (
             <Card key={book.id} className="shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col overflow-hidden bg-card/80 backdrop-blur-sm group border-t-2 border-primary/30">
               <div className="flex flex-col md:flex-row">
-                {/* Image Column */}
                 <div className="w-full md:w-1/3 flex-shrink-0 p-4 flex items-center justify-center bg-muted/10 md:rounded-l-lg md:rounded-tr-none rounded-t-lg">
                   <div className="relative w-full max-w-[200px] md:max-w-full aspect-[2/3]">
                     <Image
                       src={book.imageUrl}
                       alt={book.title}
-                      fill
+                      width={200} 
+                      height={300}
+                      unoptimized={true}
                       style={{ objectFit: 'contain' }}
                       sizes="(max-width: 767px) 200px, 33vw"
                       className="group-hover:scale-105 transition-transform duration-500 ease-out"
                     />
                   </div>
                 </div>
-                {/* Text Column */}
                 <div className="flex flex-col flex-grow p-6">
                   <CardHeader className="p-0 mb-2">
                     <CardTitle className="font-headline text-xl md:text-2xl text-primary group-hover:text-accent transition-colors duration-300">{book.title}</CardTitle>
