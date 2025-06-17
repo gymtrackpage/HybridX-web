@@ -10,7 +10,7 @@ const books = [
     title: 'Hybrid Athlete\'s Deep Dive',
     description: 'Unlock the science and strategy behind peak hybrid performance. Essential reading for serious athletes.',
     imageUrl: 'https://placehold.co/300x450.png',
-    imageHint: 'book cover fitness strategy',
+    imageHint: 'dynamic fitness book',
     amazonUrl: '#', 
     ctaText: 'Get Your Copy',
   },
@@ -19,7 +19,7 @@ const books = [
     title: 'Cardio & Strength Synergy',
     description: 'Master the art of concurrent training. Build elite endurance without sacrificing strength gains. Includes advanced protocols.',
     imageUrl: 'https://placehold.co/300x450.png',
-    imageHint: 'book cover training synergy',
+    imageHint: 'synergy training book',
     amazonUrl: '#', 
     ctaText: 'View on Amazon',
   },
@@ -40,7 +40,7 @@ export default function AmazonBookPromotion() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-stretch">
           {books.map((book) => (
-            <Card key={book.id} className="shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col overflow-hidden bg-card/80 backdrop-blur-sm group">
+            <Card key={book.id} className="shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col overflow-hidden bg-card/80 backdrop-blur-sm group border-t-2 border-primary/30">
               <div className="flex flex-col sm:flex-row">
                 <div className="sm:w-1/3 flex-shrink-0 relative h-64 sm:h-auto overflow-hidden">
                   <Image

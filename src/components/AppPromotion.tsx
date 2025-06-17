@@ -5,8 +5,9 @@ import Link from 'next/link';
 
 export default function AppPromotion() {
   return (
-    <section id="app-promotion" className="py-16 md:py-24 bg-secondary/30">
-      <div className="container mx-auto px-6">
+    <section id="app-promotion" className="relative py-16 md:py-24 bg-secondary/30 overflow-hidden">
+      <div aria-hidden="true" className="absolute inset-0 bg-subtle-x-light dark:bg-subtle-x-dark opacity-40 dark:opacity-25 mix-blend-multiply dark:mix-blend-screen"></div>
+      <div className="container mx-auto px-6 relative z-10">
         <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
           <div className="md:w-1/2 text-center md:text-left">
             <h2 className="text-3xl md:text-4xl font-headline font-bold text-primary mb-6">
@@ -28,7 +29,7 @@ export default function AppPromotion() {
                 alt="HybridX App Interface showing progress tracking"
                 layout="fill"
                 objectFit="cover"
-                data-ai-hint="app interface fitness tracking"
+                data-ai-hint="modern fitness app"
                 className="transform group-hover:scale-105 transition-transform duration-500 ease-out"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>

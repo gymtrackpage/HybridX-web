@@ -3,8 +3,9 @@ import Link from 'next/link';
 
 export default function HeroSection() {
   return (
-    <section className="py-20 md:py-32 bg-gradient-to-br from-background to-secondary/30">
-      <div className="container mx-auto px-6 text-center">
+    <section className="relative py-20 md:py-32 bg-gradient-to-br from-background to-secondary/30 overflow-hidden">
+      <div aria-hidden="true" className="absolute inset-0 bg-subtle-x-light dark:bg-subtle-x-dark opacity-20 dark:opacity-15"></div>
+      <div className="container mx-auto px-6 text-center relative z-10">
         <h1 className="text-4xl md:text-6xl font-headline font-bold text-primary mb-6 leading-tight">
           Stop Guessing. Start <span className="text-accent">Dominating</span>. Your Ultimate Hybrid Training Blueprint Awaits.
         </h1>

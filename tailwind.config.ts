@@ -9,6 +9,10 @@ export default {
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        'subtle-x-light': `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3e%3cpath d='M0 0L60 60M0 60L60 0' stroke='%2327272a' stroke-width='0.75' stroke-opacity='0.04' stroke-linecap='round'/%3e%3c/svg%3e")`,
+        'subtle-x-dark': `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3e%3cpath d='M0 0L60 60M0 60L60 0' stroke='%23a1a1aa' stroke-width='0.75' stroke-opacity='0.05' stroke-linecap='round'/%3e%3c/svg%3e")`,
+      },
       fontFamily: {
         body: ['Inter', 'sans-serif'],
         headline: ['Space Grotesk', 'sans-serif'],

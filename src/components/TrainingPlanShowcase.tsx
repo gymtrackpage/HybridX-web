@@ -20,7 +20,7 @@ const plans: Plan[] = [
     description: 'Crush your PRs. Combine elite running protocols with targeted strength work for explosive speed and endurance.',
     icon: Activity,
     ctaText: 'View Running Plans',
-    href: '#', // Placeholder, ideally links to specific plan page
+    href: '#', 
   },
   {
     id: 'cardio',
@@ -28,7 +28,7 @@ const plans: Plan[] = [
     description: 'Build an unstoppable cardiovascular engine. Diverse, challenging routines to maximize stamina and recovery.',
     icon: HeartPulse,
     ctaText: 'Explore Cardio Programs',
-    href: '#', // Placeholder
+    href: '#', 
   },
   {
     id: 'weight-training',
@@ -36,7 +36,7 @@ const plans: Plan[] = [
     description: 'Forge functional power. Comprehensive weight training designed for the demands of hybrid athleticism.',
     icon: Dumbbell,
     ctaText: 'See Strength Routines',
-    href: '#', // Placeholder
+    href: '#', 
   },
 ];
 
@@ -54,7 +54,7 @@ export default function TrainingPlanShowcase() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {plans.map((plan) => (
-            <Card key={plan.id} className="shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col bg-card/80 backdrop-blur-sm">
+            <Card key={plan.id} className="shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col bg-card/80 backdrop-blur-sm border-t-2 border-accent/50">
               <CardHeader className="items-center text-center pt-8">
                 <div className="p-4 bg-accent/20 rounded-full mb-4 ring-2 ring-accent/30">
                   <plan.icon className="h-10 w-10 text-accent" />

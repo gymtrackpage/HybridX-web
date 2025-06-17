@@ -57,7 +57,7 @@ export default function GeneralHealthCalculatorsPage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
             {generalHealthCalculators.map((calc) => (
-              <Card key={calc.id} className="shadow-xl hover:shadow-2xl transition-shadow duration-300 flex flex-col bg-card/80 backdrop-blur-sm border-border/60 group">
+              <Card key={calc.id} className="shadow-xl hover:shadow-2xl transition-shadow duration-300 flex flex-col bg-card/80 backdrop-blur-sm border-border/60 group border-t-2 border-accent/40">
                 <CardHeader className="flex-row items-center space-x-4 pb-4 pt-6">
                   <div className="p-3 bg-accent/15 rounded-lg ring-1 ring-accent/30">
                     <calc.icon className="h-8 w-8 text-accent" />
