@@ -51,11 +51,11 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-screen-2xl items-center">
         <Link href="/" className="mr-6 flex items-center space-x-2">
-          <Image 
-            src="/logo.png" 
-            alt="HybridX Hub Logo" 
-            width={110} 
-            height={40} 
+          <Image
+            src="/Full Logo (2).png"
+            alt="HybridX Hub Logo"
+            width={110}
+            height={40}
             className="dark:filter dark:invert"
             priority
           />
@@ -111,11 +111,11 @@ export default function Header() {
             <SheetContent side="right" className="w-[300px] sm:w-[320px] bg-background p-6 border-l-border/60">
                <div className="flex justify-between items-center mb-6">
                  <Link href="/" className="flex items-center space-x-2">
-                    <Image 
-                      src="/logo.png" 
-                      alt="HybridX Hub Logo" 
-                      width={110} 
-                      height={40} 
+                    <Image
+                      src="/Full Logo (2).png" /* Consistent logo path */
+                      alt="HybridX Hub Logo"
+                      width={110}
+                      height={40}
                       className="dark:filter dark:invert"
                     />
                  </Link>
