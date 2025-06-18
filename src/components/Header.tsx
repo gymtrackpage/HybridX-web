@@ -1,16 +1,15 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle } from '@/components/ui/sheet';
-import { Menu, LogIn, ChevronDown, ListChecks, Dumbbell, ClipboardList, Route, TrendingUp, HeartPulse, Timer, Percent, Utensils, Target, Trophy, ArrowRight } from 'lucide-react';
+import { Menu, LogIn, ChevronDown, ListChecks, Dumbbell, ClipboardList } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  DropdownMenuSeparator,
-  DropdownMenuLabel
 } from "@/components/ui/dropdown-menu";
 import { ThemeToggleButton } from '@/components/ThemeToggleButton';
 
@@ -19,14 +18,14 @@ interface NavItem {
   href?: string;
   isDropdown?: boolean;
   items?: SubNavItem[];
-  icon?: React.ReactNode; // Icon for the main item if it's a direct link or dropdown trigger
+  icon?: React.ReactNode;
 }
 
 interface SubNavItem {
   label: string;
-  href?: string; // Href is optional now, for separators
+  href?: string;
   icon?: React.ReactNode;
-  isSeparator?: boolean; // To distinguish separators with labels
+  isSeparator?: boolean;
 }
 
 
@@ -52,7 +51,14 @@ export default function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-screen-2xl items-center">
         <Link href="/" className="mr-6 flex items-center space-x-2">
-          <span className="font-bold font-headline text-xl text-primary hover:text-accent transition-colors">HybridX Hub</span>
+          <Image 
+            src="/logo.png" 
+            alt="HybridX Hub Logo" 
+            width={110} 
+            height={40} 
+            className="dark:filter dark:invert"
+            priority
+          />
         </Link>
         <nav className="hidden md:flex items-center space-x-1 lg:space-x-3 text-sm font-medium">
           {navItems.map((item) => (
@@ -67,8 +73,7 @@ export default function Header() {
                   {item.items.map(subItem => (
                     subItem.isSeparator ? (
                       <React.Fragment key={subItem.label}>
-                        <DropdownMenuSeparator className="my-1" />
-                        {subItem.label && <DropdownMenuLabel className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">{subItem.label}</DropdownMenuLabel>}
+                         {/* Separators not currently used, but logic remains if needed */}
                       </React.Fragment>
                     ) : (
                       <DropdownMenuItem key={subItem.label} asChild className="hover:bg-accent/10 focus:bg-accent/10">
@@ -106,7 +111,13 @@ export default function Header() {
             <SheetContent side="right" className="w-[300px] sm:w-[320px] bg-background p-6 border-l-border/60">
                <div className="flex justify-between items-center mb-6">
                  <Link href="/" className="flex items-center space-x-2">
-                    <span className="font-bold font-headline text-xl text-primary">HybridX Hub</span>
+                    <Image 
+                      src="/logo.png" 
+                      alt="HybridX Hub Logo" 
+                      width={110} 
+                      height={40} 
+                      className="dark:filter dark:invert"
+                    />
                  </Link>
                </div>
                <SheetTitle className="sr-only">Mobile Navigation</SheetTitle>
@@ -117,7 +128,7 @@ export default function Header() {
                       <p className="px-3 py-3 text-lg font-headline text-primary">{item.label}</p>
                       {item.items.map(subItem => (
                         subItem.isSeparator ? (
-                          subItem.label && <p key={`${subItem.label}-mobile-sep`} className="px-4 py-2 text-sm font-medium text-muted-foreground">{subItem.label}</p>
+                           null // Separators not currently used
                         ) : (
                           <SheetClose asChild key={`${subItem.label}-mobile`}>
                             <Link

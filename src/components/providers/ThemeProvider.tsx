@@ -30,7 +30,7 @@ interface ThemeProviderProps {
 
 export function ThemeProvider({
   children,
-  defaultTheme = 'dark', // Default to dark to match previous behavior
+  defaultTheme = 'light', // Changed default to light
   storageKey = 'hybridx-ui-theme',
 }: ThemeProviderProps) {
   const [theme, setThemeState] = useState<Theme>(() => {
@@ -42,7 +42,7 @@ export function ThemeProvider({
         }
         // Check system preference if no stored theme
         // const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        // return systemPrefersDark ? 'dark' : 'light';
+        // return systemPrefersDark ? 'dark' : 'light'; // Respect system preference if needed
       } catch (e) {
         console.error('Error reading theme from localStorage', e);
       }
