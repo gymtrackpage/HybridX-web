@@ -54,10 +54,11 @@ export default function Header() {
           <Image
             src="/Full Logo (2).png"
             alt="HybridX Hub Logo"
-            width={110}
-            height={40}
+            width={110} 
+            height={40} 
             className="dark:filter dark:invert"
             priority
+            style={{ objectFit: 'contain' }}
           />
         </Link>
         <nav className="hidden md:flex items-center space-x-1 lg:space-x-3 text-sm font-medium">
@@ -112,11 +113,12 @@ export default function Header() {
                <div className="flex justify-between items-center mb-6">
                  <Link href="/" className="flex items-center space-x-2">
                     <Image
-                      src="/Full Logo (2).png" /* Consistent logo path */
+                      src="/Full Logo (2).png" 
                       alt="HybridX Hub Logo"
                       width={110}
                       height={40}
                       className="dark:filter dark:invert"
+                       style={{ objectFit: 'contain' }}
                     />
                  </Link>
                </div>
