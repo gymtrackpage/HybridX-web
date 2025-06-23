@@ -30,6 +30,14 @@ const books = [
     amazonUrl: "https://amzn.to/445PMV1",
     ctaText: "Get Your Copy",
   },
+  {
+    id: 'dominate-hyrox-arena',
+    title: "Dominate the Hyrox Arena: 45 Advanced Workouts",
+    description: "For experienced Hyrox competitors ready to elevate their training. This guide provides 45 advanced workouts designed to push your limits and help you dominate the competition.",
+    imageUrl: "https://placehold.co/200x300.png",
+    amazonUrl: "#",
+    ctaText: "Get Your Copy",
+  }
 ];
 
 export default function AmazonBookPromotion() {
