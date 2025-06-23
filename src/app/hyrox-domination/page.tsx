@@ -66,46 +66,6 @@ const ProblemAgitationSection = () => (
   </section>
 );
 
-const AuthorityCredibilitySection = () => (
-    <section className="py-16 md:py-24 bg-background">
-      <div className="container mx-auto px-6">
-        <div className="flex flex-col md:flex-row items-center gap-12">
-          <div className="md:w-1/3">
-            <Image
-              src="https://placehold.co/400x400.png"
-              data-ai-hint="fitness coach"
-              alt="Coach Photo"
-              width={400}
-              height={400}
-              className="rounded-full shadow-2xl mx-auto"
-            />
-          </div>
-          <div className="md:w-2/3">
-            <h2 className="text-3xl md:text-4xl font-headline font-bold text-primary mb-4">Who Am I?</h2>
-            <p className="text-lg text-muted-foreground font-body mb-6">
-              I'm not some social media "fitness guru" selling you the latest fad. I'm the coach who's guided <span className="text-primary font-bold">1,000+ athletes</span> to PR their Hyrox times using the exact system you're about to discover.
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 font-body">
-              <div className="flex items-start space-x-3">
-                <Trophy className="h-8 w-8 text-accent flex-shrink-0 mt-1" />
-                <p><span className="font-bold text-primary">8-12 minute average</span> reduction in race times.</p>
-              </div>
-              <div className="flex items-start space-x-3">
-                <Star className="h-8 w-8 text-accent flex-shrink-0 mt-1" />
-                <p><span className="font-bold text-primary">Dominated age group podiums</span> across Europe and the US.</p>
-              </div>
-              <div className="flex items-start space-x-3">
-                <Clock className="h-8 w-8 text-accent flex-shrink-0 mt-1" />
-                <p>Results achieved even with <span className="font-bold text-primary">busy careers and family commitments.</span></p>
-              </div>
-            </div>
-            <p className="mt-6 font-headline text-xl text-primary">This isn't theory. This is proven, results-driven methodology.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-
 const SolutionRevealSection = () => (
     <section className="py-16 md:py-24 bg-secondary/30">
       <div className="container mx-auto px-6 text-center">
@@ -274,7 +234,6 @@ export default function HyroxDominationPage() {
       <main>
         <HeroSection />
         <ProblemAgitationSection />
-        <AuthorityCredibilitySection />
         <SolutionRevealSection />
         <WhatsIncludedSection />
         <PricingSection />
