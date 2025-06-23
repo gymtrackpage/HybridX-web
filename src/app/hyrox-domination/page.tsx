@@ -155,8 +155,10 @@ const PricingSection = () => (
                              <span className="text-xl text-muted-foreground">/month</span>
                         </div>
                         <p className="text-muted-foreground mb-6">Billed monthly. Cancel anytime. Normally <span className="line-through">£45/month</span>.</p>
-                        <Button size="lg" className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
-                            Start Dominating for £5/month
+                        <Button size="lg" className="w-full bg-accent text-accent-foreground hover:bg-accent/90" asChild>
+                            <Link href="https://app.hybridx.club/" target="_blank" rel="noopener noreferrer">
+                                Start Dominating for £5/month
+                            </Link>
                         </Button>
                     </CardContent>
                 </Card>
@@ -240,5 +242,7 @@ export default function HyroxDominationPage() {
     </div>
   );
 }
+
+    
 
     
