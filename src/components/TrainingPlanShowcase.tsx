@@ -15,27 +15,27 @@ interface Plan {
 
 const plans: Plan[] = [
   {
-    id: 'running',
-    title: 'Hybrid Running Mastery',
+    id: 'hybrid-running',
+    title: 'Hybrid Running Plans',
     description: 'Crush your PRs. Combine elite running protocols with targeted strength work for explosive speed and endurance.',
     icon: Activity,
     ctaText: 'View Running Plans',
     href: '#', 
   },
   {
-    id: 'cardio',
-    title: 'Peak Cardio Engine',
-    description: 'Build an unstoppable cardiovascular engine. Diverse, challenging routines to maximize stamina and recovery.',
+    id: 'hyrox-specific',
+    title: 'Hyrox Specific Plans',
+    description: 'For beginner, intermediate, and advanced athletes. Tailored programs to conquer every station and run.',
     icon: HeartPulse,
-    ctaText: 'Explore Cardio Programs',
+    ctaText: 'Find Your Hyrox Plan',
     href: '#', 
   },
   {
-    id: 'weight-training',
-    title: 'Strength & Power Blueprint',
-    description: 'Forge functional power. Comprehensive weight training designed for the demands of hybrid athleticism.',
+    id: 'offseason-strength',
+    title: 'Offseason Strength Plans',
+    description: 'Build your foundation. Focused strength and power programs to prepare you for your next competitive season.',
     icon: Dumbbell,
-    ctaText: 'See Strength Routines',
+    ctaText: 'Explore Strength Plans',
     href: '#', 
   },
 ];
