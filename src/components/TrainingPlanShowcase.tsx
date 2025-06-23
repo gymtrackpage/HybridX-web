@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Activity, HeartPulse, Dumbbell } from 'lucide-react';
@@ -27,8 +28,8 @@ const plans: Plan[] = [
     title: 'Hyrox Specific Plans',
     description: 'For beginner, intermediate, and advanced athletes. Tailored programs to conquer every station and run.',
     icon: HeartPulse,
-    ctaText: 'Find Your Hyrox Plan',
-    href: '#', 
+    ctaText: 'View Hyrox Blueprint',
+    href: '/hyrox-domination', 
   },
   {
     id: 'offseason-strength',
