@@ -97,12 +97,12 @@ const SolutionRevealSection = () => (
 
 const WhatsIncludedSection = () => {
     const includedItems = [
-      { icon: Calendar, title: "Beginner to Advanced Hyrox Race Preparation", value: "$497 Value", description: "Complete 12-week progressive plans for every fitness level, from first-timers to elite competitors."},
-      { icon: TrendingUp, title: "Running Specific Plan", value: "$297 Value", description: "Build a massive running threshold with specialized protocols for speed, endurance, and compromised running."},
-      { icon: Dumbbell, title: "Strength Improvement Plan", value: "$247 Value", description: "Targeted strength and conditioning to power through every station with confidence and reduce injury risk."},
-      { icon: Zap, title: "Off-Season Olympic Lifting Plan", value: "$197 Value", description: "Build explosive power and speed in your offseason with our specialized Olympic lifting and plyometrics program."},
-      { icon: Users, title: "Specific Pairs Plan", value: "$197 Value", description: "Dominate the pairs division with strategies and workouts designed for seamless transitions and synchronized effort."},
-      { icon: Trophy, title: "BONUS: Race Day Execution Plan", value: "$197 Value", description: "Detailed warm-up, nutrition, and mental preparation protocols to ensure you peak on race day."},
+      { icon: Calendar, title: "Beginner to Advanced Hyrox Race Preparation", value: "Included", description: "Complete 12-week progressive plans for every fitness level, from first-timers to elite competitors."},
+      { icon: TrendingUp, title: "Running Specific Plan", value: "Included", description: "Build a massive running threshold with specialized protocols for speed, endurance, and compromised running."},
+      { icon: Dumbbell, title: "Strength Improvement Plan", value: "Included", description: "Targeted strength and conditioning to power through every station with confidence and reduce injury risk."},
+      { icon: Zap, title: "Off-Season Olympic Lifting Plan", value: "Included", description: "Build explosive power and speed in your offseason with our specialized Olympic lifting and plyometrics program."},
+      { icon: Users, title: "Specific Pairs Plan", value: "Included", description: "Dominate the pairs division with strategies and workouts designed for seamless transitions and synchronized effort."},
+      { icon: Trophy, title: "BONUS: Race Day Execution Plan", value: "Included", description: "Detailed warm-up, nutrition, and mental preparation protocols to ensure you peak on race day."},
     ];
   
     return (
@@ -136,31 +136,28 @@ const PricingSection = () => (
     <section id="pricing" className="py-16 md:py-24 bg-secondary/30">
         <div className="container mx-auto px-6">
             <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-headline font-bold text-primary">Your Investment</h2>
-                <p className="text-lg text-muted-foreground mt-2">Choose the plan that's right for you. Price increases in 48 hours.</p>
+                <h2 className="text-3xl md:text-4xl font-headline font-bold text-primary">Get Instant Access</h2>
+                <p className="text-lg text-muted-foreground mt-2">Join now and lock in your special launch price.</p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                <Card className="border-2 border-primary shadow-2xl relative overflow-hidden">
-                    <CardHeader className="text-center">
-                        <CardTitle className="text-2xl font-headline">DIY DOMINATION</CardTitle>
-                        <p className="text-4xl font-bold text-primary my-4">$297</p>
-                        <p className="text-muted-foreground line-through">$1,583 Value</p>
+            <div className="flex justify-center">
+                <Card className="border-2 border-accent shadow-2xl relative overflow-hidden max-w-md w-full">
+                     <div className="absolute -top-px left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-sm font-bold px-4 py-1 rounded-b-lg shadow-lg">
+                        <Trophy className="inline-block h-4 w-4 mr-1.5 -mt-0.5" />
+                        LIMITED TIME OFFER
+                     </div>
+                    <CardHeader className="text-center pt-12 pb-4">
+                        <CardTitle className="text-2xl font-headline uppercase tracking-wider">Hyrox Domination</CardTitle>
+                        <CardDescription>Complete Training System</CardDescription>
                     </CardHeader>
                     <CardContent className="text-center">
-                        <p className="mb-6">Everything you need to crush your Hyrox time, delivered instantly.</p>
-                        <Button size="lg" className="w-full bg-primary text-primary-foreground hover:bg-primary/90">Get DIY Domination</Button>
-                    </CardContent>
-                </Card>
-                <Card className="border-2 border-accent shadow-2xl relative overflow-hidden">
-                    <div className="absolute top-0 right-0 bg-accent text-accent-foreground text-sm font-bold px-4 py-1 rounded-bl-lg">MOST POPULAR</div>
-                    <CardHeader className="text-center">
-                        <CardTitle className="text-2xl font-headline">COMPLETE DOMINATION</CardTitle>
-                        <p className="text-4xl font-bold text-accent my-4">$497</p>
-                        <p className="text-muted-foreground line-through">$3,438 Total Value</p>
-                    </CardHeader>
-                    <CardContent className="text-center">
-                        <p className="mb-6">Everything in DIY, PLUS a 1-on-1 coaching call, personalization, and all bonuses.</p>
-                        <Button size="lg" className="w-full bg-accent text-accent-foreground hover:bg-accent/90">Get Complete Domination</Button>
+                        <div className="flex items-baseline justify-center gap-2 my-4">
+                             <span className="text-5xl font-bold text-primary">£5</span>
+                             <span className="text-xl text-muted-foreground">/month</span>
+                        </div>
+                        <p className="text-muted-foreground mb-6">Billed monthly. Cancel anytime. Normally <span className="line-through">£45/month</span>.</p>
+                        <Button size="lg" className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
+                            Start Dominating for £5/month
+                        </Button>
                     </CardContent>
                 </Card>
             </div>
@@ -244,3 +241,5 @@ export default function HyroxDominationPage() {
     </div>
   );
 }
+
+    
