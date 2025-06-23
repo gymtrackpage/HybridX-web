@@ -51,7 +51,7 @@ const ProblemAgitationSection = () => (
           <CardContent className="space-y-4 font-body text-muted-foreground">
             <p>❌ You're wasting MONTHS on ineffective training that'll leave you gasping for air at station 3.</p>
             <p>❌ You have no idea how to pace your runs between stations (and it's costing you precious minutes).</p>
-            <p>❌ Your "cardio base" means nothing when you can't maintain running speed after wall balls.</p>
+            <p>❌ Your "cardio base" means nothing when you can't maintain running speed after the sleds.</p>
             <p>❌ You're about to embarrass yourself in front of hundreds of people because you trained all wrong.</p>
           </CardContent>
         </Card>
