@@ -2,7 +2,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { CheckCircle, ShieldCheck, Trophy, Star, Clock, AlertTriangle, ChevronRight, BarChart, BookOpen, Calendar, BrainCircuit } from 'lucide-react';
+import { ShieldCheck, Trophy, AlertTriangle, ChevronRight, Calendar, TrendingUp, Dumbbell, Zap, Users } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -97,13 +97,12 @@ const SolutionRevealSection = () => (
 
 const WhatsIncludedSection = () => {
     const includedItems = [
-      { icon: Calendar, title: "The 12-Week Blueprint", value: "$497 Value", description: "84 days of precise, progressive programming with daily workout cards."},
-      { icon: BarChart, title: "Compromised Running Mastery", value: "$297 Value", description: "Exclusive protocols and pacing strategies for running fast after stations."},
-      { icon: BookOpen, title: "Hyrox Station Efficiency Guide", value: "$197 Value", description: "Movement breakdowns and energy-saving techniques for every station."},
-      { icon: BrainCircuit, title: "RPE Training Guide", value: "$147 Value", description: "Master the Rate of Perceived Exertion system to train at the perfect intensity."},
-      { icon: Trophy, title: "Race Day Execution Plan", value: "$197 Value", description: "Detailed warm-up, nutrition, and mental preparation protocols."},
-      { icon: CheckCircle, title: "Printable PDF Calendar", value: "$97 Value", description: "Track your progress week by week and stay motivated."},
-      { icon: ShieldCheck, title: "BONUS: Deload & Recovery Protocols", value: "$147 Value", description: "Science-based recovery strategies and injury prevention."},
+      { icon: Calendar, title: "Beginner to Advanced Hyrox Race Preparation", value: "$497 Value", description: "Complete 12-week progressive plans for every fitness level, from first-timers to elite competitors."},
+      { icon: TrendingUp, title: "Running Specific Plan", value: "$297 Value", description: "Build a massive running threshold with specialized protocols for speed, endurance, and compromised running."},
+      { icon: Dumbbell, title: "Strength Improvement Plan", value: "$247 Value", description: "Targeted strength and conditioning to power through every station with confidence and reduce injury risk."},
+      { icon: Zap, title: "Off-Season Olympic Lifting Plan", value: "$197 Value", description: "Build explosive power and speed in your offseason with our specialized Olympic lifting and plyometrics program."},
+      { icon: Users, title: "Specific Pairs Plan", value: "$197 Value", description: "Dominate the pairs division with strategies and workouts designed for seamless transitions and synchronized effort."},
+      { icon: Trophy, title: "BONUS: Race Day Execution Plan", value: "$197 Value", description: "Detailed warm-up, nutrition, and mental preparation protocols to ensure you peak on race day."},
     ];
   
     return (
