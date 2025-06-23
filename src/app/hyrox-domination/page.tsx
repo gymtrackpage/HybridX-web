@@ -213,9 +213,8 @@ const FinalCloseSection = () => (
         <p className="text-lg font-body max-w-3xl mx-auto mb-8">
             Keep doing what you're doing and regret what could have been, or invest in a proven system and cross the finish line knowing you dominated your race. Which athlete do you want to be?
         </p>
-        <p className="font-bold text-destructive mb-8">This price disappears in 47 hours and 23 minutes.</p>
         <Button size="lg" asChild className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg transform hover:scale-105 transition-transform duration-200">
-            <Link href="#pricing">👇 Click Below and Let's Build Your Domination Story 👇</Link>
+            <Link href="#pricing">Start Dominating Today</Link>
         </Button>
       </div>
     </section>
