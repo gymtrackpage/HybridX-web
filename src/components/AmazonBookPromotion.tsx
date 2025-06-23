@@ -34,8 +34,8 @@ const books = [
     id: 'dominate-hyrox-arena',
     title: "Dominate the Hyrox Arena: 45 Advanced Workouts",
     description: "For experienced Hyrox competitors ready to elevate their training. This guide provides 45 advanced workouts designed to push your limits and help you dominate the competition.",
-    imageUrl: "https://placehold.co/200x300.png",
-    amazonUrl: "#",
+    imageUrl: "https://m.media-amazon.com/images/I/612iiof3NPL._SY466_.jpg",
+    amazonUrl: "https://amzn.to/4livuyq",
     ctaText: "Get Your Copy",
   }
 ];
