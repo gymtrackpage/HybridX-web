@@ -6,8 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Powerlifting Score Calculator (Wilks, DOTS) | HybridX Hub',
-  description: 'Calculate your Wilks or DOTS powerlifting score to compare strength across different bodyweights.',
+  title: 'Free Powerlifting Score Calculator (Wilks, DOTS) | HybridX Hub',
+  description: 'Use our free Powerlifting Score Calculator to find your Wilks or DOTS score. Benchmark your strength against other lifters.',
 };
 
 export default function PowerliftingScoreCalculatorPage() {

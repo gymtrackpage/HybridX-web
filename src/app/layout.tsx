@@ -1,3 +1,4 @@
+
 import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
@@ -19,8 +20,8 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: 'HybridX Hub',
-  description: 'Your central hub for hybrid training plans, books, and app.',
+  title: 'HybridX Hub: Training Plans, Calculators & Coaching App',
+  description: 'Your central hub for hybrid training plans, books, and app. Access free running and strength calculators to optimize your performance.',
 };
 
 export default function RootLayout({

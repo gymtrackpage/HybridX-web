@@ -6,8 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Split Time Calculator | HybridX Hub',
-  description: 'Calculate your race splits, with optional GPX upload for elevation-adjusted recommendations.',
+  title: 'Free Race Split Time Calculator (GPX, AI) | HybridX Hub',
+  description: 'Plan your race with our free Split Time Calculator. Generate even splits or upload a GPX file for AI-powered, elevation-adjusted split recommendations.',
 };
 
 export default function SplitTimeCalculatorPage() {

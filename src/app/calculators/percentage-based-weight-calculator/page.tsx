@@ -6,8 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Percentage-Based Weight Calculator | HybridX Hub',
-  description: 'Calculate specific training weights based on percentages of your 1RM (One-Rep Max).',
+  title: 'Free Percentage-Based Weight Calculator | HybridX Hub',
+  description: 'Calculate specific training weights with our free Percentage-Based Weight Calculator. Perfect for programming based on your 1RM.',
 };
 
 export default function PercentageBasedWeightCalculatorPage() {

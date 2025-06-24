@@ -9,8 +9,8 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Strength Calculators | HybridX Hub',
-  description: 'A suite of essential calculators for strength athletes to estimate 1RM, calculate percentage-based weights, and determine powerlifting scores.',
+  title: 'Free Strength Calculators | HybridX Hub',
+  description: 'A suite of free, essential strength calculators for athletes to estimate 1RM, calculate percentage-based weights, and determine powerlifting scores.',
 };
 
 interface CalculatorInfo {

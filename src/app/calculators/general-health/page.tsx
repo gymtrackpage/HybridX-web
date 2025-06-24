@@ -9,8 +9,8 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'General Health Calculators | HybridX Hub',
-  description: 'Essential calculators for understanding body composition, calorie needs, and macronutrient targets.',
+  title: 'Free General Health Calculators | HybridX Hub',
+  description: 'A suite of free health calculators for understanding body composition, calorie needs, and macronutrient targets.',
 };
 
 interface CalculatorInfo {

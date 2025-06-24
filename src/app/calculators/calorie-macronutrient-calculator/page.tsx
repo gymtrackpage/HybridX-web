@@ -6,8 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Calorie & Macronutrient Calculator | HybridX Hub',
-  description: 'Estimate your daily calorie and macronutrient needs for fat loss, maintenance, or muscle gain. Tailored to your activity level and goals.',
+  title: 'Free Calorie & Macronutrient Calculator | HybridX Hub',
+  description: 'Free Calorie and Macronutrient Calculator. Estimate your daily calorie and macro needs for fat loss, maintenance, or muscle gain.',
 };
 
 export default function CalorieMacronutrientCalculatorPage() {

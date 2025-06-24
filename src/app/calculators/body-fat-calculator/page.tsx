@@ -6,8 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Body Fat Percentage Calculator | HybridX Hub',
-  description: 'Estimate your body fat percentage using the U.S. Navy method. Track your body composition progress.',
+  title: 'Free Body Fat Percentage Calculator | HybridX Hub',
+  description: 'Estimate your body fat percentage with our free Body Fat Calculator. Uses the U.S. Navy method to help you track body composition.',
 };
 
 export default function BodyFatCalculatorPage() {

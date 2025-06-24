@@ -6,8 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Race Time Predictor | HybridX Hub',
-  description: 'Estimate your finish times for various race distances based on a recent performance.',
+  title: 'Free Race Time Predictor (5k, 10k, Marathon) | HybridX Hub',
+  description: 'Free Race Time Predictor. Estimate your finish times for a 5k, 10k, half marathon, or full marathon based on a recent performance.',
 };
 
 export default function RaceTimePredictorPage() {

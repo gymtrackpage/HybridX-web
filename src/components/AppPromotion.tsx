@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Smartphone, CheckCircle, BarChart2, Zap } from 'lucide-react';
@@ -40,7 +41,7 @@ export default function AppPromotion() {
             <div className="relative aspect-[16/10] rounded-xl shadow-2xl overflow-hidden group">
               <Image
                 src="/hyrox-app-showcase.png"
-                alt="HybridX App Interface showing training programs and workout generator"
+                alt="HybridX App Interface showing daily workout plans and a workout generator on a smartphone screen"
                 width={1152}
                 height={718}
                 className="object-cover w-full h-full"

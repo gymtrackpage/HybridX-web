@@ -6,8 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Heart Rate Zone Calculator | HybridX Hub',
-  description: 'Calculate your optimal training heart rate zones for running and cardio workouts.',
+  title: 'Free Heart Rate Zone Calculator | HybridX Hub',
+  description: 'Find your optimal training zones with our free Heart Rate Zone Calculator. Uses the Karvonen formula for accurate cardio and running training.',
 };
 
 export default function HeartRateZoneCalculatorPage() {

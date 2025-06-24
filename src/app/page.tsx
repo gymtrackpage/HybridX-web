@@ -5,7 +5,13 @@ import AmazonBookPromotion from '@/components/AmazonBookPromotion';
 import AppPromotion from '@/components/AppPromotion';
 import FaqSection from '@/components/FaqSection';
 import ContactFormSection from '@/components/ContactFormSection';
+import type { Metadata } from 'next';
 import Footer from '@/components/Footer';
+
+export const metadata: Metadata = {
+  title: 'HybridX Hub | Training Plans, Books, and Coaching App',
+  description: 'Achieve peak performance with HybridX Hub. Choose your path: focused training plan books or our streamlined coaching app for your pocket. Get started today.',
+};
 
 export default function Home() {
   return (

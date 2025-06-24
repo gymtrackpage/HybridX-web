@@ -6,8 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Pace Calculator | HybridX Hub',
-  description: 'Calculate your running pace, time, or distance with the HybridX Hub Pace Calculator.',
+  title: 'Free Pace Calculator for Running | HybridX Hub',
+  description: 'Easily calculate your running pace, finish time, or distance with our free Pace Calculator. Perfect for marathon, 10k, and 5k training.',
 };
 
 export default function PaceCalculatorPage() {

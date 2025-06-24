@@ -9,8 +9,8 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Running Calculators | HybridX Hub',
-  description: 'A suite of essential calculators for runners to plan pace, predict race times, find heart rate zones, and strategize splits.',
+  title: 'Free Running Calculators | HybridX Hub',
+  description: 'A suite of free, essential running calculators to plan pace, predict race times, find heart rate zones, and strategize splits for your 5k, 10k, or marathon.',
 };
 
 interface CalculatorInfo {
