@@ -1,35 +1,14 @@
-import { Users, BookOpen, Trophy } from 'lucide-react';
-
-const stats = [
-  {
-    icon: Users,
-    value: 'Thousands',
-    label: 'of Athletes on the App',
-  },
-  {
-    icon: BookOpen,
-    value: 'Thousands',
-    label: 'of Training Books Sold',
-  },
-  {
-    icon: Trophy,
-    value: 'Countless',
-    label: 'PRs Smashed',
-  },
-];
+import { Users } from 'lucide-react';
 
 export default function SocialProofSection() {
   return (
-    <section id="social-proof" className="bg-secondary/30">
-      <div className="container mx-auto px-6 py-10 md:py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-          {stats.map((stat, index) => (
-            <div key={index} className="flex flex-col items-center">
-              <stat.icon className="h-10 w-10 text-accent mb-3" />
-              <p className="text-3xl font-bold font-headline text-primary">{stat.value}</p>
-              <p className="text-md text-muted-foreground font-body">{stat.label}</p>
-            </div>
-          ))}
+    <section id="social-proof" className="bg-primary text-primary-foreground">
+      <div className="container mx-auto px-6 py-6 md:py-8">
+        <div className="flex flex-col md:flex-row items-center justify-center text-center gap-4">
+          <Users className="h-10 w-10 text-accent flex-shrink-0" />
+          <h2 className="text-xl md:text-2xl font-headline font-semibold tracking-wide">
+            Join Thousands of Athletes Achieving Peak Performance with HybridX
+          </h2>
         </div>
       </div>
     </section>
