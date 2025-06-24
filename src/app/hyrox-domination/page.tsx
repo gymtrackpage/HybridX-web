@@ -2,7 +2,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ShieldCheck, Trophy, AlertTriangle, ChevronRight, Calendar, TrendingUp, Dumbbell, Zap, Users } from 'lucide-react';
+import { ShieldCheck, Trophy, AlertTriangle, ChevronRight, Calendar, TrendingUp, Dumbbell, Zap, Users, ArrowUpRight } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -37,7 +37,7 @@ const HeroSection = () => (
 );
 
 const ProblemAgitationSection = () => (
-  <section className="py-16 md:py-24 bg-secondary/30">
+  <section className="py-20 md:py-28 bg-secondary/30">
     <div className="container mx-auto px-6 text-center">
       <h2 className="text-3xl md:text-4xl font-headline font-bold text-primary mb-8">Here's What NOBODY Tells You About Hyrox Training...</h2>
       <p className="text-lg text-muted-foreground font-body max-w-2xl mx-auto mb-12">
@@ -67,7 +67,7 @@ const ProblemAgitationSection = () => (
 );
 
 const SolutionRevealSection = () => (
-    <section className="py-16 md:py-24 bg-secondary/30">
+    <section className="py-20 md:py-28 bg-secondary/30">
       <div className="container mx-auto px-6 text-center">
         <h2 className="text-3xl md:text-4xl font-headline font-bold text-primary mb-4">Finally, The Hyrox Domination System</h2>
         <p className="text-xl text-muted-foreground font-body max-w-3xl mx-auto mb-12">
@@ -106,7 +106,7 @@ const WhatsIncludedSection = () => {
     ];
   
     return (
-      <section className="py-16 md:py-24 bg-background">
+      <section className="py-20 md:py-28 bg-background">
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-headline font-bold text-primary">The Complete Domination Package</h2>
@@ -133,7 +133,7 @@ const WhatsIncludedSection = () => {
   };
   
 const PricingSection = () => (
-    <section id="pricing" className="py-16 md:py-24 bg-secondary/30">
+    <section id="pricing" className="py-20 md:py-28 bg-secondary/30">
         <div className="container mx-auto px-6">
             <div className="text-center mb-12">
                 <h2 className="text-3xl md:text-4xl font-headline font-bold text-primary">Get Instant Access</h2>
@@ -157,7 +157,7 @@ const PricingSection = () => (
                         <p className="text-muted-foreground mb-6">Billed monthly. Cancel anytime. Normally <span className="line-through">£45/month</span>.</p>
                         <Button size="lg" className="w-full bg-accent text-accent-foreground hover:bg-accent/90" asChild>
                             <Link href="https://app.hybridx.club/" target="_blank" rel="noopener noreferrer">
-                                Start Dominating for £5/month
+                                Start Dominating for £5/month <ArrowUpRight className="ml-2 h-5 w-5" />
                             </Link>
                         </Button>
                     </CardContent>
@@ -168,7 +168,7 @@ const PricingSection = () => (
 );
   
 const GuaranteeSection = () => (
-    <section className="py-16 md:py-24 bg-background">
+    <section className="py-20 md:py-28 bg-background">
       <div className="container mx-auto px-6 max-w-3xl">
         <Card className="bg-primary/5 border-primary/20 p-8 text-center">
           <ShieldCheck className="h-16 w-16 text-accent mx-auto mb-4"/>
@@ -183,7 +183,7 @@ const GuaranteeSection = () => (
 );
   
 const FaqSection = () => (
-    <section className="py-16 md:py-24 bg-secondary/30">
+    <section className="py-20 md:py-28 bg-secondary/30">
       <div className="container mx-auto px-6 max-w-3xl">
         <h2 className="text-3xl font-headline font-bold text-primary text-center mb-8">Frequently Asked Questions</h2>
         <Accordion type="single" collapsible className="w-full">
@@ -209,7 +209,7 @@ const FaqSection = () => (
 );
 
 const FinalCloseSection = () => (
-    <section className="py-16 md:py-24 bg-primary text-primary-foreground">
+    <section className="py-20 md:py-28 bg-primary text-primary-foreground">
       <div className="container mx-auto px-6 text-center">
         <h2 className="text-3xl md:text-4xl font-headline font-bold mb-4 text-accent">The Choice Is Yours</h2>
         <p className="text-lg font-body max-w-3xl mx-auto mb-8">

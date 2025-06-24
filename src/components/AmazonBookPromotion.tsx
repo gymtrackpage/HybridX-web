@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { BookOpenCheck, ShoppingCart } from 'lucide-react';
+import { BookOpenCheck, ShoppingCart, ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
 
 const books = [
@@ -42,7 +42,7 @@ const books = [
 
 export default function AmazonBookPromotion() {
   return (
-    <section id="book-promotion" className="py-16 md:py-24 bg-background">
+    <section id="book-promotion" className="py-20 md:py-28 bg-background">
       <div className="container mx-auto px-6">
         <div className="text-center mb-12 md:mb-16">
           <BookOpenCheck className="h-16 w-16 text-accent mx-auto mb-4" />
@@ -82,7 +82,7 @@ export default function AmazonBookPromotion() {
                   <CardFooter className="p-0 mt-4">
                     <Button className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto transition-colors duration-300 font-headline py-3 text-sm md:text-base" asChild>
                       <Link href={book.amazonUrl} target="_blank" rel="noopener noreferrer">
-                        <ShoppingCart className="mr-2 h-5 w-5" /> {book.ctaText}
+                        <ShoppingCart className="mr-2 h-5 w-5" /> {book.ctaText} <ArrowUpRight className="ml-1.5 h-4 w-4" />
                       </Link>
                     </Button>
                   </CardFooter>

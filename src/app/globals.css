@@ -22,10 +22,10 @@
     --primary-foreground: 0 0% 100%; /* White */
 
     --secondary: 0 0% 96.1%; /* Light Gray */
-    --secondary-foreground: 0 0% 20%; /* Dark Gray */
+    --secondary-foreground: 0 0% 15%; /* Darker Gray for better contrast */
 
     --muted: 0 0% 90%; /* Gray */
-    --muted-foreground: 0 0% 40%; /* Darker Gray */
+    --muted-foreground: 0 0% 30%; /* Darker Gray for better contrast */
 
     --accent: 47 95% 67%; /* Yellow #fadb5c */
     --accent-foreground: 0 0% 0%; /* Black */
@@ -68,10 +68,10 @@
     --primary-foreground: 0 0% 0%; /* Black */
 
     --secondary: 0 0% 15%; /* Dark Gray */
-    --secondary-foreground: 0 0% 80%; /* Light Gray */
+    --secondary-foreground: 0 0% 90%; /* Lighter Gray for better contrast */
 
     --muted: 0 0% 20%; /* Darker Gray */
-    --muted-foreground: 0 0% 60%; /* Medium Gray */
+    --muted-foreground: 0 0% 70%; /* Lighter Gray for better contrast */
 
     --accent: 47 95% 67%; /* Yellow #fadb5c */
     --accent-foreground: 0 0% 0%; /* Black */

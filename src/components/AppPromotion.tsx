@@ -1,7 +1,7 @@
 
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Smartphone, CheckCircle, BarChart2, Zap } from 'lucide-react';
+import { Smartphone, CheckCircle, BarChart2, Zap, ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
 
 const appFeatures = [
@@ -12,7 +12,7 @@ const appFeatures = [
 
 export default function AppPromotion() {
   return (
-    <section id="app-promotion" className="relative py-16 md:py-24 bg-secondary/30 overflow-hidden">
+    <section id="app-promotion" className="relative py-20 md:py-28 bg-secondary/30 overflow-hidden">
       <div aria-hidden="true" className="absolute inset-0 bg-subtle-x-light dark:bg-subtle-x-dark opacity-40 dark:opacity-25 mix-blend-multiply dark:mix-blend-screen"></div>
       <div className="container mx-auto px-6 relative z-10">
         <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
@@ -33,7 +33,7 @@ export default function AppPromotion() {
             </div>
             <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg transform hover:scale-105 transition-transform duration-200" asChild>
               <Link href="https://app.hybridx.club" target="_blank" rel="noopener noreferrer">
-                <Smartphone className="mr-2 h-5 w-5" /> Access the App Now
+                <Smartphone className="mr-2 h-5 w-5" /> Access the App Now <ArrowUpRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
           </div>
@@ -46,6 +46,7 @@ export default function AppPromotion() {
                 height={718}
                 className="object-cover w-full h-full"
                 sizes="(max-width: 767px) 100vw, 50vw"
+                priority
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
             </div>

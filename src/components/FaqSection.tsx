@@ -34,7 +34,7 @@ const faqItems = [
 
 export default function FaqSection() {
   return (
-    <section id="faq" className="relative py-16 md:py-24 bg-secondary/30 overflow-hidden">
+    <section id="faq" className="relative py-20 md:py-28 bg-secondary/30 overflow-hidden">
       <div aria-hidden="true" className="absolute inset-0 bg-subtle-x-light dark:bg-subtle-x-dark opacity-40 dark:opacity-25 mix-blend-multiply dark:mix-blend-screen"></div>
       <div className="container mx-auto px-6 relative z-10">
         <div className="text-center mb-12 md:mb-16">

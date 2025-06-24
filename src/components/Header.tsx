@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle } from '@/components/ui/sheet';
-import { Menu, LogIn, ChevronDown, ListChecks, Dumbbell, ClipboardList } from 'lucide-react';
+import { Menu, LogIn, ChevronDown, ListChecks, Dumbbell, ClipboardList, ArrowUpRight } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -87,9 +87,13 @@ export default function Header() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Button key={item.label} variant="ghost" asChild className="transition-colors hover:text-accent text-foreground/80 font-body px-2 lg:px-3 py-2 text-sm">
-                <Link href={item.href!}>
+              <Button key={item.label} variant="ghost" asChild className="transition-colors hover:text-accent text-foreground/80 font-body px-2 lg:px-3 py-2 text-sm group">
+                <Link 
+                  href={item.href!}
+                  {...(item.href?.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                >
                   {item.icon} {item.label}
+                  {item.href?.startsWith('http') && <ArrowUpRight className="ml-1 h-4 w-4 text-muted-foreground/80 group-hover:text-accent" />}
                 </Link>
               </Button>
             )
@@ -99,7 +103,7 @@ export default function Header() {
           <ThemeToggleButton />
           <Button className="hidden md:inline-flex bg-accent text-accent-foreground hover:bg-accent/90 font-headline" asChild>
             <Link href="https://app.hybridx.club" target="_blank" rel="noopener noreferrer">
-              <LogIn className="mr-2 h-4 w-4" /> Login
+              <LogIn className="mr-2 h-4 w-4" /> Login <ArrowUpRight className="ml-1 h-4 w-4" />
             </Link>
           </Button>
           <Sheet>
@@ -147,9 +151,13 @@ export default function Header() {
                     <SheetClose asChild key={`${item.label}-mobile`}>
                       <Link
                         href={item.href!}
-                        className="flex items-center rounded-md px-3 py-3 transition-colors hover:bg-accent/10 text-base font-headline text-foreground/90"
+                        {...(item.href?.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                        className="flex items-center justify-between rounded-md px-3 py-3 transition-colors hover:bg-accent/10 text-base font-headline text-foreground/90 group"
                       >
-                        {item.icon} {item.label}
+                        <span className="flex items-center">
+                          {item.icon} {item.label}
+                        </span>
+                        {item.href?.startsWith('http') && <ArrowUpRight className="h-5 w-5 text-muted-foreground/60 group-hover:text-accent" />}
                       </Link>
                     </SheetClose>
                   )
@@ -161,7 +169,7 @@ export default function Header() {
                 <SheetClose asChild>
                   <Button className="bg-accent text-accent-foreground hover:bg-accent/90 mt-4 py-3 text-base font-headline w-full" asChild>
                     <Link href="https://app.hybridx.club" target="_blank" rel="noopener noreferrer">
-                       <LogIn className="mr-2 h-5 w-5" /> Login / Sign Up
+                       <LogIn className="mr-2 h-5 w-5" /> Login / Sign Up <ArrowUpRight className="ml-1 h-5 w-5" />
                     </Link>
                   </Button>
                 </SheetClose>
