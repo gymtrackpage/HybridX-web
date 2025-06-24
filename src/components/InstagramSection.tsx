@@ -5,12 +5,12 @@ import { Instagram, ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
 
 const instagramPosts = [
-  { id: 1, src: 'https://placehold.co/400x400.png', alt: 'Hyrox athlete performing a kettlebell exercise', hint: 'kettlebell workout' },
-  { id: 2, src: 'https://placehold.co/400x400.png', alt: 'Runner on a track at sunrise', hint: 'runner sunrise' },
-  { id: 3, src: 'https://placehold.co/400x400.png', alt: 'Athlete doing a wall ball exercise', hint: 'wall ball' },
-  { id: 4, src: 'https://placehold.co/400x400.png', alt: 'Close-up of running shoes on pavement', hint: 'running shoes' },
-  { id: 5, src: 'https://placehold.co/400x400.png', alt: 'Gym setup with barbells and weights', hint: 'gym weights' },
-  { id: 6, src: 'https://placehold.co/400x400.png', alt: 'Athlete on a rowing machine', hint: 'rowing machine' },
+  { id: 1, src: '/screenshot-1.png', alt: 'Instagram post from HybridX Club' },
+  { id: 2, src: '/screenshot-2.png', alt: 'Instagram post from HybridX Club' },
+  { id: 3, src: '/screenshot-3.png', alt: 'Instagram post from HybridX Club' },
+  { id: 4, src: '/screenshot-4.png', alt: 'Instagram post from HybridX Club' },
+  { id: 5, src: '/screenshot-5.png', alt: 'Instagram post from HybridX Club' },
+  { id: 6, src: '/screenshot-6.png', alt: 'Instagram post from HybridX Club' },
 ];
 
 export default function InstagramSection() {
@@ -36,7 +36,6 @@ export default function InstagramSection() {
                 width={400}
                 height={400}
                 className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300 ease-in-out"
-                data-ai-hint={post.hint}
               />
               <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
                 <Instagram className="h-8 w-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
