@@ -3,13 +3,13 @@ import { Users, BookOpen, Trophy } from 'lucide-react';
 const stats = [
   {
     icon: Users,
-    value: '10,000+',
-    label: 'Athletes on the App',
+    value: 'Thousands',
+    label: 'of Athletes on the App',
   },
   {
     icon: BookOpen,
-    value: '50,000+',
-    label: 'Training Books Sold',
+    value: 'Thousands',
+    label: 'of Training Books Sold',
   },
   {
     icon: Trophy,
