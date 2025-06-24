@@ -5,12 +5,12 @@ import { Instagram, ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
 
 const instagramPosts = [
-  { id: 1, src: '/screenshot-1.png', alt: 'Instagram post from HybridX Club' },
-  { id: 2, src: '/screenshot-2.png', alt: 'Instagram post from HybridX Club' },
-  { id: 3, src: '/screenshot-3.png', alt: 'Instagram post from HybridX Club' },
-  { id: 4, src: '/screenshot-4.png', alt: 'Instagram post from HybridX Club' },
-  { id: 5, src: '/screenshot-5.png', alt: 'Instagram post from HybridX Club' },
-  { id: 6, src: '/screenshot-6.png', alt: 'Instagram post from HybridX Club' },
+  { id: 1, src: '/Screenshot_20250624-171433.png', alt: 'Instagram post from HybridX Club' },
+  { id: 2, src: '/Screenshot_20250624-171454.png', alt: 'Instagram post from HybridX Club' },
+  { id: 3, src: '/Screenshot_20250624-171508.png', alt: 'Instagram post from HybridX Club' },
+  { id: 4, src: '/Screenshot_20250624-171523.png', alt: 'Instagram post from HybridX Club' },
+  { id: 5, src: '/Screenshot_20250624-171538.png', alt: 'Instagram post from HybridX Club' },
+  { id: 6, src: '/Screenshot_20250624-171557.png', alt: 'Instagram post from HybridX Club' },
 ];
 
 export default function InstagramSection() {
