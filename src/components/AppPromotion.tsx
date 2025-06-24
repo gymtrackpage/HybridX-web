@@ -1,7 +1,13 @@
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Smartphone } from 'lucide-react';
+import { Smartphone, CheckCircle, BarChart2, BookOpen } from 'lucide-react';
 import Link from 'next/link';
+
+const appFeatures = [
+    { icon: BookOpen, text: "Access all training plans in one place." },
+    { icon: BarChart2, text: "Track your workouts and monitor progress." },
+    { icon: CheckCircle, text: "Stay focused on your goals with a clear path." },
+];
 
 export default function AppPromotion() {
   return (
@@ -16,6 +22,14 @@ export default function AppPromotion() {
             <p className="text-lg text-muted-foreground font-body mb-8">
               Track every rep, every run, every win. Our app seamlessly integrates your training plans, monitors progress, and keeps you laser-focused on your goals.
             </p>
+            <div className="space-y-3 mb-10 text-left">
+                {appFeatures.map((feature, index) => (
+                    <div key={index} className="flex items-center">
+                        <feature.icon className="h-6 w-6 text-green-500 mr-3 flex-shrink-0" />
+                        <span className="text-md text-muted-foreground">{feature.text}</span>
+                    </div>
+                ))}
+            </div>
             <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg transform hover:scale-105 transition-transform duration-200" asChild>
               <Link href="https://app.hybridx.club" target="_blank" rel="noopener noreferrer">
                 <Smartphone className="mr-2 h-5 w-5" /> Access the App Now
@@ -29,7 +43,7 @@ export default function AppPromotion() {
                 alt="HybridX App Interface showing progress tracking"
                 width={800}
                 height={500}
-                unoptimized={true}
+                data-ai-hint="app interface"
                 className="object-cover w-full h-full"
                 sizes="(max-width: 767px) 100vw, 50vw"
               />

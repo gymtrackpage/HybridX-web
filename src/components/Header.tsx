@@ -30,7 +30,7 @@ interface SubNavItem {
 
 
 const navItems: NavItem[] = [
-  { label: 'Training Plans', href: '#training-plans' },
+  { label: 'Hyrox Plan', href: '/hyrox-domination' },
   { label: 'Our App', href: 'https://app.hybridx.club' },
   { label: 'Books', href: '#book-promotion' },
   {

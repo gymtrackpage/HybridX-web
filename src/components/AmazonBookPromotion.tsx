@@ -64,7 +64,6 @@ export default function AmazonBookPromotion() {
                       alt={book.title}
                       width={200} 
                       height={300}
-                      unoptimized={true}
                       style={{ objectFit: 'contain' }}
                       sizes="(max-width: 767px) 200px, 33vw"
                       className="group-hover:scale-105 transition-transform duration-500 ease-out"
