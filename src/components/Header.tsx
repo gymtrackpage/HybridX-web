@@ -53,7 +53,7 @@ export default function Header() {
         <Link href="/" className="mr-6 flex items-center space-x-2">
           <Image
             src="/Full Logo (2).png"
-            alt="HybridX Hub Logo"
+            alt="HybridX Logo"
             width={110} 
             height={40} 
             className="dark:filter dark:invert"
@@ -114,7 +114,7 @@ export default function Header() {
                  <Link href="/" className="flex items-center space-x-2">
                     <Image
                       src="/Full Logo (2).png" 
-                      alt="HybridX Hub Logo"
+                      alt="HybridX Logo"
                       width={110}
                       height={40}
                       className="dark:filter dark:invert"

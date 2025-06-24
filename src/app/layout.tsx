@@ -20,7 +20,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: 'HybridX Hub: Training Plans, Calculators & Coaching App',
+  title: 'HybridX: Training Plans, Calculators & Coaching App',
   description: 'Your central hub for hybrid training plans, books, and app. Access free running and strength calculators to optimize your performance.',
   icons: {
     icon: '/Icon Logo.png',

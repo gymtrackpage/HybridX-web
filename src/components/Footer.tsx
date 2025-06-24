@@ -7,7 +7,7 @@ export default function Footer() {
       <div className="container mx-auto px-6 py-8">
         <div className="flex flex-col items-center sm:flex-row sm:justify-between">
           <p className="text-sm text-muted-foreground font-body">
-            &copy; {new Date().getFullYear()} HybridX Hub. All rights reserved.
+            &copy; {new Date().getFullYear()} HybridX.Club. All rights reserved.
           </p>
           <div className="mt-4 flex space-x-4 sm:mt-0">
             <Link href="#" className="text-muted-foreground hover:text-accent transition-colors">
