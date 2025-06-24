@@ -47,10 +47,10 @@ export default function AmazonBookPromotion() {
         <div className="text-center mb-12 md:mb-16">
           <BookOpenCheck className="h-16 w-16 text-accent mx-auto mb-4" />
           <h2 className="text-3xl md:text-4xl font-headline font-bold text-primary mb-3">
-            Unlock Expert Hybrid Strategies with Our Guides
+            For the Analog Athlete: <span className="text-accent">Your Plan, On Paper.</span>
           </h2>
-          <p className="text-lg text-muted-foreground font-body max-w-xl mx-auto">
-            Go beyond the basics. Our bestselling books provide in-depth knowledge and actionable frameworks, available on Amazon.
+          <p className="text-lg text-muted-foreground font-body max-w-2xl mx-auto">
+            Tired of screen-time distractions? Our training books are for the athlete who wants to unplug and focus. Physically record your progress, avoid notifications, and own your plan.
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-stretch">

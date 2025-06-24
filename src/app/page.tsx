@@ -1,6 +1,6 @@
+
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
-import TrainingPlanShowcase from '@/components/TrainingPlanShowcase';
 import AmazonBookPromotion from '@/components/AmazonBookPromotion';
 import AppPromotion from '@/components/AppPromotion';
 import FaqSection from '@/components/FaqSection';
@@ -13,7 +13,6 @@ export default function Home() {
       <Header />
       <main className="flex-grow">
         <HeroSection />
-        <TrainingPlanShowcase />
         <AppPromotion />
         <AmazonBookPromotion />
         <FaqSection />

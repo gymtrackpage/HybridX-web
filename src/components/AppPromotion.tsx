@@ -1,12 +1,13 @@
+
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Smartphone, CheckCircle, BarChart2, BookOpen } from 'lucide-react';
+import { Smartphone, CheckCircle, BarChart2, Zap } from 'lucide-react';
 import Link from 'next/link';
 
 const appFeatures = [
-    { icon: BookOpen, text: "Access all training plans in one place." },
-    { icon: BarChart2, text: "Track your workouts and monitor progress." },
-    { icon: CheckCircle, text: "Stay focused on your goals with a clear path." },
+    { icon: Zap, text: "Get your daily workout, instantly. No distractions." },
+    { icon: BarChart2, text: "Track every rep and run to see real progress." },
+    { icon: CheckCircle, text: "Stay laser-focused on the only thing that matters: results." },
 ];
 
 export default function AppPromotion() {
@@ -17,10 +18,10 @@ export default function AppPromotion() {
         <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
           <div className="md:w-1/2 text-center md:text-left">
             <h2 className="text-3xl md:text-4xl font-headline font-bold text-primary mb-6">
-              Your Hybrid Coach, <span className="text-accent">In Your Pocket. 24/7.</span>
+              For the Digital Athlete: <span className="text-accent">Your Coach In Your Pocket.</span>
             </h2>
             <p className="text-lg text-muted-foreground font-body mb-8">
-              Track every rep, every run, every win. Our app seamlessly integrates your training plans, monitors progress, and keeps you laser-focused on your goals.
+              Get exactly what you need to know, with nothing you don't. Our app delivers your daily plan with zero fluff, so you can focus on the work.
             </p>
             <div className="space-y-3 mb-10 text-left">
                 {appFeatures.map((feature, index) => (
