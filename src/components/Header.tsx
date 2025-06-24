@@ -43,7 +43,6 @@ const navItems: NavItem[] = [
     ]
   },
   { label: 'FAQ', href: '#faq' },
-  { label: 'Contact', href: '#contact' },
 ];
 
 export default function Header() {
