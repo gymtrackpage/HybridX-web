@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle } from '@/components/ui/sheet';
-import { Menu, LogIn, ChevronDown, ListChecks, Dumbbell, ClipboardList, ArrowUpRight } from 'lucide-react';
+import { Menu, LogIn, ChevronDown, ListChecks, Dumbbell, ClipboardList, ArrowUpRight, ShoppingCart } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,7 +32,8 @@ interface SubNavItem {
 const navItems: NavItem[] = [
   { label: 'Hyrox Plan', href: '/hyrox-domination' },
   { label: 'Our App', href: 'https://app.hybridx.club' },
-  { label: 'Books', href: '#book-promotion' },
+  { label: 'Books', href: '/#book-promotion' },
+  { label: 'Store', href: '/store' },
   {
     label: 'Calculators',
     isDropdown: true,
@@ -42,7 +43,7 @@ const navItems: NavItem[] = [
       { label: 'General Health Calculators', href: '/calculators/general-health', icon: <ClipboardList className="mr-2 h-5 w-5" /> },
     ]
   },
-  { label: 'FAQ', href: '#faq' },
+  { label: 'FAQ', href: '/#faq' },
 ];
 
 export default function Header() {
