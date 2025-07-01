@@ -40,7 +40,7 @@ export default function ApparelPromotion() {
             <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col overflow-hidden bg-card/80 backdrop-blur-sm group border-t-2 border-primary/30">
               <CardContent className="p-4 flex-grow flex items-center justify-center">
                 <div 
-                  className="ecsp ecsp-SingleProduct-v2 ecsp-SingleProduct-v2-bordered ecsp-SingleProduct-v2-centered ecsp-Product ec-Product-743426001" 
+                  className="ecsp ecsp-SingleProduct-v2 ecsp-SingleProduct-v2-centered ecsp-Product ec-Product-743426001" 
                   itemScope 
                   itemType="http://schema.org/Product" 
                   data-single-product-id="743426001">
@@ -63,7 +63,7 @@ export default function ApparelPromotion() {
             <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col overflow-hidden bg-card/80 backdrop-blur-sm group border-t-2 border-primary/30">
               <CardContent className="p-4 flex-grow flex items-center justify-center">
                 <div 
-                  className="ecsp ecsp-SingleProduct-v2 ecsp-SingleProduct-v2-bordered ecsp-SingleProduct-v2-centered ecsp-Product ec-Product-739862435" 
+                  className="ecsp ecsp-SingleProduct-v2 ecsp-SingleProduct-v2-centered ecsp-Product ec-Product-739862435" 
                   itemScope 
                   itemType="http://schema.org/Product" 
                   data-single-product-id="739862435">
