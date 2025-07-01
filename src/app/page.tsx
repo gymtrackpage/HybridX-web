@@ -7,10 +7,11 @@ import FaqSection from '@/components/FaqSection';
 import InstagramSection from '@/components/InstagramSection';
 import type { Metadata } from 'next';
 import Footer from '@/components/Footer';
+import ApparelPromotion from '@/components/ApparelPromotion';
 
 export const metadata: Metadata = {
   title: 'HybridX Hub | Training Plans, Books, and Coaching App',
-  description: 'Achieve peak performance with HybridX Hub. Choose your path: focused training plan books or our streamlined coaching app for your pocket. Get started today.',
+  description: 'Join thousands of athletes on the HybridX app and using our training books. Achieve peak performance with our training plans, books, and coaching app. Get started today.',
 };
 
 export default function Home() {
@@ -22,6 +23,7 @@ export default function Home() {
         <SocialProofSection />
         <AppPromotion />
         <AmazonBookPromotion />
+        <ApparelPromotion />
         <FaqSection />
         <InstagramSection />
       </main>
