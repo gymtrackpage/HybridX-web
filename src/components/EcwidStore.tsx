@@ -4,23 +4,35 @@
 import Script from 'next/script';
 import { useEffect } from 'react';
 
-// IMPORTANT: Replace this with your actual Ecwid Store ID
-const ECWID_STORE_ID = 'YOUR_STORE_ID';
+// User's Ecwid Store ID
+const ECWID_STORE_ID = '112581013';
+
+// Extracted from the user-provided embed code for better management
+const ecwidConfigArgs = [
+    "categoriesPerRow=3",
+    "views=grid(20,3) list(60) table(60)",
+    "categoryView=grid",
+    "searchView=list",
+    `id=my-store-${ECWID_STORE_ID}`
+];
 
 export default function EcwidStore() {
 
-  // This effect handles the case where the component might re-render.
-  // Ecwid's script is designed to be loaded once. The `Ecwid.OnAPILoaded.add` ensures
-  // the product browser is re-initialized if needed.
+  const initializeEcwid = () => {
+    if (typeof window.xProductBrowser === 'function') {
+        window.xProductBrowser(...ecwidConfigArgs);
+    }
+  }
+  
+  // This effect handles the case where the component might re-render after the
+  // Ecwid script has already been loaded on the page.
   useEffect(() => {
     if (typeof window.Ecwid !== 'undefined') {
         window.Ecwid.OnAPILoaded.add(function() {
-            if (typeof window.xProductBrowser === 'function') {
-                window.xProductBrowser(`id=my-store-${ECWID_STORE_ID}`);
-            }
+            initializeEcwid();
         });
     }
-  }, []);
+  }, []); // Empty dependency array ensures this runs only once on mount.
 
 
   if (ECWID_STORE_ID === 'YOUR_STORE_ID') {
@@ -40,14 +52,10 @@ export default function EcwidStore() {
       <Script
         data-cfasync="false"
         type="text/javascript"
-        src={`https://app.ecwid.com/script.js?${ECWID_STORE_ID}&data_platform=code`}
+        src={`https://app.ecwid.com/script.js?${ECWID_STORE_ID}&data_platform=code&data_date=2025-07-01`}
         charset="utf-8"
         strategy="lazyOnload"
-        onLoad={() => {
-          if (typeof window.xProductBrowser === 'function') {
-            window.xProductBrowser(`id=my-store-${ECWID_STORE_ID}`);
-          }
-        }}
+        onLoad={initializeEcwid}
       />
     </>
   );
@@ -56,7 +64,7 @@ export default function EcwidStore() {
 // Add types for Ecwid global objects to satisfy TypeScript
 declare global {
   interface Window {
-    xProductBrowser: (id: string) => void;
+    xProductBrowser: (...args: string[]) => void;
     Ecwid: {
         OnAPILoaded: {
             add: (callback: () => void) => void;
