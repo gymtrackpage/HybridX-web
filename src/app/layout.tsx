@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   title: 'HybridX: Training Plans, Calculators & Coaching App',
   description: 'Your central hub for hybrid training plans, books, and app. Access free running and strength calculators to optimize your performance.',
   icons: {
-    icon: '/Icon Logo.png',
+    icon: "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2250%22 height=%2250%22 viewBox=%220 0 50 50%22 fill=%22none%22 stroke=%22black%22 stroke-width=%225%22><line x1=%220%22 y1=%220%22 x2=%2250%22 y2=%2250%22 /><line x1=%2250%22 y1=%220%22 x2=%220%22 y2=%2250%22 /></svg>",
   },
 };
 
