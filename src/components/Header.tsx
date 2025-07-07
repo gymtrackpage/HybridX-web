@@ -36,6 +36,7 @@ const navItems: NavItem[] = [
   { label: 'Store', href: '/store' },
   {
     label: 'Calculators',
+    href: '/calculators',
     isDropdown: true,
     items: [
       { label: 'Running Calculators', href: '/calculators/running', icon: <ListChecks className="mr-2 h-5 w-5" /> },
@@ -131,7 +132,14 @@ export default function Header() {
                 {navItems.map((item, index) =>
                   item.isDropdown && item.items ? (
                     <React.Fragment key={`${item.label}-${index}-mobile`}>
-                      <p className="px-3 py-3 text-lg font-headline text-primary">{item.label}</p>
+                      <SheetClose asChild>
+                        <Link
+                          href={item.href!}
+                          className="flex items-center justify-between rounded-md px-3 py-3 transition-colors hover:bg-accent/10 text-lg font-headline text-primary group"
+                        >
+                          {item.label}
+                        </Link>
+                      </SheetClose>
                       {item.items.map(subItem => (
                         subItem.isSeparator ? (
                            null // Separators not currently used
