@@ -31,6 +31,7 @@ const nextConfig: NextConfig = {
       // Local development server address from logs
       'http://localhost:9002',
     ],
+    serverActions: true,
   },
 };
 
