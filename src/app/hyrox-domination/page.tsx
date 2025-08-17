@@ -8,6 +8,8 @@ import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import HyroxDominationForm from '@/components/hyrox/HyroxDominationForm';
+
 
 export const metadata: Metadata = {
   title: 'Hyrox Domination: The Ultimate 12-Week Blueprint',
@@ -30,7 +32,7 @@ const HeroSection = () => (
         The scientifically-backed 12-week blueprint that's helped over 1,000+ athletes shave minutes off their Hyrox times - even if you've never stepped foot in a functional fitness gym before.
       </p>
       <Button size="lg" asChild className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg transform hover:scale-105 transition-transform duration-200">
-        <Link href="#pricing">YES! I Want To Dominate My Hyrox Race</Link>
+        <Link href="#get-the-plan">YES! I Want To Dominate My Hyrox Race</Link>
       </Button>
     </div>
   </section>
@@ -132,34 +134,25 @@ const WhatsIncludedSection = () => {
     );
   };
   
-const PricingSection = () => (
-    <section id="pricing" className="py-20 md:py-28 bg-secondary/30">
+const GetThePlanSection = () => (
+    <section id="get-the-plan" className="py-20 md:py-28 bg-secondary/30">
         <div className="container mx-auto px-6">
             <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-headline font-bold text-primary">Get Instant Access</h2>
-                <p className="text-lg text-muted-foreground mt-2">Join now and lock in your special launch price.</p>
+                <h2 className="text-3xl md:text-4xl font-headline font-bold text-primary">Get Your Custom Training Plan</h2>
+                <p className="text-lg text-muted-foreground mt-2 max-w-2xl mx-auto">Select your target event, enter your email, and we'll automatically generate and send your personalized 12-week training plan.</p>
             </div>
             <div className="flex justify-center">
-                <Card className="border-2 border-accent shadow-2xl relative overflow-hidden max-w-md w-full">
+                <Card className="border-2 border-accent shadow-2xl relative overflow-hidden max-w-lg w-full">
                      <div className="absolute -top-px left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-sm font-bold px-4 py-1 rounded-b-lg shadow-lg">
                         <Trophy className="inline-block h-4 w-4 mr-1.5 -mt-0.5" />
-                        LIMITED TIME OFFER
+                        100% FREE
                      </div>
                     <CardHeader className="text-center pt-12 pb-4">
-                        <CardTitle className="text-2xl font-headline uppercase tracking-wider">Hyrox Domination</CardTitle>
-                        <CardDescription>Complete Training System</CardDescription>
+                        <CardTitle className="text-2xl font-headline uppercase tracking-wider">Hyrox Domination Plan</CardTitle>
+                        <CardDescription>Your Personalized Path to the Finish Line</CardDescription>
                     </CardHeader>
-                    <CardContent className="text-center">
-                        <div className="flex items-baseline justify-center gap-2 my-4">
-                             <span className="text-5xl font-bold text-primary">£5</span>
-                             <span className="text-xl text-muted-foreground">/month</span>
-                        </div>
-                        <p className="text-muted-foreground mb-6">Billed monthly. Cancel anytime. Normally <span className="line-through">£45/month</span>.</p>
-                        <Button size="lg" className="w-full bg-accent text-accent-foreground hover:bg-accent/90" asChild>
-                            <Link href="https://app.hybridx.club/" target="_blank" rel="noopener noreferrer">
-                                Start Dominating for £5/month <ArrowUpRight className="ml-2 h-5 w-5" />
-                            </Link>
-                        </Button>
+                    <CardContent className="text-center px-4 sm:px-8 pb-8">
+                        <HyroxDominationForm />
                     </CardContent>
                 </Card>
             </div>
@@ -216,7 +209,7 @@ const FinalCloseSection = () => (
             Keep doing what you're doing and regret what could have been, or invest in a proven system and cross the finish line knowing you dominated your race. Which athlete do you want to be?
         </p>
         <Button size="lg" asChild className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg transform hover:scale-105 transition-transform duration-200">
-            <Link href="#pricing">Start Dominating Today</Link>
+            <Link href="#get-the-plan">Get My Free Plan Now</Link>
         </Button>
       </div>
     </section>
@@ -233,7 +226,7 @@ export default function HyroxDominationPage() {
         <ProblemAgitationSection />
         <SolutionRevealSection />
         <WhatsIncludedSection />
-        <PricingSection />
+        <GetThePlanSection />
         <GuaranteeSection />
         <FaqSection />
         <FinalCloseSection />
