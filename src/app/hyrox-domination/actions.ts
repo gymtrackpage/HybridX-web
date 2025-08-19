@@ -35,8 +35,9 @@ export async function signUpForTrainingPlan(
   try {
     await addDoc(collection(firestore, 'trainingPlanSignups'), {
       email,
-      event,
+      event, // event will now be a string like "London Olympia | 2024-11-30T00:00:00.000Z"
       createdAt: serverTimestamp(),
+      status: 'pending', // Add a status for the background job to query
     });
 
     // Here is where you would trigger the next steps, like a Cloud Function.
@@ -52,6 +53,7 @@ export async function signUpForTrainingPlan(
     return {
       message: 'An unexpected error occurred on the server. Please try again.',
       type: 'error',
+      
     };
   }
 }
