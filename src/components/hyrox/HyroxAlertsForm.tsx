@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useActionState, useFormStatus } from 'react-dom';
 import { subscribeToHyroxAlerts, type FormState } from '@/app/hyrox-alerts/actions';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -37,7 +37,7 @@ function SubmitButton() {
 
 export default function HyroxAlertsForm() {
   const initialState: FormState = { message: '', type: '' };
-  const [state, formAction] = useFormState(subscribeToHyroxAlerts, initialState);
+  const [state, formAction] = useActionState(subscribeToHyroxAlerts, initialState);
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {

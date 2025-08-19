@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useActionState } from 'react';
+import { useFormStatus } from 'react-dom';
 import { signUpForTrainingPlan, type SignUpFormState } from '@/app/hyrox-domination/actions';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -64,7 +65,7 @@ const FormSchema = z.object({
 
 export default function HyroxDominationForm() {
   const initialState: SignUpFormState = { message: '', type: '' };
-  const [state, formAction] = useFormState(signUpForTrainingPlan, initialState);
+  const [state, formAction] = useActionState(signUpForTrainingPlan, initialState);
   const formRef = useRef<HTMLFormElement>(null);
   
   // zod validation for client side
