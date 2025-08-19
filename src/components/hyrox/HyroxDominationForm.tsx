@@ -20,7 +20,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { firestore } from '@/lib/firebase';
-import { collection, getDocs, orderBy, Timestamp } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy, Timestamp } from 'firebase/firestore';
 
 
 interface HyroxEvent {
@@ -80,8 +80,8 @@ export default function HyroxDominationForm() {
       async function fetchEvents() {
           try {
               const eventsCollection = collection(firestore, 'hyroxEvents');
-              const q = orderBy('date', 'asc');
-              const querySnapshot = await getDocs(eventsCollection);
+              const q = query(eventsCollection, orderBy('date', 'asc'));
+              const querySnapshot = await getDocs(q);
               const eventsList = querySnapshot.docs
                 .map(doc => {
                     const data = doc.data();
