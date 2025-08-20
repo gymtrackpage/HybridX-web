@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
@@ -156,12 +157,12 @@ export default function HyroxDominationForm() {
                     <Label htmlFor="event" className="block text-sm font-semibold text-foreground mb-2 text-left">
                         Select Your Hyrox Event
                     </Label>
-                    <Select onValueChange={field.onChange} value={field.value} disabled={eventsLoading}>
+                    <Select onValueChange={field.onChange} value={field.value} disabled={eventsLoading || hyroxEvents.length === 0}>
                         <FormControl>
                         <SelectTrigger className="w-full px-4 py-3 bg-input border-2 border-border rounded-lg text-foreground 
                                                 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 
                                                 transition-all duration-300 font-body h-auto">
-                            <SelectValue placeholder={eventsLoading ? "Loading events..." : "Choose your race..."} />
+                            <SelectValue placeholder={eventsLoading ? "Loading events..." : (hyroxEvents.length === 0 ? "No Events Found" : "Choose your race...")} />
                         </SelectTrigger>
                         </FormControl>
                         <SelectContent>
