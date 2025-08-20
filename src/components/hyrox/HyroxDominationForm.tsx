@@ -20,7 +20,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { firestore } from '@/lib/firebase';
-import { collection, getDocs, query, orderBy, Timestamp } from 'firebase/firestore';
+import { collection, getDocs, query, where, orderBy, Timestamp } from 'firebase/firestore';
 
 
 interface HyroxEvent {
@@ -78,27 +78,32 @@ export default function HyroxDominationForm() {
 
   useEffect(() => {
       async function fetchEvents() {
+          setEventsLoading(true);
           try {
               const eventsCollection = collection(firestore, 'hyroxEvents');
-              const q = query(eventsCollection, orderBy('date', 'asc'));
+              const now = new Date();
+              // Query for events where the date is in the future, ordered by date
+              const q = query(
+                eventsCollection, 
+                where('date', '>=', Timestamp.fromDate(now)), 
+                orderBy('date', 'asc')
+              );
+              
               const querySnapshot = await getDocs(q);
-              const eventsList = querySnapshot.docs
-                .map(doc => {
+              const eventsList = querySnapshot.docs.map(doc => {
                     const data = doc.data();
-                    // Firestore timestamp to JS Date
                     const eventDate = (data.date as Timestamp).toDate();
                     return {
                         id: doc.id,
                         name: data.name,
                         date: eventDate,
                     };
-                })
-                .filter(event => event.date >= new Date()); // Filter out past events
+                });
               
               setHyroxEvents(eventsList);
           } catch (error) {
-              console.error("Error fetching events:", error);
-              // Handle error (e.g., show a message to the user)
+              console.error("Error fetching events from Firestore:", error);
+              // Optionally set an error state to show in the UI
           } finally {
               setEventsLoading(false);
           }
@@ -151,7 +156,7 @@ export default function HyroxDominationForm() {
                     <Label htmlFor="event" className="block text-sm font-semibold text-foreground mb-2 text-left">
                         Select Your Hyrox Event
                     </Label>
-                    <Select onValueChange={field.onChange} defaultValue={field.value} disabled={eventsLoading}>
+                    <Select onValueChange={field.onChange} value={field.value} disabled={eventsLoading}>
                         <FormControl>
                         <SelectTrigger className="w-full px-4 py-3 bg-input border-2 border-border rounded-lg text-foreground 
                                                 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 
