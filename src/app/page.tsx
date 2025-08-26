@@ -1,3 +1,4 @@
+
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
 import SocialProofSection from '@/components/SocialProofSection';
@@ -8,10 +9,11 @@ import InstagramSection from '@/components/InstagramSection';
 import type { Metadata } from 'next';
 import Footer from '@/components/Footer';
 import ApparelPromotion from '@/components/ApparelPromotion';
+import TrainingPlanShowcase from '@/components/TrainingPlanShowcase';
 
 export const metadata: Metadata = {
-  title: 'HybridX Hub | Training Plans, Books, and Coaching App',
-  description: 'Join thousands of athletes on the HybridX app and using our training books. Achieve peak performance with our training plans, books, and coaching app. Get started today.',
+  title: 'HybridX Hub | Hybrid Training Plans, Books, and Coaching App',
+  description: 'The central hub for the hybrid athlete. Achieve peak performance with our training plans for running and lifting, expert books, and our coaching app. Get started today.',
 };
 
 export default function Home() {
@@ -21,6 +23,7 @@ export default function Home() {
       <main className="flex-grow space-y-20 md:space-y-28">
         <HeroSection />
         <SocialProofSection />
+        <TrainingPlanShowcase />
         <AppPromotion />
         <AmazonBookPromotion />
         <ApparelPromotion />

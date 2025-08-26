@@ -10,7 +10,7 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Free Fitness & Health Calculators | HybridX Hub',
-  description: 'A comprehensive suite of free calculators for running, strength training, and general health to optimize your fitness journey.',
+  description: 'A comprehensive suite of free calculators for running, strength training, and general health. Calculate your pace, 1RM, body fat, and more to optimize your fitness journey.',
 };
 
 interface CalculatorCategory {
@@ -60,7 +60,7 @@ export default function CalculatorsHubPage() {
               Fitness & Health Calculators
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground font-body max-w-3xl mx-auto">
-              Your one-stop hub for essential tools to measure, track, and optimize every aspect of your training and health.
+              Your one-stop hub for essential tools to measure, track, and optimize every aspect of your training and health. From running pace to one-rep max, get the data you need to train smarter.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
@@ -86,6 +86,20 @@ export default function CalculatorsHubPage() {
                 </CardContent>
               </Card>
             ))}
+          </div>
+          <div className="mt-20 text-left max-w-4xl mx-auto space-y-8">
+            <div>
+              <h2 className="text-2xl font-bold font-headline text-primary mb-4">Why Use Fitness Calculators?</h2>
+              <p className="text-muted-foreground font-body">
+                In the world of hybrid training, data is everything. Fitness calculators remove the guesswork from your training and nutrition. They provide objective numbers to help you set realistic goals, track your progress accurately, and make informed decisions about your workouts and diet. Whether you're trying to figure out your marathon pace or your daily calorie needs for muscle gain, these tools provide the baseline you need for effective programming.
+              </p>
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold font-headline text-primary mb-4">How to Integrate Calculators Into Your Training</h2>
+              <p className="text-muted-foreground font-body">
+                Start by using the calculators to establish your current baseline. For example, use the 1RM calculator to determine your current strength levels, then use the Percentage-Based Weight Calculator to structure your lifting sessions. Use the Pace Calculator to plan your runs and the Heart Rate Zone calculator to ensure you're training at the right intensity. Re-visit these calculators every 4-6 weeks to measure progress and adjust your training plan accordingly.
+              </p>
+            </div>
           </div>
         </section>
       </main>

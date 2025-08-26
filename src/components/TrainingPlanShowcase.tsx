@@ -43,14 +43,14 @@ const plans: Plan[] = [
 
 export default function TrainingPlanShowcase() {
   return (
-    <section id="training-plans" className="py-16 md:py-24 bg-background">
+    <section id="training-plans" className="py-20 md:py-28 bg-secondary/30">
       <div className="container mx-auto px-6">
         <div className="text-center mb-12 md:mb-16">
           <h2 className="text-3xl md:text-4xl font-headline font-bold text-primary mb-3">
             Your Path to Elite Hybrid Performance Starts Here
           </h2>
-          <p className="text-lg text-muted-foreground font-body max-w-xl mx-auto">
-            Choose your focus or combine them all. Our expertly designed plans are your roadmap to results.
+          <p className="text-lg text-muted-foreground font-body max-w-2xl mx-auto">
+            Our training philosophy is built on the principle of concurrent training—developing strength and endurance in parallel. These plans are your roadmap to becoming a truly well-rounded hybrid athlete.
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

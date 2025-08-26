@@ -9,8 +9,8 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Free General Health Calculators | HybridX Hub',
-  description: 'A suite of free health calculators for understanding body composition, calorie needs, and macronutrient targets.',
+  title: 'Free Health Calculators (Body Fat, Calories) | HybridX Hub',
+  description: 'A suite of free health calculators to understand body composition, daily calorie needs, and macronutrient targets for your fitness and nutrition goals.',
 };
 
 interface CalculatorInfo {
@@ -51,8 +51,8 @@ export default function GeneralHealthCalculatorsPage() {
             <h1 className="text-4xl md:text-5xl font-headline font-bold text-primary mb-4">
               Understand Your Body: Health Calculators
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground font-body max-w-2xl mx-auto">
-              Gain insights into your body composition and nutritional needs with our easy-to-use general health calculators.
+            <p className="text-lg md:text-xl text-muted-foreground font-body max-w-3xl mx-auto">
+              Gain key insights into your body composition and nutritional needs with our easy-to-use health calculators. Whether you want to estimate your body fat or dial in your nutrition, these tools can help guide your journey.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">

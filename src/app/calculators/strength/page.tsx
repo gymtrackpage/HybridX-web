@@ -9,8 +9,8 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Free Strength Calculators | HybridX Hub',
-  description: 'A suite of free, essential strength calculators for athletes to estimate 1RM, calculate percentage-based weights, and determine powerlifting scores.',
+  title: 'Free Strength Calculators (1RM, Percentage, Wilks) | HybridX Hub',
+  description: 'A suite of free strength calculators for athletes. Estimate your one-rep max, calculate percentage-based training weights, and determine your powerlifting score.',
 };
 
 interface CalculatorInfo {
@@ -59,8 +59,8 @@ export default function StrengthCalculatorsPage() {
             <h1 className="text-4xl md:text-5xl font-headline font-bold text-primary mb-4">
               Forge Your Strength: Essential Calculators
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground font-body max-w-2xl mx-auto">
-              Maximize your strength gains with our specialized calculators. Estimate your 1RM, plan your training percentages, and benchmark your powerlifting total.
+            <p className="text-lg md:text-xl text-muted-foreground font-body max-w-3xl mx-auto">
+              Maximize your strength gains with our specialized calculators. Estimate your 1RM for lifts like the squat, bench, and deadlift, plan your training percentages, and benchmark your powerlifting total.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
