@@ -154,6 +154,7 @@ export default function SplitTimeCalculatorForm() {
         
         setParsedGpxData(elevationProfile);
         setGpxTotalDistanceKm(cumulativeDistanceKm);
+        // Auto-fill the distance and set unit to km
         setTargetDistance(cumulativeDistanceKm.toFixed(2)); 
         setDistanceUnit('km'); 
         toast({ title: "GPX File Processed", description: `Route loaded: ${cumulativeDistanceKm.toFixed(2)} km.` });
@@ -378,7 +379,7 @@ export default function SplitTimeCalculatorForm() {
               <Input
                   id="targetDistance" type="number" value={targetDistance}
                   onChange={(e) => setTargetDistance(e.target.value)} 
-                  placeholder={gpxFile && typeof gpxTotalDistanceKm === 'number' ? `${gpxTotalDistanceKm.toFixed(2)} (from GPX)` : "e.g., 10"}
+                  placeholder={gpxFile && typeof gpxTotalDistanceKm === 'number' ? `${gpxTotalDistanceKm.toFixed(2)}` : "e.g., 10"}
                   className={`${inputBaseClass} mt-1`} min="0" step="0.01"
                   disabled={!!gpxFile} 
               />
