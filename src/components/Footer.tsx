@@ -24,6 +24,9 @@ export default function Footer() {
             </Link>
           </div>
         </div>
+        <div className="mt-6 pt-6 border-t border-border/20 text-center text-xs text-muted-foreground font-body">
+          <p>hybridx.club is not affiliated with HYROX GmbH. HYROX® is a registered trademark of HYROX GmbH.</p>
+        </div>
       </div>
     </footer>
   );
