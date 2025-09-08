@@ -32,15 +32,19 @@ export default function SignUpPage() {
         setStatus('loading');
         setMessage('');
 
-        const finalForm = new FormData();
-        finalForm.append('firstName', firstName);
-        finalForm.append('email', email);
-
         try {
             await fetch(SCRIPT_URL, {
                 method: 'POST',
-                body: finalForm,
-                mode: 'no-cors', // 'no-cors' is essential for this type of cross-origin request to Apps Script
+                mode: 'no-cors', // Essential for cross-origin requests to Apps Script
+                headers: {
+                  // This header is important, but be aware 'no-cors' mode might restrict it.
+                  // The key part is sending the data in the format the script expects.
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  firstName,
+                  email,
+                }),
             });
             
             // In 'no-cors' mode, we cannot read the response. We assume success if no error is thrown.
