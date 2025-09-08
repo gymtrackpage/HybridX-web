@@ -32,17 +32,18 @@ export default function SignUpPage() {
         setStatus('loading');
         setMessage('');
 
-        try {
-            const response = await fetch(SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors', // Important for Apps Script to avoid CORS errors
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ firstName, email }),
-            });
+        const finalForm = new FormData();
+        finalForm.append('firstName', firstName);
+        finalForm.append('email', email);
 
-            // With 'no-cors' mode, we assume success if the request doesn't throw an error.
+        try {
+            await fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: finalForm,
+                mode: 'no-cors', // 'no-cors' is essential for this type of cross-origin request to Apps Script
+            });
+            
+            // In 'no-cors' mode, we cannot read the response. We assume success if no error is thrown.
             setStatus('success');
             setMessage('Thank you for subscribing! Your first email is on its way.');
 
@@ -114,7 +115,7 @@ export default function SignUpPage() {
                 {status === 'success' && (
                     <div id="success-message" className="bg-[#1a1a1a] p-8 rounded-lg max-w-md mx-auto">
                         <h3 className="text-2xl font-headline font-bold text-yellow-400">Thank You!</h3>
-                        <p className="text-white mt-2">Your first email is on its way. Check your inbox (and spam folder) to start your journey.</p>
+                        <p className="text-white mt-2">{message}</p>
                     </div>
                 )}
 
