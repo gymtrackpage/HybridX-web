@@ -24,14 +24,8 @@ const nextConfig: NextConfig = {
       }
     ],
   },
-  experimental: {
-    allowedDevOrigins: [
-      // Specific origin from the error log, assuming https
-      'https://6000-firebase-studio-1750151528468.cluster-c23mj7ubf5fxwq6nrbev4ugaxa.cloudworkstations.dev',
-      // Local development server address from logs
-      'http://localhost:9002',
-    ],
-    serverActions: true,
+  serverActions: {
+    bodySizeLimit: '2mb', // Or a value appropriate for your needs
   },
 };
 

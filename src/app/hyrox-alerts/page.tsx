@@ -6,14 +6,9 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import HyroxAlertsForm from '@/components/hyrox/HyroxAlertsForm';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import type { Metadata } from 'next';
 
-// Metadata should be defined in a Server Component or at the page level, not in a client component.
-// We will create a separate metadata export.
-export const metadata: Metadata = {
-    title: 'Hyrox Event Alerts | Never Miss a Race Announcement | HybridX Hub',
-    description: 'Get instant email notifications when new Hyrox races are announced worldwide. Stay ahead of the competition and secure your spot with our free alert service.',
-};
+// Metadata has been removed from this client component to fix the build error.
+// The metadata for this page should be handled in a parent layout or page if needed.
 
 
 export default function HyroxAlertsPage() {
