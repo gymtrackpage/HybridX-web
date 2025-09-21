@@ -19,15 +19,10 @@ export default function PrivacyPolicyPage() {
             <CardHeader className="text-center pb-8">
               <CardTitle className="text-3xl md:text-4xl font-headline text-primary">Privacy Policy</CardTitle>
               <CardDescription className="text-lg text-muted-foreground font-body mt-2">
-                Last Updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                Last Updated: June 26, 2024
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-8 font-body text-foreground/90">
-              <div className="p-4 bg-destructive/10 border-l-4 border-destructive text-destructive-foreground/90">
-                <p className="font-bold">Disclaimer:</p>
-                <p className="text-sm">This is a template privacy policy and is not legal advice. You should consult with a legal professional to ensure this policy meets your specific needs and complies with all applicable laws and regulations.</p>
-              </div>
-
+            <CardContent className="space-y-8">
               <section>
                 <h2 className="text-2xl font-headline text-primary mb-3">1. Introduction</h2>
                 <p className="text-muted-foreground">
@@ -96,10 +91,9 @@ export default function PrivacyPolicyPage() {
               <section>
                 <h2 className="text-2xl font-headline text-primary mb-3">7. Contact Us</h2>
                 <p className="text-muted-foreground">
-                  If you have questions or comments about this Privacy Policy, please contact us at: [Your Contact Email Address]
+                  If you have questions or comments about this Privacy Policy, please contact us at: training@hybridx.club
                 </p>
               </section>
-
             </CardContent>
           </Card>
         </div>
