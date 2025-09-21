@@ -6,9 +6,12 @@ export default function Footer() {
     <footer className="border-t border-border/40 bg-background">
       <div className="container mx-auto px-6 py-8">
         <div className="flex flex-col items-center sm:flex-row sm:justify-between">
-          <p className="text-sm text-muted-foreground font-body">
-            &copy; {new Date().getFullYear()} HybridX.Club. All rights reserved.
-          </p>
+          <div className="text-sm text-muted-foreground font-body space-x-4">
+             <span>&copy; {new Date().getFullYear()} HybridX.Club. All rights reserved.</span>
+             <Link href="/privacy-policy" className="hover:text-accent transition-colors">
+                Privacy Policy
+             </Link>
+          </div>
           <div className="mt-4 flex space-x-4 sm:mt-0">
             <Link href="#" className="text-muted-foreground hover:text-accent transition-colors">
               <Facebook className="h-5 w-5" />
