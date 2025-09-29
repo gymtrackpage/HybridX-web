@@ -1,8 +1,7 @@
 
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { AlertTriangle } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -22,9 +21,6 @@ export default function TwelveWeekHyroxPage() {
           <Card className="shadow-xl border-border/60 overflow-hidden">
             <CardHeader className="text-center">
               <CardTitle className="text-3xl md:text-4xl font-headline text-primary">12-Week Hyrox Training Plan</CardTitle>
-              <CardDescription className="text-lg text-muted-foreground font-body mt-2">
-                Your embedded training plan is loading below. If it does not appear, please ensure your browser supports iframes and that content from script.google.com is not being blocked.
-              </CardDescription>
             </CardHeader>
             <CardContent className="p-0 sm:p-2 md:p-4">
               <div className="bg-muted/30 rounded-md overflow-hidden h-[1024px]">
