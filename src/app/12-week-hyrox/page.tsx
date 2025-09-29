@@ -27,7 +27,7 @@ export default function TwelveWeekHyroxPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="p-0 sm:p-2 md:p-4">
-              <div className="aspect-[4/3] bg-muted/30 rounded-md overflow-hidden">
+              <div className="bg-muted/30 rounded-md overflow-hidden h-[1024px]">
                 <iframe
                   src={APPS_SCRIPT_URL}
                   className="w-full h-full border-0"
