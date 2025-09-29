@@ -23,7 +23,7 @@ export default function TwelveWeekHyroxPage() {
             <CardHeader className="text-center">
               <CardTitle className="text-3xl md:text-4xl font-headline text-primary">12-Week Hyrox Training Plan</CardTitle>
               <CardDescription className="text-lg text-muted-foreground font-body mt-2">
-                Your embedded training plan is loading below.
+                Your embedded training plan is loading below. If it does not appear, please ensure your browser supports iframes and that content from script.google.com is not being blocked.
               </CardDescription>
             </CardHeader>
             <CardContent className="p-0 sm:p-2 md:p-4">
@@ -34,11 +34,6 @@ export default function TwelveWeekHyroxPage() {
                   title="12 Week Hyrox Training Plan"
                   sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
                 >
-                   <div className="p-8 text-center text-destructive-foreground">
-                     <AlertTriangle className="mx-auto h-12 w-12 text-destructive mb-4" />
-                     <h2 className="text-xl font-bold">Embedding Failed</h2>
-                     <p>Your browser does not support iframes, or the content is being blocked. Please ensure you have the correct permissions to view this content.</p>
-                   </div>
                 </iframe>
               </div>
             </CardContent>
