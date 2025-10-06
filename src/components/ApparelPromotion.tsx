@@ -51,10 +51,10 @@ export default function ApparelPromotion() {
                       <div itemProp="priceCurrency" content="GBP"></div>
                     </div>
                   </div>
-                  <div customprop="options"></div>
-                  <div customprop="qty"></div>
-                  <div customprop="addtobag"></div>
-                  <div customprop="vatinprice"></div>
+                  <div data-customprop="options"></div>
+                  <div data-customprop="qty"></div>
+                  <div data-customprop="addtobag"></div>
+                  <div data-customprop="vatinprice"></div>
                 </div>
               </CardContent>
             </Card>
@@ -74,10 +74,10 @@ export default function ApparelPromotion() {
                       <div itemProp="priceCurrency" content="GBP"></div>
                     </div>
                   </div>
-                  <div customprop="options"></div>
-                  <div customprop="qty"></div>
-                  <div customprop="addtobag"></div>
-                  <div customprop="vatinprice"></div>
+                  <div data-customprop="options"></div>
+                  <div data-customprop="qty"></div>
+                  <div data-customprop="addtobag"></div>
+                  <div data-customprop="vatinprice"></div>
                 </div>
               </CardContent>
             </Card>

@@ -7,15 +7,6 @@ import Footer from '@/components/Footer';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
-import type { Metadata } from 'next';
-
-// This metadata will be applied at the page level, but since this is a client component, 
-// it's more for documentation. Next.js prefers metadata in Server Components or layout files.
-const metadata: Metadata = {
-  title: 'HybridX AI Coaching | Early Access',
-  description: 'Stop following a static plan. Get exclusive early access to the AI-powered training app that adapts to you.',
-};
-
 
 // This is the URL for your deployed Apps Script Web App
 const SCRIPT_URL = 'https://script.google.com/a/macros/hybridx.club/s/AKfycbxCDBD1B5-1p2fF4_VJs2SCX2HdQm9V3PkWNEr2gn-1_Pedu2ogLmrciyze2iz_LWL4/exec';

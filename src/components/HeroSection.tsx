@@ -16,10 +16,10 @@ export default function HeroSection() {
 
       <div className="container mx-auto px-6 text-center relative z-10">
         <h1 className="text-4xl md:text-6xl font-headline font-bold text-primary mb-6 leading-tight">
-          Stop Training Blind. Choose Your Path to <span className="text-accent">Peak Performance.</span>
+          Master Hyrox Training & <span className="text-accent">Dominate Your Competition.</span>
         </h1>
         <p className="text-lg md:text-xl text-muted-foreground font-body max-w-3xl mx-auto mb-10">
-          Tired of generic workouts? We offer two proven ways to get results: Our distraction-free training books for focused, hands-on tracking, or our streamlined app for your coach in your pocket.
+          Scientifically-backed Hyrox training plans and hybrid workout programs. Whether you're racing Hyrox competitions or building hybrid fitness, get expert plans, books, and coaching to achieve peak performance.
         </p>
         <div className="space-y-4 md:space-y-0 md:space-x-4">
           <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg transform hover:scale-105 transition-transform duration-200 w-full md:w-auto" asChild>

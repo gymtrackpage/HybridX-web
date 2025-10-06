@@ -4,28 +4,42 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import Script from 'next/script';
+import { createFAQSchema } from '@/lib/seo';
 
 const faqItems = [
   {
     id: 'faq1',
-    question: 'What is Hybrid Training?',
+    question: 'What is Hyrox?',
     answer:
-      'Hybrid training combines multiple training disciplines, such as endurance running, strength training, and cardio, into a single, cohesive program. The goal is to develop a well-rounded athleticism rather than specializing in one area.',
+      'Hyrox is a global fitness competition that combines running with functional workout stations. Athletes complete 8 x 1km runs, alternating with 8 workout stations including SkiErg, sled push, sled pull, burpee broad jumps, rowing, farmers carry, sandbag lunges, and wall balls. It\'s the ultimate test of hybrid fitness.',
   },
   {
     id: 'faq2',
-    question: 'Who are these training plans and books for?',
+    question: 'What is Hybrid Training?',
     answer:
-      'Our plans and books are designed for individuals of all fitness levels who are interested in hybrid training. Whether you\'re a beginner looking to get started or an experienced athlete aiming to optimize performance, you\'ll find valuable resources.',
+      'Hybrid training combines multiple training disciplines, such as endurance running, strength training, and functional fitness, into a single, cohesive program. It\'s perfect for Hyrox competitions and for developing well-rounded athleticism rather than specializing in one area.',
   },
   {
     id: 'faq3',
+    question: 'Do you offer Hyrox training plans?',
+    answer:
+      'Yes! We offer comprehensive Hyrox training plans for all levels. Our 12-week Hyrox training programs are scientifically designed to prepare you for competition, with specific workouts targeting compromised running, station efficiency, and race-day performance. Check out our Hyrox Domination program for a complete training system.',
+  },
+  {
+    id: 'faq4',
+    question: 'Who are these training plans and books for?',
+    answer:
+      'Our plans and books are designed for individuals of all fitness levels interested in Hyrox training, hybrid training, and functional fitness. Whether you\'re preparing for your first Hyrox competition, aiming for a podium finish, or simply building hybrid athleticism, you\'ll find valuable resources.',
+  },
+  {
+    id: 'faq5',
     question: 'How do I access the HybridX app?',
     answer:
       'You can access the HybridX app by visiting app.hybridx.club. It\'s a web-based application accessible from any device with an internet browser. We recommend bookmarking it for easy access.',
   },
   {
-    id: 'faq4',
+    id: 'faq6',
     question: 'Are the books different from the app content?',
     answer:
       'Our books offer in-depth knowledge, foundational principles, and often include comprehensive programs that can be followed offline. The app provides interactive tracking, dynamic plan adjustments (in future versions), and a convenient way to access your plans on the go. They are designed to be complementary.',
@@ -33,16 +47,24 @@ const faqItems = [
 ];
 
 export default function FaqSection() {
+  const faqSchema = createFAQSchema(faqItems);
+
   return (
+    <>
+      <Script
+        id="faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
     <section id="faq" className="relative py-20 md:py-28 bg-secondary/30 overflow-hidden">
       <div aria-hidden="true" className="absolute inset-0 bg-subtle-x-light dark:bg-subtle-x-dark opacity-40 dark:opacity-25 mix-blend-multiply dark:mix-blend-screen"></div>
       <div className="container mx-auto px-6 relative z-10">
         <div className="text-center mb-12 md:mb-16">
           <h2 className="text-3xl md:text-4xl font-headline font-bold text-primary mb-3">
-            Frequently Asked Questions
+            Hyrox Training & Hybrid Fitness FAQs
           </h2>
           <p className="text-lg text-muted-foreground font-body max-w-xl mx-auto">
-            Find answers to common questions about Hybrid Training and our products.
+            Find answers to common questions about Hyrox, hybrid training, and our products.
           </p>
         </div>
         <div className="max-w-3xl mx-auto">
@@ -61,5 +83,6 @@ export default function FaqSection() {
         </div>
       </div>
     </section>
+    </>
   );
 }

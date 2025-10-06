@@ -8,6 +8,24 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Free Body Fat Percentage Calculator | HybridX Hub',
   description: 'Estimate your body fat percentage with our free Body Fat Calculator. Uses the U.S. Navy method to help you track body composition.',
+  keywords: [
+    'body fat calculator',
+    'body fat percentage',
+    'navy method',
+    'body composition',
+    'fitness calculator',
+  ],
+  openGraph: {
+    title: 'Free Body Fat Percentage Calculator | HybridX Hub',
+    description: 'Estimate your body fat percentage with our free Body Fat Calculator. Uses the U.S. Navy method to help you track body composition.',
+    url: 'https://hybridx.club/calculators/body-fat-calculator',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Free Body Fat Percentage Calculator',
+    description: 'Estimate your body fat percentage with our free Body Fat Calculator. Uses the U.S. Navy method.',
+  },
 };
 
 export default function BodyFatCalculatorPage() {

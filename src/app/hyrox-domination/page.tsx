@@ -2,6 +2,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import Script from 'next/script';
 import { ShieldCheck, Trophy, AlertTriangle, ChevronRight, Calendar, TrendingUp, Dumbbell, Zap, Users, ArrowUpRight } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -9,11 +10,33 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import HyroxDominationForm from '@/components/hyrox/HyroxDominationForm';
+import { createFAQSchema } from '@/lib/seo';
 
 
 export const metadata: Metadata = {
   title: 'Hyrox Training Plan: The Ultimate 12-Week Blueprint to Dominate',
   description: "The scientifically-backed 12-week Hyrox training plan that's helped over 1,000+ athletes crush their race times. For beginners and advanced competitors.",
+  keywords: [
+    'hyrox training plan',
+    'hyrox workout',
+    'hyrox preparation',
+    '12 week hyrox plan',
+    'hyrox training',
+    'functional fitness',
+    'hyrox race prep',
+    'hybrid training',
+  ],
+  openGraph: {
+    title: 'Hyrox Training Plan: The Ultimate 12-Week Blueprint to Dominate',
+    description: "The scientifically-backed 12-week Hyrox training plan that's helped over 1,000+ athletes crush their race times.",
+    url: 'https://hybridx.club/hyrox-domination',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Hyrox Training Plan: The Ultimate 12-Week Blueprint',
+    description: "The scientifically-backed 12-week Hyrox training plan that's helped 1,000+ athletes crush their race times.",
+  },
 };
 
 // --- Section Components ---
@@ -176,31 +199,61 @@ const GuaranteeSection = () => (
     </section>
 );
   
-const FaqSection = () => (
-    <section className="py-20 md:py-28 bg-secondary/30">
-      <div className="container mx-auto px-6 max-w-3xl">
-        <h2 className="text-3xl font-headline font-bold text-primary text-center mb-8">Frequently Asked Questions about Hyrox Training</h2>
-        <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="faq-1">
-            <AccordionTrigger>What if I'm a complete beginner?</AccordionTrigger>
-            <AccordionContent>Perfect. This plan is designed to take you from wherever you are to Hyrox-ready in 12 weeks. It uses RPE (Rate of Perceived Exertion) so the intensity automatically scales to your current fitness level. My biggest success stories are people who thought they "weren't ready."</AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="faq-2">
-            <AccordionTrigger>How much time do I need to train per week?</AccordionTrigger>
-            <AccordionContent>You don't need to live in the gym. Sessions range from 45-90 minutes, with most under 75 minutes, 4-5 days a week. If you have time to scroll social media, you have time to transform your fitness.</AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="faq-3">
-            <AccordionTrigger>Why is this free? What's the catch?</AccordionTrigger>
-            <AccordionContent>There's no catch. We believe this is the most effective Hyrox training system available, and we want to prove it to you. Our hope is that you'll get incredible results, love the system, and consider our premium app or books in the future. But this 12-week plan is 100% free.</AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="faq-4">
-            <AccordionTrigger>What equipment do I need for this plan?</AccordionTrigger>
-            <AccordionContent>The plan is designed for a standard functional fitness gym. You'll need access to things like a squat rack, barbells, dumbbells, kettlebells, a rowing machine, a ski-erg, and space for sled pushes/pulls. We provide substitution suggestions where possible.</AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </div>
-    </section>
-);
+const FaqSection = () => {
+  const hyroxFaqItems = [
+    {
+      question: "What if I'm a complete beginner?",
+      answer: "Perfect. This plan is designed to take you from wherever you are to Hyrox-ready in 12 weeks. It uses RPE (Rate of Perceived Exertion) so the intensity automatically scales to your current fitness level. My biggest success stories are people who thought they weren't ready.",
+    },
+    {
+      question: "How much time do I need to train per week?",
+      answer: "You don't need to live in the gym. Sessions range from 45-90 minutes, with most under 75 minutes, 4-5 days a week. If you have time to scroll social media, you have time to transform your fitness.",
+    },
+    {
+      question: "Why is this free? What's the catch?",
+      answer: "There's no catch. We believe this is the most effective Hyrox training system available, and we want to prove it to you. Our hope is that you'll get incredible results, love the system, and consider our premium app or books in the future. But this 12-week plan is 100% free.",
+    },
+    {
+      question: "What equipment do I need for this plan?",
+      answer: "The plan is designed for a standard functional fitness gym. You'll need access to things like a squat rack, barbells, dumbbells, kettlebells, a rowing machine, a ski-erg, and space for sled pushes/pulls. We provide substitution suggestions where possible.",
+    },
+  ];
+
+  const hyroxFaqSchema = createFAQSchema(hyroxFaqItems);
+
+  return (
+    <>
+      <Script
+        id="hyrox-faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(hyroxFaqSchema) }}
+      />
+      <section className="py-20 md:py-28 bg-secondary/30">
+        <div className="container mx-auto px-6 max-w-3xl">
+          <h2 className="text-3xl font-headline font-bold text-primary text-center mb-8">Frequently Asked Questions about Hyrox Training</h2>
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="faq-1">
+              <AccordionTrigger>What if I'm a complete beginner?</AccordionTrigger>
+              <AccordionContent>Perfect. This plan is designed to take you from wherever you are to Hyrox-ready in 12 weeks. It uses RPE (Rate of Perceived Exertion) so the intensity automatically scales to your current fitness level. My biggest success stories are people who thought they "weren't ready."</AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="faq-2">
+              <AccordionTrigger>How much time do I need to train per week?</AccordionTrigger>
+              <AccordionContent>You don't need to live in the gym. Sessions range from 45-90 minutes, with most under 75 minutes, 4-5 days a week. If you have time to scroll social media, you have time to transform your fitness.</AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="faq-3">
+              <AccordionTrigger>Why is this free? What's the catch?</AccordionTrigger>
+              <AccordionContent>There's no catch. We believe this is the most effective Hyrox training system available, and we want to prove it to you. Our hope is that you'll get incredible results, love the system, and consider our premium app or books in the future. But this 12-week plan is 100% free.</AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="faq-4">
+              <AccordionTrigger>What equipment do I need for this plan?</AccordionTrigger>
+              <AccordionContent>The plan is designed for a standard functional fitness gym. You'll need access to things like a squat rack, barbells, dumbbells, kettlebells, a rowing machine, a ski-erg, and space for sled pushes/pulls. We provide substitution suggestions where possible.</AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </div>
+      </section>
+    </>
+  );
+};
 
 const FinalCloseSection = () => (
     <section className="py-20 md:py-28 bg-primary text-primary-foreground">

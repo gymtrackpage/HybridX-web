@@ -8,6 +8,24 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'HybridX Store | Training Gear and Apparel',
   description: 'Shop official HybridX training gear, apparel, and accessories. Get equipped to dominate your training and races.',
+  keywords: [
+    'hybrid training gear',
+    'fitness apparel',
+    'workout clothes',
+    'training accessories',
+    'hyrox gear',
+  ],
+  openGraph: {
+    title: 'HybridX Store | Training Gear and Apparel',
+    description: 'Shop official HybridX training gear, apparel, and accessories. Get equipped to dominate your training.',
+    url: 'https://hybridx.club/store',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'HybridX Store | Training Gear',
+    description: 'Shop official HybridX training gear, apparel, and accessories.',
+  },
 };
 
 export default function StorePage() {

@@ -1,12 +1,50 @@
 
 import type {NextConfig} from 'next';
 
-const nextConfig: NextConfig = {
-  typescript: {
-    ignoreBuildErrors: true,
+// Security Headers - Applied to all routes
+const securityHeaders = [
+  {
+    key: 'X-DNS-Prefetch-Control',
+    value: 'on'
   },
+  {
+    key: 'Strict-Transport-Security',
+    value: 'max-age=63072000; includeSubDomains; preload'
+  },
+  {
+    key: 'X-Frame-Options',
+    value: 'SAMEORIGIN'
+  },
+  {
+    key: 'X-Content-Type-Options',
+    value: 'nosniff'
+  },
+  {
+    key: 'X-XSS-Protection',
+    value: '1; mode=block'
+  },
+  {
+    key: 'Referrer-Policy',
+    value: 'strict-origin-when-cross-origin'
+  },
+  {
+    key: 'Permissions-Policy',
+    value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()'
+  },
+  {
+    key: 'Content-Security-Policy',
+    value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://app.ecwid.com https://script.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; font-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://app.ecwid.com https://script.google.com; frame-src 'self' https://app.ecwid.com https://script.google.com; object-src 'none'; base-uri 'self'; form-action 'self' https://script.google.com; frame-ancestors 'self'; upgrade-insecure-requests"
+  }
+];
+
+const nextConfig: NextConfig = {
+  // ✅ ENABLED: Catch TypeScript errors during build
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+  // ✅ ENABLED: Enforce code quality with ESLint
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false,
   },
   images: {
     remotePatterns: [
@@ -23,9 +61,21 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       }
     ],
+    // Performance: Enable image optimization
+    formats: ['image/webp', 'image/avif'],
   },
-  serverActions: {
-    bodySizeLimit: '2mb', // Or a value appropriate for your needs
+  // Enable experimental features for better performance
+  experimental: {
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
+  },
+  // ✅ SECURITY: Apply headers to all routes (works with Firebase App Hosting)
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: securityHeaders,
+      },
+    ];
   },
 };
 

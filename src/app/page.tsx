@@ -12,8 +12,43 @@ import ApparelPromotion from '@/components/ApparelPromotion';
 import TrainingPlanShowcase from '@/components/TrainingPlanShowcase';
 
 export const metadata: Metadata = {
-  title: 'HybridX Hub | Hybrid Training Plans, Books, and Coaching App',
-  description: 'The central hub for the hybrid athlete. Achieve peak performance with our training plans for running and lifting, expert books, and our coaching app. Get started today.',
+  title: 'HybridX Hub | Hyrox Training Plans, Workout Programs & Coaching App',
+  description: 'Expert Hyrox training plans and hybrid workout programs. Master Hyrox competitions with our scientifically-backed training plans, books, and coaching app. Free calculators and resources.',
+  keywords: [
+    'hyrox',
+    'hyrox training',
+    'hyrox workout',
+    'what is hyrox',
+    'hyrox competition',
+    'hyrox training plan',
+    'hybrid training',
+    'hybrid athlete',
+    'training plans',
+    'running training',
+    'strength training',
+    'fitness calculators',
+    'hybrid training app',
+  ],
+  openGraph: {
+    title: 'HybridX Hub | Hyrox Training Plans, Workout Programs & Coaching App',
+    description: 'Expert Hyrox training plans and hybrid workout programs. Master Hyrox competitions with our scientifically-backed training plans, books, and coaching app.',
+    url: 'https://hybridx.club',
+    type: 'website',
+    images: [
+      {
+        url: '/Icon Logo.png',
+        width: 1200,
+        height: 630,
+        alt: 'HybridX Hub - Training Plans and Coaching App',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'HybridX Hub | Hyrox Training Plans, Workout Programs & Coaching App',
+    description: 'Expert Hyrox training plans and hybrid workout programs. Master Hyrox competitions with our scientifically-backed training plans, books, and coaching app.',
+    images: ['/Icon Logo.png'],
+  },
 };
 
 export default function Home() {

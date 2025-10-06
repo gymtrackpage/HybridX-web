@@ -11,6 +11,28 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Free Fitness & Health Calculators | HybridX Hub',
   description: 'A comprehensive suite of free calculators for running, strength training, and general health. Calculate your pace, 1RM, body fat, and more to optimize your fitness journey.',
+  keywords: [
+    'fitness calculators',
+    'running calculators',
+    'strength calculators',
+    'health calculators',
+    'pace calculator',
+    '1RM calculator',
+    'body fat calculator',
+    'macronutrient calculator',
+    'heart rate zones',
+  ],
+  openGraph: {
+    title: 'Free Fitness & Health Calculators | HybridX Hub',
+    description: 'A comprehensive suite of free calculators for running, strength training, and general health. Calculate your pace, 1RM, body fat, and more.',
+    url: 'https://hybridx.club/calculators',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Free Fitness & Health Calculators',
+    description: 'A comprehensive suite of free calculators for running, strength training, and general health.',
+  },
 };
 
 interface CalculatorCategory {

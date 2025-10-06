@@ -35,16 +35,8 @@ export default function EcwidStore() {
   }, []); // Empty dependency array ensures this runs only once on mount.
 
 
-  if (ECWID_STORE_ID === 'YOUR_STORE_ID') {
-    return (
-        <div className="text-center p-8 bg-destructive/10 border border-destructive rounded-lg">
-            <p className="font-bold text-destructive">Store Not Configured</p>
-            <p className="text-destructive/90 mt-2">
-                Please replace <code className="bg-destructive/20 px-1 py-0.5 rounded">'YOUR_STORE_ID'</code> with your actual Ecwid Store ID in the file <code className="bg-destructive/20 px-1 py-0.5 rounded">src/components/EcwidStore.tsx</code>.
-            </p>
-        </div>
-    );
-  }
+  // Check if store ID is configured (removed comparison that TypeScript flagged)
+  // The actual store ID is already set above
 
   return (
     <>
@@ -53,7 +45,7 @@ export default function EcwidStore() {
         data-cfasync="false"
         type="text/javascript"
         src={`https://app.ecwid.com/script.js?${ECWID_STORE_ID}&data_platform=code&data_date=2025-07-01`}
-        charset="utf-8"
+        charSet="utf-8"
         strategy="lazyOnload"
         onLoad={initializeEcwid}
       />

@@ -4,6 +4,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import { Inter, Space_Grotesk } from 'next/font/google';
+import { SITE_CONFIG, createOrganizationSchema } from '@/lib/seo';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -20,10 +21,75 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: 'HybridX: Training Plans, Calculators & Coaching App',
-  description: 'Your central hub for hybrid training plans, books, and app. Access free running and strength calculators to optimize your performance.',
+  metadataBase: new URL(SITE_CONFIG.url),
+  title: {
+    default: 'HybridX: Hyrox Training Plans, Workouts & Coaching App',
+    template: '%s | HybridX Hub',
+  },
+  description: 'Expert Hyrox training plans and hybrid workout programs. Master Hyrox competitions with scientifically-backed training, books, and coaching. Free fitness calculators.',
+  keywords: [
+    'hyrox',
+    'hyrox training',
+    'hyrox workout',
+    'what is hyrox',
+    'hyrox competition',
+    'hyrox training plan',
+    'hybrid training',
+    'hyrox race',
+    'hyrox preparation',
+    'running calculators',
+    'strength calculators',
+    'fitness calculators',
+    'training plans',
+    'hybrid athlete',
+    'functional fitness',
+  ],
+  authors: [{ name: 'HybridX Hub' }],
+  creator: 'HybridX Hub',
+  publisher: 'HybridX Hub',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   icons: {
     icon: "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2250%22 height=%2250%22 viewBox=%220 0 50 50%22 fill=%22none%22 stroke=%22black%22 stroke-width=%225%22><line x1=%220%22 y1=%220%22 x2=%2250%22 y2=%2250%22 /><line x1=%2250%22 y1=%220%22 x2=%220%22 y2=%2250%22 /></svg>",
+    apple: '/Icon Logo.png',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: SITE_CONFIG.url,
+    siteName: SITE_CONFIG.name,
+    title: 'HybridX: Hyrox Training Plans, Workouts & Coaching App',
+    description: 'Expert Hyrox training plans and hybrid workout programs. Master Hyrox competitions with scientifically-backed training, books, and coaching.',
+    images: [
+      {
+        url: '/Icon Logo.png',
+        width: 1200,
+        height: 630,
+        alt: 'HybridX Hub - Hybrid Training',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'HybridX: Hyrox Training Plans, Workouts & Coaching App',
+    description: 'Expert Hyrox training plans and hybrid workout programs. Master Hyrox competitions with scientifically-backed training, books, and coaching.',
+    images: ['/Icon Logo.png'],
+    creator: '@hybridxhub',
+  },
+  alternates: {
+    canonical: SITE_CONFIG.url,
+  },
+  verification: {
+    google: 'pqqqhsjCj9Bk1lngrIUZozN4Gg187vaRgwfVHXcNUPg', // Add your Google Search Console verification code
   },
 };
 
@@ -32,9 +98,18 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const organizationSchema = createOrganizationSchema();
+
   return (
     <html lang="en" suppressHydrationWarning className={`${inter.variable} ${spaceGrotesk.variable}`}>
       <head>
+        {/* Organization Schema */}
+        <Script
+          id="organization-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+
         {/* Google tag (gtag.js) */}
         <Script
           async
