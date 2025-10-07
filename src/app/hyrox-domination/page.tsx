@@ -29,7 +29,6 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Hyrox Training Plan: The Ultimate 12-Week Blueprint to Dominate',
     description: "The scientifically-backed 12-week Hyrox training plan that's helped over 1,000+ athletes crush their race times.",
-    url: 'https://hybridx.club/hyrox-domination',
     type: 'website',
   },
   twitter: {

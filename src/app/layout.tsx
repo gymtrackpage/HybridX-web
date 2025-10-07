@@ -65,7 +65,6 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: SITE_CONFIG.url,
     siteName: SITE_CONFIG.name,
     title: 'HybridX: Hyrox Training Plans, Workouts & Coaching App',
     description: 'Expert Hyrox training plans and hybrid workout programs. Master Hyrox competitions with scientifically-backed training, books, and coaching.',
@@ -86,7 +85,7 @@ export const metadata: Metadata = {
     creator: '@hybridxhub',
   },
   alternates: {
-    canonical: SITE_CONFIG.url,
+    canonical: process.env.NODE_ENV === 'production' ? SITE_CONFIG.url : undefined,
   },
   verification: {
     google: 'pqqqhsjCj9Bk1lngrIUZozN4Gg187vaRgwfVHXcNUPg', // Add your Google Search Console verification code

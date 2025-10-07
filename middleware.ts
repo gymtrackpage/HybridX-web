@@ -5,6 +5,9 @@ export function middleware(request: NextRequest) {
   // Clone the response to add headers
   const response = NextResponse.next();
 
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  const studioHost = '*.cloudworkstations.dev';
+
   // ✅ DNS Prefetch Control - Allow DNS prefetching for performance
   response.headers.set('X-DNS-Prefetch-Control', 'on');
 
@@ -15,7 +18,9 @@ export function middleware(request: NextRequest) {
   );
 
   // ✅ X-Frame-Options - Prevent clickjacking
-  response.headers.set('X-Frame-Options', 'SAMEORIGIN');
+  // We will rely on CSP's frame-ancestors, which is more flexible.
+  // Setting both can cause issues, so we'll remove this one.
+  // response.headers.set('X-Frame-Options', 'SAMEORIGIN');
 
   // ✅ X-Content-Type-Options - Prevent MIME sniffing
   response.headers.set('X-Content-Type-Options', 'nosniff');
@@ -33,7 +38,6 @@ export function middleware(request: NextRequest) {
   );
 
   // ✅ Content-Security-Policy - Mitigate XSS and injection attacks
-  // NOTE: Adjust based on your third-party scripts (Google Analytics, Ecwid, etc.)
   const cspDirectives = [
     "default-src 'self'",
     // Scripts: Allow self, inline scripts (needed for Next.js), and trusted domains
@@ -54,8 +58,8 @@ export function middleware(request: NextRequest) {
     "base-uri 'self'",
     // Form actions: Restrict where forms can submit
     "form-action 'self' https://script.google.com",
-    // Frame ancestors: Prevent embedding (same as X-Frame-Options)
-    "frame-ancestors 'self'",
+    // Frame ancestors: Prevent embedding, but allow Studio in dev
+    `frame-ancestors 'self' ${isDevelopment ? `https://${studioHost}` : ''}`,
     // Upgrade insecure requests
     "upgrade-insecure-requests",
   ];

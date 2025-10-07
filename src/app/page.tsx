@@ -32,7 +32,6 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'HybridX Hub | Hyrox Training Plans, Workout Programs & Coaching App',
     description: 'Expert Hyrox training plans and hybrid workout programs. Master Hyrox competitions with our scientifically-backed training plans, books, and coaching app.',
-    url: 'https://hybridx.club',
     type: 'website',
     images: [
       {
