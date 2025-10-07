@@ -20,27 +20,38 @@ import {
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { firestore } from '@/lib/firebase';
-import { collection, getDocs, query, where, orderBy, Timestamp } from 'firebase/firestore';
-
-
 interface HyroxEvent {
-    id: string;
     name: string;
-    date: Date;
+    startDate: string | null;
+    endDate: string | null;
+}
+
+// Helper function to generate dates between start and end date
+function generateDateRange(startDate: string, endDate: string): string[] {
+  const dates: string[] = [];
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  const currentDate = new Date(start);
+  while (currentDate <= end) {
+    dates.push(new Date(currentDate).toISOString().split('T')[0]);
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  return dates;
 }
 
 function SubmitButton() {
   const { pending } = useFormStatus();
 
   return (
-    <Button 
-      type="submit" 
+    <Button
+      type="submit"
       disabled={pending}
-      className="w-full py-4 px-6 bg-accent text-accent-foreground hover:bg-accent/90 font-bold 
+      className="w-full py-4 px-6 bg-accent text-accent-foreground hover:bg-accent/90 font-bold
                text-base uppercase tracking-wider rounded-lg shadow-lg font-headline
-               hover:shadow-xl hover:-translate-y-1 active:translate-y-0 
-               disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none 
+               hover:shadow-xl hover:-translate-y-1 active:translate-y-0
+               disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none
                transition-all duration-300"
     >
       {pending ? (
@@ -58,6 +69,7 @@ function SubmitButton() {
 const FormSchema = z.object({
   email: z.string().email(),
   event: z.string().min(1, { message: "Please select an event." }),
+  eventDate: z.string().min(1, { message: "Please select an event date." }),
 });
 
 
@@ -67,6 +79,8 @@ export default function HyroxDominationForm() {
   const formRef = useRef<HTMLFormElement>(null);
   const [hyroxEvents, setHyroxEvents] = useState<HyroxEvent[]>([]);
   const [eventsLoading, setEventsLoading] = useState(true);
+  const [selectedEvent, setSelectedEvent] = useState<HyroxEvent | null>(null);
+  const [availableDates, setAvailableDates] = useState<string[]>([]);
   
   // zod validation for client side
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -74,6 +88,7 @@ export default function HyroxDominationForm() {
     defaultValues: {
       email: "",
       event: "",
+      eventDate: "",
     },
   });
 
@@ -81,29 +96,14 @@ export default function HyroxDominationForm() {
       async function fetchEvents() {
           setEventsLoading(true);
           try {
-              const eventsCollection = collection(firestore, 'hyroxEvents');
-              const now = new Date();
-              // Query for events where the date is in the future, ordered by date
-              const q = query(
-                eventsCollection, 
-                where('date', '>=', Timestamp.fromDate(now)), 
-                orderBy('date', 'asc')
-              );
-              
-              const querySnapshot = await getDocs(q);
-              const eventsList = querySnapshot.docs.map(doc => {
-                    const data = doc.data();
-                    const eventDate = (data.date as Timestamp).toDate();
-                    return {
-                        id: doc.id,
-                        name: data.name,
-                        date: eventDate,
-                    };
-                });
-              
-              setHyroxEvents(eventsList);
+              const response = await fetch('/api/hyrox-events');
+              const data = await response.json();
+
+              if (data.events) {
+                  setHyroxEvents(data.events);
+              }
           } catch (error) {
-              console.error("Error fetching events from Firestore:", error);
+              console.error("Error fetching events from Google Sheets:", error);
               // Optionally set an error state to show in the UI
           } finally {
               setEventsLoading(false);
@@ -112,10 +112,33 @@ export default function HyroxDominationForm() {
       fetchEvents();
   }, []);
 
+  // Handle event selection and generate available dates
+  useEffect(() => {
+    const subscription = form.watch((value, { name }) => {
+      if (name === 'event' && value.event) {
+        const event = hyroxEvents.find(e => e.name === value.event);
+        if (event) {
+          setSelectedEvent(event);
+          if (event.startDate && event.endDate) {
+            const dates = generateDateRange(event.startDate, event.endDate);
+            setAvailableDates(dates);
+          } else {
+            setAvailableDates([]);
+          }
+          // Reset the eventDate field when event changes
+          form.setValue('eventDate', '');
+        }
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form, hyroxEvents]);
+
   useEffect(() => {
     if (state.type === 'success') {
       formRef.current?.reset();
       form.reset();
+      setSelectedEvent(null);
+      setAvailableDates([]);
     }
   }, [state, form]);
 
@@ -166,13 +189,60 @@ export default function HyroxDominationForm() {
                         </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                        {hyroxEvents.map((event) => (
-                            <SelectItem key={event.id} value={`${event.name} | ${event.date.toISOString()}`}>
-                                {event.name} - {event.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                        {hyroxEvents.map((event, index) => (
+                            <SelectItem key={index} value={event.name}>
+                                {event.name}
                             </SelectItem>
                         ))}
                         {eventsLoading && <SelectItem value="loading" disabled>Loading...</SelectItem>}
-                        {!eventsLoading && hyroxEvents.length === 0 && <SelectItem value="no-events" disabled>No upcoming events found.</SelectItem>}
+                        {!eventsLoading && hyroxEvents.length === 0 && <SelectItem value="no-events" disabled>No events found.</SelectItem>}
+                        </SelectContent>
+                    </Select>
+                    <FormMessage />
+                </FormItem>
+            )}
+        />
+
+        <FormField
+            control={form.control}
+            name="eventDate"
+            render={({ field }) => (
+                <FormItem>
+                    <Label htmlFor="eventDate" className="block text-sm font-semibold text-foreground mb-2 text-left">
+                        Select Your Event Date
+                    </Label>
+                    <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                        disabled={!selectedEvent || availableDates.length === 0}
+                    >
+                        <FormControl>
+                        <SelectTrigger className="w-full px-4 py-3 bg-input border-2 border-border rounded-lg text-foreground
+                                                focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20
+                                                transition-all duration-300 font-body h-auto">
+                            <SelectValue placeholder={
+                                !selectedEvent
+                                    ? "Select an event first..."
+                                    : availableDates.length === 0
+                                        ? "No dates available"
+                                        : "Choose your event date..."
+                            } />
+                        </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                        {availableDates.map((date) => {
+                            const dateObj = new Date(date);
+                            return (
+                                <SelectItem key={date} value={date}>
+                                    {dateObj.toLocaleDateString('en-US', {
+                                        weekday: 'short',
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric'
+                                    })}
+                                </SelectItem>
+                            );
+                        })}
                         </SelectContent>
                     </Select>
                     <FormMessage />

@@ -7,6 +7,7 @@ import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 const SignUpSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address.' }),
   event: z.string().min(1, { message: 'Please select an event.' }),
+  eventDate: z.string().min(1, { message: 'Please select an event date.' }),
 });
 
 export type SignUpFormState = {
@@ -21,6 +22,7 @@ export async function signUpForTrainingPlan(
   const validatedFields = SignUpSchema.safeParse({
     email: formData.get('email'),
     event: formData.get('event'),
+    eventDate: formData.get('eventDate'),
   });
 
   if (!validatedFields.success) {
@@ -30,21 +32,28 @@ export async function signUpForTrainingPlan(
     };
   }
 
-  const { email, event } = validatedFields.data;
+  const { email, event, eventDate } = validatedFields.data;
 
   try {
+    // Save to Firestore
     await addDoc(collection(firestore, 'trainingPlanSignups'), {
       email,
-      event, // event will now be a string like "London Olympia | 2024-11-30T00:00:00.000Z"
+      event,
+      eventDate,
       createdAt: serverTimestamp(),
-      status: 'pending', // Add a status for the background job to query
+      status: 'processing',
     });
 
-    // Here is where you would trigger the next steps, like a Cloud Function.
-    // For now, we'll return a success message.
-    
+    // Generate the PDF training plan
+    const { generateTrainingPlanPDF } = await import('@/lib/training-plan/generate-plan');
+    const pdfBuffer = await generateTrainingPlanPDF(eventDate, event, email);
+
+    // Send email with PDF
+    const { sendTrainingPlanEmail } = await import('@/lib/email/send-training-plan');
+    await sendTrainingPlanEmail(email, event, eventDate, pdfBuffer);
+
     return {
-      message: 'Success! Your plan is being generated. Check your email shortly.',
+      message: 'Success! Your custom training plan has been sent to your email. Check your inbox!',
       type: 'success',
     };
 

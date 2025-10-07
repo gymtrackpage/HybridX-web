@@ -37,7 +37,7 @@ const securityHeaders = [
   },
   {
     key: 'Content-Security-Policy',
-    value: `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://app.ecwid.com https://script.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; font-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://app.ecwid.com https://script.google.com; frame-src 'self' https://app.ecwid.com https://script.google.com; object-src 'none'; base-uri 'self'; form-action 'self' https://script.google.com; frame-ancestors 'self' ${isDevelopment ? `https://${studioHost}` : ''}; upgrade-insecure-requests;`
+    value: `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://app.ecwid.com https://script.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; font-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://app.ecwid.com https://script.google.com; frame-src 'self' https://app.ecwid.com https://script.google.com; object-src 'none'; base-uri 'self'; form-action 'self' https://script.google.com; frame-ancestors 'self' ${isDevelopment ? `https://${studioHost}` : ''};${isDevelopment ? '' : ' upgrade-insecure-requests;'}`
   }
 ];
 

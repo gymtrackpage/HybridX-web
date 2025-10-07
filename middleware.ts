@@ -60,8 +60,8 @@ export function middleware(request: NextRequest) {
     "form-action 'self' https://script.google.com",
     // Frame ancestors: Prevent embedding, but allow Studio in dev
     `frame-ancestors 'self' ${isDevelopment ? `https://${studioHost}` : ''}`,
-    // Upgrade insecure requests
-    "upgrade-insecure-requests",
+    // Upgrade insecure requests (disabled in dev to allow preview)
+    ...(isDevelopment ? [] : ["upgrade-insecure-requests"]),
   ];
 
   response.headers.set('Content-Security-Policy', cspDirectives.join('; '));
