@@ -1,3 +1,4 @@
+
 'use server';
 
 import { z } from 'zod';
@@ -38,22 +39,13 @@ export async function signUpForTrainingPlan(
     // Save to Firestore
     await addDoc(collection(firestore, 'trainingPlanSignups'), {
       email,
-      event,
-      eventDate,
+      event: `${event} | ${eventDate}`,
       createdAt: serverTimestamp(),
-      status: 'processing',
+      status: 'pending',
     });
-
-    // Generate the PDF training plan
-    const { generateTrainingPlanPDF } = await import('@/lib/training-plan/generate-plan');
-    const pdfBuffer = await generateTrainingPlanPDF(eventDate, event, email);
-
-    // Send email with PDF
-    const { sendTrainingPlanEmail } = await import('@/lib/email/send-training-plan');
-    await sendTrainingPlanEmail(email, event, eventDate, pdfBuffer);
-
+    
     return {
-      message: 'Success! Your custom training plan has been sent to your email. Check your inbox!',
+      message: 'Success! Your custom training plan is being generated and will be sent to your email shortly. This can take up to a minute.',
       type: 'success',
     };
 
