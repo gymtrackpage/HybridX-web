@@ -1,5 +1,4 @@
-
-import type {NextConfig} from 'next';
+/** @type {import('next').NextConfig} */
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 const studioHost = '*.cloudworkstations.dev';
@@ -41,7 +40,7 @@ const securityHeaders = [
   }
 ];
 
-const nextConfig: NextConfig = {
+const nextConfig = {
   // ✅ ENABLED: Catch TypeScript errors during build
   typescript: {
     ignoreBuildErrors: false,
@@ -83,4 +82,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
