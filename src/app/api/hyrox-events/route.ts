@@ -3,12 +3,9 @@ import { google } from 'googleapis';
 
 export async function GET() {
   try {
-    // Initialize Google Sheets API
+    // Initialize Google Sheets API using Application Default Credentials
+    // This will automatically use the service account in the App Hosting environment
     const auth = new google.auth.GoogleAuth({
-      credentials: {
-        client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-      },
       scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
     });
 

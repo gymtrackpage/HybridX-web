@@ -13,7 +13,7 @@ export async function generateTrainingPlanPDF(
 
   // Generate PDF
   const pdfDocument = React.createElement(TrainingPlanPDF, { trainingPlan });
-  const pdfBuffer = await renderToBuffer(pdfDocument);
+  const pdfBuffer = await renderToBuffer(pdfDocument as any);
 
   return pdfBuffer;
 }
