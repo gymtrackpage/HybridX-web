@@ -24,14 +24,6 @@ env:
     value: "false"
     availability:
       - RUNTIME
-  - variable: SMTP_USER
-    secret: projects/354413162075/secrets/SMTP_USER
-    availability:
-      - RUNTIME
-  - variable: SMTP_PASSWORD
-    secret: projects/354413162075/secrets/SMTP_PASSWORD
-    availability:
-      - RUNTIME
   - variable: SMTP_FROM
     value: "\"HybridX\" <noreply@hybridx.com>"
     availability:

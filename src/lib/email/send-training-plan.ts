@@ -1,4 +1,4 @@
-import nodemailer from 'nodemailer';
+import { emailTransporter } from './service';
 
 export async function sendTrainingPlanEmail(
   userEmail: string,
@@ -6,16 +6,7 @@ export async function sendTrainingPlanEmail(
   eventDate: string,
   pdfBuffer: Buffer
 ): Promise<void> {
-  // Create transporter - you'll need to add email credentials to .env
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: parseInt(process.env.SMTP_PORT || '587'),
-    secure: process.env.SMTP_SECURE === 'true',
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASSWORD,
-    },
-  });
+  const transporter = emailTransporter;
 
   const formattedDate = new Date(eventDate).toLocaleDateString('en-US', {
     year: 'numeric',
