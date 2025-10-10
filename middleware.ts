@@ -3,80 +3,62 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  // Clone the response to add headers
   const response = NextResponse.next();
-
   const isDevelopment = process.env.NODE_ENV === 'development';
-  const studioHost = '*.cloudworkstations.dev';
-  const idxHost = '*.idx.google.com';
-
-  // ✅ DNS Prefetch Control - Allow DNS prefetching for performance
+  
+  // --- Looser policy for Development/Preview ---
+  // These headers are safe and do not interfere with iframes or local development.
   response.headers.set('X-DNS-Prefetch-Control', 'on');
-
-  // Conditionally add HSTS header only in production
-  if (!isDevelopment) {
-      response.headers.set(
-        'Strict-Transport-Security',
-        'max-age=63072000; includeSubDomains; preload'
-      );
-  }
-
-  // ✅ X-Content-Type-Options - Prevent MIME sniffing
   response.headers.set('X-Content-Type-Options', 'nosniff');
 
-  // ✅ X-XSS-Protection - Enable XSS filter (legacy browsers)
-  response.headers.set('X-XSS-Protection', '1; mode=block');
+  // --- Stricter policy for Production ---
+  // These headers (HSTS, CSP) are only applied when NOT in development mode.
+  // This prevents them from blocking the Studio web preview.
+  if (!isDevelopment) {
+    // Force HTTPS for 2 years
+    response.headers.set(
+      'Strict-Transport-Security',
+      'max-age=63072000; includeSubDomains; preload'
+    );
 
-  // ✅ Referrer-Policy - Control referrer information
-  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-
-  // ✅ Permissions-Policy - Control browser features
-  response.headers.set(
-    'Permissions-Policy',
-    'camera=(), microphone=(), geolocation=(), interest-cohort=()'
-  );
-
-  // ✅ Content-Security-Policy - Mitigate XSS and injection attacks
-  const cspDirectives = [
-    "default-src 'self'",
-    // Scripts: Allow self, inline scripts (needed for Next.js), and trusted domains
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://app.ecwid.com https://script.google.com",
-    // Styles: Allow self and inline styles (needed for Tailwind/Next.js)
-    "style-src 'self' 'unsafe-inline'",
-    // Images: Allow self, data URIs, and external image sources
-    "img-src 'self' data: https: http:",
-    // Fonts: Allow self and data URIs
-    "font-src 'self' data:",
-    // Connect (API calls): Allow self and trusted domains
-    "connect-src 'self' https://*.google-analytics.com https://www.google-analytics.com https://app.ecwid.com https://script.google.com",
-    // Frames: Allow Ecwid and Google Apps Script iframes
-    "frame-src 'self' https://app.ecwid.com https://script.google.com",
-    // Object/Embed: Disallow plugins
-    "object-src 'none'",
-    // Base URI: Restrict base tag usage
-    "base-uri 'self'",
-    // Form actions: Restrict where forms can submit
-    "form-action 'self' https://script.google.com",
-    // Frame ancestors: Prevent embedding, but ALWAYS allow Studio & IDX
-    `frame-ancestors 'self' https://${studioHost} https://${idxHost}`,
-    // Upgrade insecure requests (disabled in dev to allow preview)
-    ...(isDevelopment ? [] : ["upgrade-in-secure-requests"]),
-  ];
-
-  response.headers.set('Content-Security-Policy', cspDirectives.join('; '));
+    // Define a strict Content Security Policy for production
+    const cspDirectives = [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://app.ecwid.com https://script.google.com",
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data: https: http:",
+      "font-src 'self' data:",
+      "connect-src 'self' https://*.google-analytics.com https://www.google-analytics.com https://app.ecwid.com https://script.google.com",
+      "frame-src 'self' https://app.ecwid.com https://script.google.com",
+      "object-src 'none'",
+      "base-uri 'self'",
+      "form-action 'self' https://script.google.com",
+      // IMPORTANT: This allows Studio and other Google tools to embed the app
+      "frame-ancestors 'self' https://*.cloudworkstations.dev https://*.idx.google.com",
+      "upgrade-insecure-requests",
+    ];
+    response.headers.set('Content-Security-Policy', cspDirectives.join('; '));
+  } else {
+    // In development, have a very permissive frame-ancestors policy
+    // to ensure the preview works without any issues.
+    response.headers.set(
+      'Content-Security-Policy',
+      "frame-ancestors 'self' https://*.cloudworkstations.dev https://*.idx.google.com;"
+    );
+  }
 
   return response;
 }
 
-// Configure which routes the middleware runs on
 export const config = {
   matcher: [
     /*
-     * Match all request paths except:
-     * - api routes (handled separately)
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
      * - _next/static (static files)
-     * - _next/image (image optimization)
-     * - favicon.ico, sitemap.xml, robots.txt (public files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - and common image/asset extensions
      */
     '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|.*\\.png|.*\\.jpg|.*\\.jpeg|.*\\.gif|.*\\.svg|.*\\.webp).*)',
   ],
