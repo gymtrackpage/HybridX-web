@@ -1,48 +1,69 @@
 /** @type {import('next').NextConfig} */
 
-const isDevelopment = process.env.NODE_ENV === 'development';
+// Detect if running in a Firebase App Hosting preview environment
+const isPreview = !!process.env.FIREBASE_APP_HOSTING_URL;
 
-// Base security headers
-const baseSecurityHeaders = [
-  {
-    key: 'X-DNS-Prefetch-Control',
-    value: 'on'
-  },
-  {
-    key: 'X-Content-Type-Options',
-    value: 'nosniff'
-  },
-  {
-    key: 'X-XSS-Protection',
-    value: '1; mode=block'
-  },
-  {
-    key: 'Referrer-Policy',
-    value: 'strict-origin-when-cross-origin'
-  },
-  {
-    key: 'Permissions-Policy',
-    value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()'
-  }
-];
+const getSecurityHeaders = () => {
+  const baseSecurityHeaders = [
+    {
+      key: 'X-DNS-Prefetch-Control',
+      value: 'on'
+    },
+    {
+      key: 'X-Content-Type-Options',
+      value: 'nosniff'
+    },
+    {
+      key: 'X-XSS-Protection',
+      value: '1; mode=block'
+    },
+    {
+      key: 'Referrer-Policy',
+      value: 'strict-origin-when-cross-origin'
+    },
+    {
+      key: 'Permissions-Policy',
+      value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()'
+    }
+  ];
 
-// Production-only security headers
-const productionSecurityHeaders = [
-  {
-    key: 'Strict-Transport-Security',
-    value: 'max-age=63072000; includeSubDomains; preload'
-  }
-];
+  // Define Content Security Policy directives
+  const cspDirectives = [
+    "default-src 'self'",
+    // Added *.google-analytics.com to connect-src for full analytics support
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://*.google-analytics.com https://app.ecwid.com https://script.google.com",
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: https: http:",
+    "font-src 'self' data:",
+    "connect-src 'self' https://*.google-analytics.com https://app.ecwid.com https://script.google.com",
+    "frame-src 'self' https://app.ecwid.com https://script.google.com",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self' https://script.google.com",
+    // ALWAYS allow framing by Studio's domains.
+    "frame-ancestors 'self' https://*.cloudworkstations.dev https://*.idx.google.com",
+  ];
 
-// Determine final security headers
-const securityHeaders = [
-  ...baseSecurityHeaders,
-  ...(!isDevelopment ? productionSecurityHeaders : []),
-  {
-    key: 'Content-Security-Policy',
-    value: `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://app.ecwid.com https://script.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; font-src 'self' data:; connect-src 'self' https://*.google-analytics.com https://www.google-analytics.com https://app.ecwid.com https://script.google.com; frame-src 'self' https://app.ecwid.com https://script.google.com; object-src 'none'; base-uri 'self'; form-action 'self' https://script.google.com; frame-ancestors 'self' https://*.cloudworkstations.dev https://*.idx.google.com;${isDevelopment ? '' : ' upgrade-insecure-requests'}`.replace(/\s{2,}/g, ' ').trim()
+  if (!isPreview) {
+    // Add production-only headers
+    baseSecurityHeaders.push({
+      key: 'Strict-Transport-Security',
+      value: 'max-age=63072000; includeSubDomains; preload'
+    });
+    // Add production-only CSP directives
+    cspDirectives.push("upgrade-insecure-requests");
   }
-];
+
+  const finalHeaders = [
+    ...baseSecurityHeaders,
+    {
+      key: 'Content-Security-Policy',
+      value: cspDirectives.join('; ').replace(/\s{2,}/g, ' ').trim()
+    }
+  ];
+  
+  return finalHeaders;
+};
 
 const nextConfig = {
   // ✅ ENABLED: Catch TypeScript errors during build
@@ -80,7 +101,7 @@ const nextConfig = {
     return [
       {
         source: '/(.*)',
-        headers: securityHeaders,
+        headers: getSecurityHeaders(),
       },
     ];
   },
