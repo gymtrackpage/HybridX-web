@@ -1,3 +1,4 @@
+
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
@@ -7,20 +8,18 @@ export function middleware(request: NextRequest) {
 
   const isDevelopment = process.env.NODE_ENV === 'development';
   const studioHost = '*.cloudworkstations.dev';
+  const idxHost = '*.idx.google.com';
 
   // ✅ DNS Prefetch Control - Allow DNS prefetching for performance
   response.headers.set('X-DNS-Prefetch-Control', 'on');
 
-  // ✅ Strict-Transport-Security - Force HTTPS (adjust max-age as needed)
-  response.headers.set(
-    'Strict-Transport-Security',
-    'max-age=63072000; includeSubDomains; preload'
-  );
-
-  // ✅ X-Frame-Options - Prevent clickjacking
-  // We will rely on CSP's frame-ancestors, which is more flexible.
-  // Setting both can cause issues, so we'll remove this one.
-  // response.headers.set('X-Frame-Options', 'SAMEORIGIN');
+  // Conditionally add HSTS header only in production
+  if (!isDevelopment) {
+      response.headers.set(
+        'Strict-Transport-Security',
+        'max-age=63072000; includeSubDomains; preload'
+      );
+  }
 
   // ✅ X-Content-Type-Options - Prevent MIME sniffing
   response.headers.set('X-Content-Type-Options', 'nosniff');
@@ -29,7 +28,7 @@ export function middleware(request: NextRequest) {
   response.headers.set('X-XSS-Protection', '1; mode=block');
 
   // ✅ Referrer-Policy - Control referrer information
-  response.headers.set('Referrer-Policy', 'origin-when-cross-origin');
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
 
   // ✅ Permissions-Policy - Control browser features
   response.headers.set(
@@ -49,7 +48,7 @@ export function middleware(request: NextRequest) {
     // Fonts: Allow self and data URIs
     "font-src 'self' data:",
     // Connect (API calls): Allow self and trusted domains
-    "connect-src 'self' https://www.google-analytics.com https://app.ecwid.com https://script.google.com",
+    "connect-src 'self' https://*.google-analytics.com https://www.google-analytics.com https://app.ecwid.com https://script.google.com",
     // Frames: Allow Ecwid and Google Apps Script iframes
     "frame-src 'self' https://app.ecwid.com https://script.google.com",
     // Object/Embed: Disallow plugins
@@ -58,10 +57,10 @@ export function middleware(request: NextRequest) {
     "base-uri 'self'",
     // Form actions: Restrict where forms can submit
     "form-action 'self' https://script.google.com",
-    // Frame ancestors: Prevent embedding, but allow Studio in dev
-    `frame-ancestors 'self' ${isDevelopment ? `https://${studioHost}` : ''}`,
+    // Frame ancestors: Prevent embedding, but ALWAYS allow Studio & IDX
+    `frame-ancestors 'self' https://${studioHost} https://${idxHost}`,
     // Upgrade insecure requests (disabled in dev to allow preview)
-    ...(isDevelopment ? [] : ["upgrade-insecure-requests"]),
+    ...(isDevelopment ? [] : ["upgrade-in-secure-requests"]),
   ];
 
   response.headers.set('Content-Security-Policy', cspDirectives.join('; '));
