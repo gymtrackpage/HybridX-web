@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle } from '@/components/ui/sheet';
-import { Menu, LogIn, ChevronDown, ListChecks, Dumbbell, ClipboardList, ArrowUpRight, ShoppingCart } from 'lucide-react';
+import { Menu, LogIn, ChevronDown, ListChecks, Dumbbell, ClipboardList, ArrowUpRight, ShoppingCart, BookOpen } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,8 +32,14 @@ interface SubNavItem {
 const navItems: NavItem[] = [
   { label: 'Hyrox Plan', href: '/hyrox-domination' },
   { label: 'Our App', href: 'https://app.hybridx.club' },
-  { label: 'Books', href: '/#book-promotion' },
-  { label: 'Store', href: '/store' },
+  {
+    label: 'Shop',
+    isDropdown: true,
+    items: [
+      { label: 'Books', href: '/#book-promotion', icon: <BookOpen className="mr-2 h-5 w-5" /> },
+      { label: 'Store', href: '/store', icon: <ShoppingCart className="mr-2 h-5 w-5" /> },
+    ]
+  },
   {
     label: 'Calculators',
     href: '/calculators',
@@ -134,7 +140,7 @@ export default function Header() {
                     <React.Fragment key={`${item.label}-${index}-mobile`}>
                       <SheetClose asChild>
                         <Link
-                          href={item.href!}
+                          href={item.href || '#'}
                           className="flex items-center justify-between rounded-md px-3 py-3 transition-colors hover:bg-accent/10 text-lg font-headline text-primary group"
                         >
                           {item.label}
