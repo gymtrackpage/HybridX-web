@@ -1,3 +1,4 @@
+
 import {
   Accordion,
   AccordionContent,
@@ -24,7 +25,7 @@ const faqItems = [
     id: 'faq3',
     question: 'Do you offer Hyrox training plans?',
     answer:
-      'Yes! We offer comprehensive Hyrox training plans for all levels. Our 12-week Hyrox training programs are scientifically designed to prepare you for competition, with specific workouts targeting compromised running, station efficiency, and race-day performance. Check out our Hyrox Domination program for a complete training system.',
+      'Yes! We offer comprehensive Hyrox training plans for all levels. Our 12-week Hyrox training programs are scientifically designed to prepare you for competition, with specific workouts targeting compromised running, station efficiency, and race-day performance. Check out our Hyrox Performance program for a complete training system.',
   },
   {
     id: 'faq4',

@@ -16,7 +16,7 @@ import { fetchHyroxEvents, type HyroxEvent } from '@/lib/hyrox-events';
 
 export const metadata: Metadata = {
   title: 'Hyrox Training Plan: The Ultimate 12-Week Blueprint to Excel',
-  description: "The scientifically-backed 12-week Hyrox training plan that's helped over 1,000+ athletes improve their race times. For beginners and advanced competitors.",
+  description: "A scientifically-backed 12-week Hyrox training plan that's helped over 1,000+ athletes achieve their best race times. For beginners and advanced competitors.",
   keywords: [
     'hyrox training plan',
     'hyrox workout',
@@ -29,13 +29,13 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: 'Hyrox Training Plan: The Ultimate 12-Week Blueprint to Excel',
-    description: "The scientifically-backed 12-week Hyrox training plan that's helped over 1,000+ athletes improve their race times.",
+    description: "A scientifically-backed 12-week Hyrox training plan that's helped 1,000+ athletes achieve their best race times.",
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Hyrox Training Plan: The Ultimate 12-Week Blueprint',
-    description: "The scientifically-backed 12-week Hyrox training plan that's helped 1,000+ athletes improve their race times.",
+    description: "A scientifically-backed 12-week Hyrox training plan that's helped 1,000+ athletes achieve their best race times.",
   },
 };
 
@@ -77,13 +77,13 @@ const ProblemAgitationSection = () => (
             <p>❌ You're wasting MONTHS on ineffective training that'll leave you gasping for air at station 3.</p>
             <p>❌ You have no idea how to pace your runs between stations (and it's costing you precious minutes).</p>
             <p>❌ Your "cardio base" means nothing when you can't maintain running speed after the sleds.</p>
-            <p>❌ You're about to embarrass yourself in front of hundreds of people because you trained all wrong.</p>
+            <p>❌ You're worried you won't perform your best because you trained all wrong.</p>
           </CardContent>
         </Card>
         <div className="bg-primary text-primary-foreground p-8 rounded-lg flex flex-col justify-center">
           <h3 className="font-headline text-2xl mb-4 text-accent">The Worst Part?</h3>
           <p className="font-body text-lg">
-            You KNOW you're capable of so much more, but you're following advice from people who've never even completed a Hyrox race themselves. Most people fail miserably because they train like it's a marathon when it's a completely different beast.
+            You KNOW you're capable of so much more, but you're following advice from people who've never even completed a Hyrox race themselves. Most people fail to reach their potential because they train like it's a marathon when it's a completely different beast.
           </p>
         </div>
       </div>
@@ -271,7 +271,7 @@ const FinalCloseSection = () => (
 
 // --- Main Page Component ---
 
-export default async function HyroxDominationPage() {
+export default async function HyroxPerformancePage() {
   // Fetch events at build/request time for instant availability
   const events = await fetchHyroxEvents();
 

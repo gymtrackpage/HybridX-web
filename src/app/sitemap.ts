@@ -1,3 +1,4 @@
+
 import { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -90,7 +91,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/hyrox-domination`,
+      url: `${baseUrl}/hyrox-performance`,
       lastModified: new Date(),
       changeFrequency: 'weekly' as const,
       priority: 0.9,

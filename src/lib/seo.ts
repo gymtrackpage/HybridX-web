@@ -1,3 +1,4 @@
+
 import { Metadata } from 'next';
 
 // Detect if running in Firebase Studio (Cloud Workstations) or development

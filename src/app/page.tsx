@@ -13,7 +13,7 @@ import TrainingPlanShowcase from '@/components/TrainingPlanShowcase';
 
 export const metadata: Metadata = {
   title: 'HybridX Hub | Hyrox Training Plans, Workout Programs & Coaching App',
-  description: 'Expert Hyrox training plans and hybrid workout programs. Master Hyrox competitions with our scientifically-backed training plans, books, and coaching app. Free calculators and resources.',
+  description: 'Expert Hyrox training plans and hybrid workout programs. Achieve your best performance in Hyrox competitions with our scientifically-backed training plans, books, and coaching app. Free calculators and resources.',
   keywords: [
     'hyrox',
     'hyrox training',
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: 'HybridX Hub | Hyrox Training Plans, Workout Programs & Coaching App',
-    description: 'Expert Hyrox training plans and hybrid workout programs. Master Hyrox competitions with our scientifically-backed training plans, books, and coaching app.',
+    description: 'Expert Hyrox training plans and hybrid workout programs. Achieve your best performance in Hyrox competitions with our scientifically-backed training plans, books, and coaching app.',
     type: 'website',
     images: [
       {
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'HybridX Hub | Hyrox Training Plans, Workout Programs & Coaching App',
-    description: 'Expert Hyrox training plans and hybrid workout programs. Master Hyrox competitions with our scientifically-backed training plans, books, and coaching app.',
+    description: 'Expert Hyrox training plans and hybrid workout programs. Achieve your best performance in Hyrox competitions with our scientifically-backed training plans, books, and coaching app.',
     images: ['/Icon Logo.png'],
   },
 };

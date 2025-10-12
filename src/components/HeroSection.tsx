@@ -16,7 +16,7 @@ export default function HeroSection() {
 
       <div className="container mx-auto px-6 text-center relative z-10">
         <h1 className="text-4xl md:text-6xl font-headline font-bold text-primary mb-6 leading-tight">
-          Master Hyrox Training & <span className="text-accent">Dominate Your Competition.</span>
+          Master Hyrox Training & <span className="text-accent">Achieve Your Best Performance.</span>
         </h1>
         <p className="text-lg md:text-xl text-muted-foreground font-body max-w-3xl mx-auto mb-10">
           Scientifically-backed Hyrox training plans and hybrid workout programs. Whether you're racing Hyrox competitions or building hybrid fitness, get expert plans, books, and coaching to achieve peak performance.
