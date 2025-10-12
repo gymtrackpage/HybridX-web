@@ -46,7 +46,7 @@ const getSecurityHeaders = () => {
     "frame-ancestors 'self' https://*.cloudworkstations.dev https://*.idx.google.com",
   ];
 
-  // In Firebase Studio, relax CSP to allow preview to work
+  // In Firebase Studio or Preview, relax CSP and headers. In production, be strict.
   if (isStudio || isPreview) {
     // Don't add HSTS in preview/studio environments
   } else {
@@ -103,7 +103,7 @@ const nextConfig = {
   },
   // ✅ SECURITY: Apply headers to all routes (works with Firebase App Hosting)
   async headers() {
-    // Skip security headers in Firebase Studio to allow preview to work
+    // In Firebase Studio, we don't apply headers to allow the preview to work
     if (isStudio) {
       return [];
     }

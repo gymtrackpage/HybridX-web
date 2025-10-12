@@ -35,9 +35,6 @@ export default function EcwidStore() {
   }, []); // Empty dependency array ensures this runs only once on mount.
 
 
-  // Check if store ID is configured (removed comparison that TypeScript flagged)
-  // The actual store ID is already set above
-
   return (
     <>
       <div id={`my-store-${ECWID_STORE_ID}`}></div>
