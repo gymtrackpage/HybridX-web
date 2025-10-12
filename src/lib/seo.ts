@@ -1,9 +1,25 @@
 import { Metadata } from 'next';
 
+// Detect if running in Firebase Studio (Cloud Workstations) or development
+const isStudio = typeof process !== 'undefined' &&
+  (!!process.env.GOOGLE_CLOUD_WORKSTATIONS || !!process.env.WEB_HOST);
+const isDev = typeof process !== 'undefined' && process.env.NODE_ENV === 'development';
+
+// Use localhost or Studio URL in dev/studio, production URL otherwise
+const getBaseUrl = () => {
+  if (isStudio && typeof process !== 'undefined' && process.env.WEB_HOST) {
+    return `https://${process.env.WEB_HOST}`;
+  }
+  if (isDev) {
+    return 'http://localhost:3000';
+  }
+  return 'https://hybridx.club';
+};
+
 export const SITE_CONFIG = {
   name: 'HybridX Hub',
   description: 'Expert Hyrox training plans and hybrid workout programs. Master Hyrox competitions with scientifically-backed training plans, books, and coaching app. Free fitness calculators.',
-  url: 'https://hybridx.club', // Update this to your actual domain
+  url: getBaseUrl(),
   ogImage: '/Icon Logo.png', // Update with your OG image path
   links: {
     twitter: 'https://twitter.com/hybridxhub', // Update with your Twitter

@@ -19,10 +19,16 @@ import {
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-interface HyroxEvent {
+import { parseTrainingPlanCSV, groupWorkoutsByDay } from '@/lib/training-plan-utils';
+import { downloadTrainingPlanPDF } from '@/lib/pdf-generator';
+export interface HyroxEvent {
     name: string;
     startDate: string | null;
     endDate: string | null;
+}
+
+interface HyroxDominationFormProps {
+  initialEvents?: HyroxEvent[];
 }
 
 // Helper function to generate dates between start and end date
@@ -66,25 +72,28 @@ function SubmitButton() {
 }
 
 const FormSchema = z.object({
+  name: z.string().min(2, { message: "Please enter your name." }),
   email: z.string().email(),
   event: z.string().min(1, { message: "Please select an event." }),
   eventDate: z.string().min(1, { message: "Please select an event date." }),
 });
 
 
-export default function HyroxDominationForm() {
+export default function HyroxDominationForm({ initialEvents = [] }: HyroxDominationFormProps) {
   const initialState: SignUpFormState = { message: '', type: '' };
   const [state, formAction] = useFormState(signUpForTrainingPlan, initialState);
   const formRef = useRef<HTMLFormElement>(null);
-  const [hyroxEvents, setHyroxEvents] = useState<HyroxEvent[]>([]);
-  const [eventsLoading, setEventsLoading] = useState(true);
+  const [hyroxEvents, setHyroxEvents] = useState<HyroxEvent[]>(initialEvents);
+  const [eventsLoading, setEventsLoading] = useState(initialEvents.length === 0);
   const [selectedEvent, setSelectedEvent] = useState<HyroxEvent | null>(null);
   const [availableDates, setAvailableDates] = useState<string[]>([]);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   
   // zod validation for client side
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
+      name: "",
       email: "",
       event: "",
       eventDate: "",
@@ -92,6 +101,11 @@ export default function HyroxDominationForm() {
   });
 
   useEffect(() => {
+      // Only fetch events if we don't have initialEvents
+      if (initialEvents.length > 0) {
+          return;
+      }
+
       async function fetchEvents() {
           setEventsLoading(true);
           try {
@@ -109,7 +123,7 @@ export default function HyroxDominationForm() {
           }
       }
       fetchEvents();
-  }, []);
+  }, [initialEvents]);
 
   // Handle event selection and generate available dates
   useEffect(() => {
@@ -133,24 +147,92 @@ export default function HyroxDominationForm() {
   }, [form, hyroxEvents]);
 
   useEffect(() => {
-    if (state.type === 'success') {
-      formRef.current?.reset();
-      form.reset();
-      setSelectedEvent(null);
-      setAvailableDates([]);
+    if (state.type === 'success' && !isGeneratingPDF) {
+      // Generate and download the PDF
+      const generatePDF = async () => {
+        setIsGeneratingPDF(true);
+        try {
+          const name = form.getValues('name');
+          const email = form.getValues('email');
+          const event = form.getValues('event');
+          const eventDate = form.getValues('eventDate');
+
+          // Parse the training plan CSV
+          const trainingPlanRows = await parseTrainingPlanCSV('/training-plans/hyrox-fusion-84.csv');
+
+          // Group workouts by day and calculate dates
+          const workouts = groupWorkoutsByDay(trainingPlanRows, new Date(eventDate));
+
+          // Generate and download PDF
+          downloadTrainingPlanPDF({
+            userName: name,
+            eventName: event,
+            eventDate: eventDate,
+            userEmail: email,
+            programName: trainingPlanRows[0]?.programName || 'Hyrox Fusion Prep',
+            programDescription: trainingPlanRows[0]?.programDescription || '',
+            workouts: workouts
+          });
+
+          // Reset form after PDF generation
+          formRef.current?.reset();
+          form.reset();
+          setSelectedEvent(null);
+          setAvailableDates([]);
+        } catch (error) {
+          console.error('Error generating PDF:', error);
+          // Still reset the form even if PDF generation fails
+          formRef.current?.reset();
+          form.reset();
+          setSelectedEvent(null);
+          setAvailableDates([]);
+        } finally {
+          setIsGeneratingPDF(false);
+        }
+      };
+
+      generatePDF();
     }
-  }, [state, form]);
+  }, [state, form, isGeneratingPDF]);
 
   return (
     <Form {...form}>
       <form ref={formRef} action={formAction} className="space-y-6">
         <FormField
             control={form.control}
+            name="name"
+            render={({ field }) => (
+            <FormItem>
+                <Label
+                htmlFor="name"
+                className="block text-sm font-semibold text-foreground mb-2 text-left"
+                >
+                Your Name
+                </Label>
+                <FormControl>
+                <Input
+                    type="text"
+                    id="name"
+                    placeholder="John Doe"
+                    className="w-full px-4 py-3 bg-input border-2 border-border rounded-lg text-foreground placeholder-muted-foreground
+                            focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20
+                            transition-all duration-300 font-body"
+                    {...field}
+                />
+                </FormControl>
+                <input type="hidden" name="name" value={field.value || ''} />
+                <FormMessage />
+            </FormItem>
+            )}
+        />
+
+        <FormField
+            control={form.control}
             name="email"
             render={({ field }) => (
             <FormItem>
-                <Label 
-                htmlFor="email" 
+                <Label
+                htmlFor="email"
                 className="block text-sm font-semibold text-foreground mb-2 text-left"
                 >
                 Email Address
@@ -160,8 +242,8 @@ export default function HyroxDominationForm() {
                     type="email"
                     id="email"
                     placeholder="your.email@example.com"
-                    className="w-full px-4 py-3 bg-input border-2 border-border rounded-lg text-foreground placeholder-muted-foreground 
-                            focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 
+                    className="w-full px-4 py-3 bg-input border-2 border-border rounded-lg text-foreground placeholder-muted-foreground
+                            focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20
                             transition-all duration-300 font-body"
                     {...field}
                 />
@@ -181,8 +263,8 @@ export default function HyroxDominationForm() {
                     </Label>
                     <Select onValueChange={field.onChange} value={field.value} disabled={eventsLoading || hyroxEvents.length === 0}>
                         <FormControl>
-                        <SelectTrigger className="w-full px-4 py-3 bg-input border-2 border-border rounded-lg text-foreground 
-                                                focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20 
+                        <SelectTrigger className="w-full px-4 py-3 bg-input border-2 border-border rounded-lg text-foreground
+                                                focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/20
                                                 transition-all duration-300 font-body h-auto">
                             <SelectValue placeholder={eventsLoading ? "Loading events..." : (hyroxEvents.length === 0 ? "No Events Found" : "Choose your race...")} />
                         </SelectTrigger>
@@ -197,6 +279,8 @@ export default function HyroxDominationForm() {
                         {!eventsLoading && hyroxEvents.length === 0 && <SelectItem value="no-events" disabled>No events found.</SelectItem>}
                         </SelectContent>
                     </Select>
+                    {/* Hidden input for form submission */}
+                    <input type="hidden" name="event" value={field.value || ''} />
                     <FormMessage />
                 </FormItem>
             )}
@@ -244,6 +328,8 @@ export default function HyroxDominationForm() {
                         })}
                         </SelectContent>
                     </Select>
+                    {/* Hidden input for form submission */}
+                    <input type="hidden" name="eventDate" value={field.value || ''} />
                     <FormMessage />
                 </FormItem>
             )}

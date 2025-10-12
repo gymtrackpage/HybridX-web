@@ -11,11 +11,12 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import HyroxDominationForm from '@/components/hyrox/HyroxDominationForm';
 import { createFAQSchema } from '@/lib/seo';
+import { fetchHyroxEvents, type HyroxEvent } from '@/lib/hyrox-events';
 
 
 export const metadata: Metadata = {
-  title: 'Hyrox Training Plan: The Ultimate 12-Week Blueprint to Dominate',
-  description: "The scientifically-backed 12-week Hyrox training plan that's helped over 1,000+ athletes crush their race times. For beginners and advanced competitors.",
+  title: 'Hyrox Training Plan: The Ultimate 12-Week Blueprint to Excel',
+  description: "The scientifically-backed 12-week Hyrox training plan that's helped over 1,000+ athletes improve their race times. For beginners and advanced competitors.",
   keywords: [
     'hyrox training plan',
     'hyrox workout',
@@ -27,14 +28,14 @@ export const metadata: Metadata = {
     'hybrid training',
   ],
   openGraph: {
-    title: 'Hyrox Training Plan: The Ultimate 12-Week Blueprint to Dominate',
-    description: "The scientifically-backed 12-week Hyrox training plan that's helped over 1,000+ athletes crush their race times.",
+    title: 'Hyrox Training Plan: The Ultimate 12-Week Blueprint to Excel',
+    description: "The scientifically-backed 12-week Hyrox training plan that's helped over 1,000+ athletes improve their race times.",
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Hyrox Training Plan: The Ultimate 12-Week Blueprint',
-    description: "The scientifically-backed 12-week Hyrox training plan that's helped 1,000+ athletes crush their race times.",
+    description: "The scientifically-backed 12-week Hyrox training plan that's helped 1,000+ athletes improve their race times.",
   },
 };
 
@@ -45,7 +46,7 @@ const HeroSection = () => (
     <div className="absolute inset-0 bg-subtle-x-light dark:bg-subtle-x-dark opacity-30 dark:opacity-20 mix-blend-multiply dark:mix-blend-screen"></div>
     <div className="container mx-auto px-6 relative z-10">
       <h1 className="text-4xl md:text-6xl font-headline font-bold text-primary mb-4 leading-tight">
-        Stop Guessing. Start <span className="text-accent">DOMINATING</span>. The Only Hyrox Training Plan That Guarantees You'll Crush Your Race Time
+        Stop Guessing. Start <span className="text-accent">ACHIEVING</span>. The Hyrox Training Plan That Guarantees You'll Improve Your Race Time
       </h1>
       <p className="text-lg md:text-xl text-muted-foreground font-body max-w-3xl mx-auto mb-8">
         (Or We'll Refund Every Penny)
@@ -93,7 +94,7 @@ const ProblemAgitationSection = () => (
 const SolutionRevealSection = () => (
     <section className="py-20 md:py-28 bg-secondary/30">
       <div className="container mx-auto px-6 text-center">
-        <h2 className="text-3xl md:text-4xl font-headline font-bold text-primary mb-4">Finally, The Hyrox Domination System</h2>
+        <h2 className="text-3xl md:text-4xl font-headline font-bold text-primary mb-4">Finally, The Hyrox Performance System</h2>
         <p className="text-xl text-muted-foreground font-body max-w-3xl mx-auto mb-12">
             Built from the ground up for ONE PURPOSE: Making you faster, stronger, and more efficient at every single Hyrox station. This isn't just a collection of workouts; it's a complete system for peak performance.
         </p>
@@ -125,7 +126,7 @@ const WhatsIncludedSection = () => {
       { icon: TrendingUp, title: "Running Specific Plan", value: "Included", description: "Build a massive running threshold with specialized protocols for speed, endurance, and compromised running."},
       { icon: Dumbbell, title: "Strength Improvement Plan", value: "Included", description: "Targeted strength and conditioning to power through every station with confidence and reduce injury risk."},
       { icon: Zap, title: "Off-Season Olympic Lifting Plan", value: "Included", description: "Build explosive power and speed in your offseason with our specialized Olympic lifting and plyometrics program."},
-      { icon: Users, title: "Specific Pairs Plan", value: "Included", description: "Dominate the pairs division with strategies and workouts designed for seamless transitions and synchronized effort."},
+      { icon: Users, title: "Specific Pairs Plan", value: "Included", description: "Excel in the pairs division with strategies and workouts designed for seamless transitions and synchronized effort."},
       { icon: Trophy, title: "BONUS: Race Day Execution Plan", value: "Included", description: "Detailed warm-up, nutrition, and mental preparation protocols to ensure you peak on race day."},
     ];
   
@@ -133,7 +134,7 @@ const WhatsIncludedSection = () => {
       <section className="py-20 md:py-28 bg-background">
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-headline font-bold text-primary">The Complete Domination Package</h2>
+            <h2 className="text-3xl md:text-4xl font-headline font-bold text-primary">The Complete Performance Package</h2>
             <p className="text-lg text-muted-foreground mt-2">Everything you need for your best Hyrox performance ever.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -157,7 +158,7 @@ const WhatsIncludedSection = () => {
     );
   };
   
-const GetThePlanSection = () => (
+const GetThePlanSection = ({ events }: { events: HyroxEvent[] }) => (
     <section id="get-the-plan" className="py-20 md:py-28 bg-secondary/30">
         <div className="container mx-auto px-6">
             <div className="text-center mb-12">
@@ -171,11 +172,11 @@ const GetThePlanSection = () => (
                         100% FREE
                      </div>
                     <CardHeader className="text-center pt-12 pb-4">
-                        <CardTitle className="text-2xl font-headline uppercase tracking-wider">Hyrox Domination Plan</CardTitle>
+                        <CardTitle className="text-2xl font-headline uppercase tracking-wider">Hyrox Performance Plan</CardTitle>
                         <CardDescription>Your Personalized Path to the Finish Line</CardDescription>
                     </CardHeader>
                     <CardContent className="text-center px-4 sm:px-8 pb-8">
-                        <HyroxDominationForm />
+                        <HyroxDominationForm initialEvents={events} />
                     </CardContent>
                 </Card>
             </div>
@@ -259,7 +260,7 @@ const FinalCloseSection = () => (
       <div className="container mx-auto px-6 text-center">
         <h2 className="text-3xl md:text-4xl font-headline font-bold mb-4 text-accent">The Choice Is Yours</h2>
         <p className="text-lg font-body max-w-3xl mx-auto mb-8">
-            Keep doing what you're doing and regret what could have been, or invest in a proven system and cross the finish line knowing you dominated your race. Which athlete do you want to be?
+            Keep doing what you're doing and regret what could have been, or invest in a proven system and cross the finish line knowing you gave it your best. Which athlete do you want to be?
         </p>
         <Button size="lg" asChild className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg transform hover:scale-105 transition-transform duration-200">
             <Link href="#get-the-plan">Get My Free Plan Now</Link>
@@ -270,7 +271,10 @@ const FinalCloseSection = () => (
 
 // --- Main Page Component ---
 
-export default function HyroxDominationPage() {
+export default async function HyroxDominationPage() {
+  // Fetch events at build/request time for instant availability
+  const events = await fetchHyroxEvents();
+
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       <Header />
@@ -279,7 +283,7 @@ export default function HyroxDominationPage() {
         <ProblemAgitationSection />
         <SolutionRevealSection />
         <WhatsIncludedSection />
-        <GetThePlanSection />
+        <GetThePlanSection events={events} />
         <GuaranteeSection />
         <FaqSection />
         <FinalCloseSection />

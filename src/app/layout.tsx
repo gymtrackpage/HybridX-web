@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2250%22 height=%2250%22 viewBox=%220 0 50 50%22 fill=%22none%22 stroke=%22black%22 stroke-width=%225%22><line x1=%220%22 y1=%220%22 x2=%2250%22 y2=%2250%22 /><line x1=%2250%22 y1=%220%22 x2=%220%22 y2=%2250%22 /></svg>",
+    icon: '/Icon Logo.png',
     apple: '/Icon Logo.png',
   },
   openGraph: {
@@ -85,7 +85,9 @@ export const metadata: Metadata = {
     creator: '@hybridxhub',
   },
   alternates: {
-    canonical: process.env.NODE_ENV === 'production' ? SITE_CONFIG.url : undefined,
+    canonical: (process.env.NODE_ENV === 'production' &&
+                !process.env.GOOGLE_CLOUD_WORKSTATIONS &&
+                !process.env.WEB_HOST) ? SITE_CONFIG.url : undefined,
   },
   verification: {
     google: 'pqqqhsjCj9Bk1lngrIUZozN4Gg187vaRgwfVHXcNUPg', // Add your Google Search Console verification code

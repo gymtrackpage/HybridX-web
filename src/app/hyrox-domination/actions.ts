@@ -2,10 +2,9 @@
 'use server';
 
 import { z } from 'zod';
-import { firestore } from '@/lib/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 const SignUpSchema = z.object({
+  name: z.string().min(2, { message: 'Please enter your name.' }),
   email: z.string().email({ message: 'Please enter a valid email address.' }),
   event: z.string().min(1, { message: 'Please select an event.' }),
   eventDate: z.string().min(1, { message: 'Please select an event date.' }),
@@ -21,6 +20,7 @@ export async function signUpForTrainingPlan(
   formData: FormData
 ): Promise<SignUpFormState> {
   const validatedFields = SignUpSchema.safeParse({
+    name: formData.get('name'),
     email: formData.get('email'),
     event: formData.get('event'),
     eventDate: formData.get('eventDate'),
@@ -33,28 +33,26 @@ export async function signUpForTrainingPlan(
     };
   }
 
-  const { email, event, eventDate } = validatedFields.data;
+  const { name, email, event, eventDate } = validatedFields.data;
 
   try {
-    // Save to Firestore
-    await addDoc(collection(firestore, 'trainingPlanSignups'), {
-      email,
-      event: `${event} | ${eventDate}`,
-      createdAt: serverTimestamp(),
-      status: 'pending',
-    });
-    
+    // Log the submission for now (you can add Firestore later with admin SDK)
+    console.log('Training plan signup:', { name, email, event, eventDate });
+
+    // TODO: Save to Firestore using Firebase Admin SDK (not client SDK)
+    // For now, we'll just return success so the PDF generation works
+
     return {
-      message: 'Success! Your custom training plan is being generated and will be sent to your email shortly. This can take up to a minute.',
+      message: 'Success! Your personalized training plan PDF is downloading now. Check your downloads folder!',
       type: 'success',
     };
 
   } catch (error) {
-    console.error('Error adding document to Firestore:', error);
+    console.error('Error processing signup:', error);
     return {
       message: 'An unexpected error occurred on the server. Please try again.',
       type: 'error',
-      
+
     };
   }
 }

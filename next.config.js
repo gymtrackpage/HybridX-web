@@ -2,6 +2,8 @@
 
 // Detect if running in a Firebase App Hosting preview environment
 const isPreview = !!process.env.FIREBASE_APP_HOSTING_URL;
+// Detect if running in Firebase Studio (Cloud Workstations)
+const isStudio = !!process.env.GOOGLE_CLOUD_WORKSTATIONS || !!process.env.WEB_HOST;
 
 const getSecurityHeaders = () => {
   const baseSecurityHeaders = [
@@ -44,7 +46,10 @@ const getSecurityHeaders = () => {
     "frame-ancestors 'self' https://*.cloudworkstations.dev https://*.idx.google.com",
   ];
 
-  if (!isPreview) {
+  // In Firebase Studio, relax CSP to allow preview to work
+  if (isStudio || isPreview) {
+    // Don't add HSTS in preview/studio environments
+  } else {
     // Add production-only headers
     baseSecurityHeaders.push({
       key: 'Strict-Transport-Security',
@@ -98,6 +103,10 @@ const nextConfig = {
   },
   // ✅ SECURITY: Apply headers to all routes (works with Firebase App Hosting)
   async headers() {
+    // Skip security headers in Firebase Studio to allow preview to work
+    if (isStudio) {
+      return [];
+    }
     return [
       {
         source: '/(.*)',

@@ -6,14 +6,13 @@ import { initializeApp, getApps } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 
 // Your web app's Firebase configuration
-// This object is populated by the `RequestFirebaseProjectWithConfig` tool
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyDL-gFhMxaJ_oAYgGvsIqvmmDBkIgF417E",
+  authDomain: "hybridx-hub.firebaseapp.com",
+  projectId: "hybridx-hub",
+  storageBucket: "hybridx-hub.firebasestorage.app",
+  messagingSenderId: "354413162075",
+  appId: "1:354413162075:web:2dced5666f00d329b0197e"
 };
 
 
