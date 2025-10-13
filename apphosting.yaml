@@ -25,11 +25,11 @@ env:
     availability:
       - RUNTIME
   - variable: SMTP_FROM
-    value: "\"HybridX\" <noreply@hybridx.com>"
+    value: '"HybridX" <noreply@hybridx.com>'
     availability:
       - RUNTIME
   - variable: NEXT_PUBLIC_HYROX_SCRIPT_URL
-    value: https://script.google.com/macros/s/AKfycbwVSO_PHr_N3g5gV4aU-Q6EWoeYrHoVYE3NYF37tLiVQVNtgnmZMmNrol4iBWms1G8l/exec
+    value: PASTE_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE
     availability:
       - BUILD
       - RUNTIME
