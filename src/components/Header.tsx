@@ -73,7 +73,7 @@ export default function Header() {
             item.isDropdown && item.items ? (
               <DropdownMenu key={item.label}>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="flex items-center transition-colors hover:text-accent text-foreground/80 font-body px-2 lg:px-3 py-2 text-sm">
+                  <Button variant="ghost" className="flex items-center transition-colors hover:text-accent-foreground text-foreground/80 font-body px-2 lg:px-3 py-2 text-sm">
                     {item.icon} {item.label} <ChevronDown className="ml-1 h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -94,13 +94,13 @@ export default function Header() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Button key={item.label} variant="ghost" asChild className="transition-colors hover:text-accent text-foreground/80 font-body px-2 lg:px-3 py-2 text-sm group">
+              <Button key={item.label} variant="ghost" asChild className="transition-colors hover:text-accent-foreground text-foreground/80 font-body px-2 lg:px-3 py-2 text-sm group">
                 <Link 
                   href={item.href!}
                   {...(item.href?.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                 >
                   {item.icon} {item.label}
-                  {item.href?.startsWith('http') && <ArrowUpRight className="ml-1 h-4 w-4 text-muted-foreground/80 group-hover:text-accent" />}
+                  {item.href?.startsWith('http') && <ArrowUpRight className="ml-1 h-4 w-4 text-muted-foreground/80 group-hover:text-accent-foreground" />}
                 </Link>
               </Button>
             )
