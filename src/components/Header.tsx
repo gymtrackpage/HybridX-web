@@ -30,7 +30,7 @@ interface SubNavItem {
 
 
 const navItems: NavItem[] = [
-  { label: 'Hyrox Plan', href: '/hyrox-domination' },
+  { label: 'Free Hyrox Plan', href: '/free-hyrox-plan' },
   { label: 'Our App', href: 'https://app.hybridx.club' },
   {
     label: 'Shop',
@@ -73,7 +73,7 @@ export default function Header() {
             item.isDropdown && item.items ? (
               <DropdownMenu key={item.label}>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="flex items-center transition-colors hover:text-accent-foreground text-foreground/80 font-body px-2 lg:px-3 py-2 text-sm">
+                  <Button variant="ghost" className="flex items-center transition-colors hover:bg-accent focus:bg-accent text-foreground/80 hover:text-accent-foreground focus:text-accent-foreground font-body px-2 lg:px-3 py-2 text-sm">
                     {item.icon} {item.label} <ChevronDown className="ml-1 h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -84,7 +84,7 @@ export default function Header() {
                          {/* Separators not currently used, but logic remains if needed */}
                       </React.Fragment>
                     ) : (
-                      <DropdownMenuItem key={subItem.label} asChild className="hover:bg-accent/10 focus:bg-accent/10">
+                      <DropdownMenuItem key={subItem.label} asChild className="hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground">
                         <Link href={subItem.href!} className="font-body text-foreground/90 flex items-center">
                           {subItem.icon} {subItem.label}
                         </Link>
@@ -94,7 +94,7 @@ export default function Header() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Button key={item.label} variant="ghost" asChild className="transition-colors hover:text-accent-foreground text-foreground/80 font-body px-2 lg:px-3 py-2 text-sm group">
+              <Button key={item.label} variant="ghost" asChild className="transition-colors hover:bg-accent focus:bg-accent text-foreground/80 hover:text-accent-foreground focus:text-accent-foreground font-body px-2 lg:px-3 py-2 text-sm group">
                 <Link 
                   href={item.href!}
                   {...(item.href?.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}

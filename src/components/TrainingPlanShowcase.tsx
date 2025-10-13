@@ -21,7 +21,7 @@ const plans: Plan[] = [
     description: 'Crush your PRs. Combine elite running protocols with targeted strength work for explosive speed and endurance.',
     icon: Activity,
     ctaText: 'View The Blueprint',
-    href: '/hyrox-domination',
+    href: '/free-hyrox-plan',
   },
   {
     id: 'hyrox-specific',
@@ -29,7 +29,7 @@ const plans: Plan[] = [
     description: 'For beginner, intermediate, and advanced athletes. Tailored programs to conquer every station and run.',
     icon: HeartPulse,
     ctaText: 'View The Blueprint',
-    href: '/hyrox-domination',
+    href: '/free-hyrox-plan',
   },
   {
     id: 'offseason-strength',
@@ -37,7 +37,7 @@ const plans: Plan[] = [
     description: 'Build your foundation. Focused strength and power programs to prepare you for your next competitive season.',
     icon: Dumbbell,
     ctaText: 'View The Blueprint',
-    href: '/hyrox-domination',
+    href: '/free-hyrox-plan',
   },
 ];
 

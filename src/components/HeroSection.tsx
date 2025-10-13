@@ -11,7 +11,7 @@ const trainingOptions = [
     price: "£0",
     description: "Your race, your dates, your personalized 12-week PDF plan. The perfect starting point.",
     cta: "Get Your Free PDF",
-    href: "/hyrox-domination",
+    href: "/free-hyrox-plan",
     variant: "secondary" as const,
   },
   {
