@@ -48,7 +48,13 @@ const Pattern = () => (
 
 export default function HeroSection() {
   return (
-    <section className="relative py-20 md:py-28 bg-black text-white overflow-hidden">
+    <section 
+      className="relative py-20 md:py-28 bg-black text-white overflow-hidden"
+      style={{
+        clipPath: 'polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%)',
+        paddingBottom: '12rem', // Add padding to compensate for the clip-path
+      }}
+    >
       <div className="absolute inset-0 opacity-50">
         <Pattern />
       </div>
@@ -67,7 +73,7 @@ export default function HeroSection() {
           {trainingOptions.map((option, index) => (
             <Card 
               key={option.title} 
-              className="flex flex-col text-left shadow-2xl hover:-translate-y-2 transition-transform duration-300 bg-gray-900/60 backdrop-blur-sm border border-accent/20 group"
+              className="flex flex-col text-left shadow-2xl hover:-translate-y-2 transition-transform duration-300 bg-gray-900/40 backdrop-blur-sm border border-accent/20 group"
               style={{ animationDelay: `${index * 150}ms` }}
             >
               <CardHeader className="flex-row items-center space-x-4 pb-3 pt-6">
