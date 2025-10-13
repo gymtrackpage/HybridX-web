@@ -1,3 +1,4 @@
+
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
@@ -49,10 +50,10 @@ const Pattern = () => (
 export default function HeroSection() {
   return (
     <section 
-      className="relative py-20 md:py-28 bg-black text-white overflow-hidden"
+      className="relative py-16 md:py-20 bg-gradient-to-b from-black to-neutral-900 text-white overflow-hidden"
       style={{
-        clipPath: 'polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%)',
-        paddingBottom: '12rem', // Add padding to compensate for the clip-path
+        clipPath: 'polygon(0 0, 100% 0, 100% 90%, 50% 100%, 0 90%)',
+        paddingBottom: '8rem', // Adjust padding to compensate for the clip-path
       }}
     >
       <div className="absolute inset-0 opacity-50">
@@ -62,10 +63,10 @@ export default function HeroSection() {
       <div className="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-black/80 via-black/50 to-transparent"></div>
       
       <div className="container mx-auto px-6 text-center relative z-10">
-        <h1 className="text-4xl md:text-6xl font-headline font-extrabold text-white mb-6 leading-tight drop-shadow-lg">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-headline font-extrabold text-white mb-4 leading-tight drop-shadow-lg">
           Your Path to <span className="text-accent">Peak Performance</span> Starts Here.
         </h1>
-        <p className="text-lg md:text-xl text-white/80 font-body max-w-3xl mx-auto mb-12">
+        <p className="text-lg md:text-xl text-white/80 font-body max-w-3xl mx-auto mb-10">
           Whatever your budget or training style, we have a scientifically-backed plan to help you achieve your best. Choose the option that's right for you.
         </p>
         
