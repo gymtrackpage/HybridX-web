@@ -120,44 +120,6 @@ const SolutionRevealSection = () => (
     </section>
   );
 
-const WhatsIncludedSection = () => {
-    const includedItems = [
-      { icon: Calendar, title: "Beginner to Advanced Hyrox Race Preparation", value: "Included", description: "Complete 12-week progressive plans for every fitness level, from first-timers to elite competitors."},
-      { icon: TrendingUp, title: "Running Specific Plan", value: "Included", description: "Build a massive running threshold with specialized protocols for speed, endurance, and compromised running."},
-      { icon: Dumbbell, title: "Strength Improvement Plan", value: "Included", description: "Targeted strength and conditioning to power through every station with confidence and reduce injury risk."},
-      { icon: Zap, title: "Off-Season Olympic Lifting Plan", value: "Included", description: "Build explosive power and speed in your offseason with our specialized Olympic lifting and plyometrics program."},
-      { icon: Users, title: "Specific Pairs Plan", value: "Included", description: "Excel in the pairs division with strategies and workouts designed for seamless transitions and synchronized effort."},
-      { icon: Trophy, title: "BONUS: Race Day Execution Plan", value: "Included", description: "Detailed warm-up, nutrition, and mental preparation protocols to ensure you peak on race day."},
-    ];
-  
-    return (
-      <section className="py-20 md:py-28 bg-background">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-headline font-bold text-primary">The Complete Performance Package</h2>
-            <p className="text-lg text-muted-foreground mt-2">Everything you need for your best Hyrox performance ever.</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {includedItems.map((item, index) => (
-              <Card key={index} className="shadow-lg border-primary/20">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <item.icon className="h-8 w-8 text-accent"/>
-                    <span className="text-sm font-bold text-accent bg-accent/10 px-2 py-1 rounded">{item.value}</span>
-                  </div>
-                  <CardTitle className="pt-2">{item.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">{item.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-    );
-  };
-  
 const GetThePlanSection = ({ events }: { events: HyroxEvent[] }) => (
     <section id="get-the-plan" className="py-20 md:py-28 bg-secondary/30">
         <div className="container mx-auto px-6">
@@ -184,6 +146,45 @@ const GetThePlanSection = ({ events }: { events: HyroxEvent[] }) => (
     </section>
 );
   
+const WhatsIncludedSection = () => {
+    const includedItems = [
+      { icon: Calendar, title: "Beginner to Advanced Hyrox Race Preparation", value: "Included", description: "Complete 12-week progressive plans for every fitness level, from first-timers to elite competitors."},
+      { icon: TrendingUp, title: "Running Specific Plan", value: "Included", description: "Build a massive running threshold with specialized protocols for speed, endurance, and compromised running."},
+      { icon: Dumbbell, title: "Strength Improvement Plan", value: "Included", description: "Targeted strength and conditioning to power through every station with confidence and reduce injury risk."},
+      { icon: Zap, title: "Off-Season Olympic Lifting Plan", value: "Included", description: "Build explosive power and speed in your offseason with our specialized Olympic lifting and plyometrics program."},
+      { icon: Users, title: "Specific Pairs Plan", value: "Included", description: "Excel in the pairs division with strategies and workouts designed for seamless transitions and synchronized effort."},
+      { icon: Trophy, title: "BONUS: Race Day Execution Plan", value: "Included", description: "Detailed warm-up, nutrition, and mental preparation protocols to ensure you peak on race day."},
+    ];
+  
+    return (
+      <section className="py-20 md:py-28 bg-background">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-headline font-bold text-primary">Looking for a more complete experience?</h2>
+            <p className="text-lg text-muted-foreground mt-2">Try our app now for Free</p>
+            <p className="text-lg text-muted-foreground mt-2">Free to start training now!</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {includedItems.map((item, index) => (
+              <Card key={index} className="shadow-lg border-primary/20">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <item.icon className="h-8 w-8 text-accent"/>
+                    <span className="text-sm font-bold text-accent bg-accent/10 px-2 py-1 rounded">{item.value}</span>
+                  </div>
+                  <CardTitle className="pt-2">{item.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">{item.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  };
+
 const GuaranteeSection = () => (
     <section className="py-20 md:py-28 bg-background">
       <div className="container mx-auto px-6 max-w-3xl">
