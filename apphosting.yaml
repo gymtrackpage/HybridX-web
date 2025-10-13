@@ -29,7 +29,7 @@ env:
     availability:
       - RUNTIME
   - variable: NEXT_PUBLIC_HYROX_SCRIPT_URL
-    value: PASTE_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE
+    value: https://script.google.com/macros/s/AKfycbyAtEd75pgGttM3iStIgq63fJNFCfKA0NZXq87l4aBhNHJwN0ZhamRPwVC3fVEJx1LeJw/exec
     availability:
       - BUILD
       - RUNTIME

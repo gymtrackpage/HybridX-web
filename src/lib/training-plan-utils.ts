@@ -1,3 +1,4 @@
+
 import Papa from 'papaparse';
 
 export interface TrainingPlanRow {
@@ -114,6 +115,17 @@ export function formatDate(date: Date): string {
 export function formatDateShort(date: Date): string {
   return date.toISOString().split('T')[0];
 }
+
+/**
+ * Format date for ICS file (YYYYMMDD)
+ */
+export function formatDateForICS(date: Date): string {
+    const year = date.getUTCFullYear();
+    const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(date.getUTCDate()).padStart(2, '0');
+    return `${year}${month}${day}`;
+}
+
 
 /**
  * Get week number for a given day (1-12 weeks)

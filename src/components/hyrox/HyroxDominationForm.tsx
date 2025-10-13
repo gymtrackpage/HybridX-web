@@ -3,7 +3,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { useFormState, useFormStatus } from 'react-dom';
-import { signUpForTrainingPlan, type SignUpFormState } from '@/app/hyrox-domination/actions';
+import { signUpForTrainingPlan, type SignUpFormState } from '@/app/free-hyrox-plan/actions';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
@@ -21,6 +21,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { parseTrainingPlanCSV, groupWorkoutsByDay } from '@/lib/training-plan-utils';
 import { downloadTrainingPlanPDF } from '@/lib/pdf-generator';
+import { downloadTrainingPlanICS } from '@/lib/ical-generator';
+
 export interface HyroxEvent {
     name: string;
     startDate: string | null;
@@ -87,7 +89,7 @@ export default function HyroxDominationForm({ initialEvents = [] }: HyroxDominat
   const [eventsLoading, setEventsLoading] = useState(initialEvents.length === 0);
   const [selectedEvent, setSelectedEvent] = useState<HyroxEvent | null>(null);
   const [availableDates, setAvailableDates] = useState<string[]>([]);
-  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
   
   // zod validation for client side
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -147,10 +149,10 @@ export default function HyroxDominationForm({ initialEvents = [] }: HyroxDominat
   }, [form, hyroxEvents]);
 
   useEffect(() => {
-    if (state.type === 'success' && !isGeneratingPDF) {
-      // Generate and download the PDF
-      const generatePDF = async () => {
-        setIsGeneratingPDF(true);
+    if (state.type === 'success' && !isGenerating) {
+      // Generate and download the PDF and ICS files
+      const generateFiles = async () => {
+        setIsGenerating(true);
         try {
           const name = form.getValues('name');
           const email = form.getValues('email');
@@ -163,8 +165,7 @@ export default function HyroxDominationForm({ initialEvents = [] }: HyroxDominat
           // Group workouts by day and calculate dates
           const workouts = groupWorkoutsByDay(trainingPlanRows, new Date(eventDate));
 
-          // Generate and download PDF
-          downloadTrainingPlanPDF({
+          const pdfAndIcsOptions = {
             userName: name,
             eventName: event,
             eventDate: eventDate,
@@ -172,7 +173,13 @@ export default function HyroxDominationForm({ initialEvents = [] }: HyroxDominat
             programName: trainingPlanRows[0]?.programName || 'Hyrox Fusion Prep',
             programDescription: trainingPlanRows[0]?.programDescription || '',
             workouts: workouts
-          });
+          };
+
+          // Generate and download PDF
+          downloadTrainingPlanPDF(pdfAndIcsOptions);
+          // Generate and download ICS
+          downloadTrainingPlanICS(pdfAndIcsOptions);
+
 
           // Reset form after PDF generation
           formRef.current?.reset();
@@ -180,20 +187,20 @@ export default function HyroxDominationForm({ initialEvents = [] }: HyroxDominat
           setSelectedEvent(null);
           setAvailableDates([]);
         } catch (error) {
-          console.error('Error generating PDF:', error);
-          // Still reset the form even if PDF generation fails
+          console.error('Error generating files:', error);
+          // Still reset the form even if generation fails
           formRef.current?.reset();
           form.reset();
           setSelectedEvent(null);
           setAvailableDates([]);
         } finally {
-          setIsGeneratingPDF(false);
+          setIsGenerating(false);
         }
       };
 
-      generatePDF();
+      generateFiles();
     }
-  }, [state, form, isGeneratingPDF]);
+  }, [state, form, isGenerating]);
 
   return (
     <Form {...form}>
