@@ -66,7 +66,7 @@ const ProblemAgitationSection = () => (
     <div className="container mx-auto px-6 text-center">
       <h2 className="text-3xl md:text-4xl font-headline font-bold text-primary mb-8">Here's What NOBODY Tells You About Hyrox Training...</h2>
       <p className="text-lg text-muted-foreground font-body max-w-2xl mx-auto mb-12">
-        Let me guess. You've signed up for a Hyrox race and now you're panicking, right? You've probably tried following random CrossFit workouts or copying some influencer's "Hyrox prep" from Instagram. <span className="font-bold text-primary">Spoiler: it doesn't work.</span>
+        Let me guess. You've signed up for a Hyrox race and now you're panicking, right? You've probably tried following random CrossFit workouts or copying some influencer's "Hyrox prep" reel from Instagram. <br></br><span className="font-bold text-primary">Spoiler: it doesn't work.</span>
       </p>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto text-left">
         <Card className="bg-background/80">
@@ -83,7 +83,7 @@ const ProblemAgitationSection = () => (
         <div className="bg-primary text-primary-foreground p-8 rounded-lg flex flex-col justify-center">
           <h3 className="font-headline text-2xl mb-4 text-accent">The Worst Part?</h3>
           <p className="font-body text-lg">
-            You KNOW you're capable of so much more, but you're following advice from people who've never even completed a Hyrox race themselves. Most people fail to reach their potential because they train like it's a marathon when it's a completely different beast.
+            You KNOW you're capable of so much more, but you're following advice from people who are not like you and probably don't follow their own 'advice'. Most of the training advice out there is for clicks and attention for 'new innovative methods' or POV's that aren't actually real. </p><p className="font-body text-lg">It wont get you prepared.
           </p>
         </div>
       </div>
@@ -104,7 +104,7 @@ const SolutionRevealSection = () => (
                 <CardContent>Foundation, Strength Endurance, Peak Performance, and a Competition Taper.</CardContent>
             </Card>
             <Card>
-                <CardHeader><CardTitle>Compromised Running Mastery</CardTitle></CardHeader>
+                <CardHeader><CardTitle>Compromised Running With A Purpose</CardTitle></CardHeader>
                 <CardContent>The secret sauce. Master the art of running fast AFTER your legs are screaming from stations.</CardContent>
             </Card>
             <Card>
@@ -113,7 +113,7 @@ const SolutionRevealSection = () => (
             </Card>
             <Card>
                 <CardHeader><CardTitle>RPE-Based Programming</CardTitle></CardHeader>
-                <CardContent>Precise intensity targets that adapt to YOUR fitness level, eliminating guesswork.</CardContent>
+                <CardContent>Precise intensity targets that adapt to YOUR fitness level, eliminating guesswork and not trying to match an influencers pace.</CardContent>
             </Card>
         </div>
       </div>
@@ -282,8 +282,8 @@ export default async function HyroxPerformancePage() {
         <HeroSection />
         <ProblemAgitationSection />
         <SolutionRevealSection />
-        <WhatsIncludedSection />
         <GetThePlanSection events={events} />
+        <WhatsIncludedSection />
         <GuaranteeSection />
         <FaqSection />
         <FinalCloseSection />
