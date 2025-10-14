@@ -175,7 +175,8 @@ export function generateTrainingPlanPDF(options: PDFGenerationOptions): jsPDF {
 
     // Calculate space needed for this workout
     const exerciseCount = workout.exercises.length;
-    const spaceNeeded = 25 + (exerciseCount * 6);
+    // Base space (header) + space per exercise line (estimate) + notes box space
+    const spaceNeeded = 25 + (exerciseCount * 6) + 30;
 
     checkPageBreak(spaceNeeded);
 
@@ -187,10 +188,19 @@ export function generateTrainingPlanPDF(options: PDFGenerationOptions): jsPDF {
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(BRAND_DARK);
     doc.text(`Day ${workout.day}`, 25, yPosition + 8);
+    
+    // Add Checkbox
+    doc.setDrawColor(BRAND_DARK);
+    doc.setLineWidth(0.3);
+    doc.rect(pageWidth - 45, yPosition + 3.5, 5, 5); // x, y, width, height
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(BRAND_GRAY);
+    doc.text('Done', pageWidth - 38, yPosition + 8);
+
 
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(BRAND_GRAY);
-    doc.text(formatDateShort(workout.date), pageWidth - 25, yPosition + 8, { align: 'right' });
+    doc.text(formatDateShort(workout.date), pageWidth / 2, yPosition + 8, { align: 'center' });
 
     yPosition += 15;
 
@@ -224,7 +234,22 @@ export function generateTrainingPlanPDF(options: PDFGenerationOptions): jsPDF {
       doc.setTextColor(BRAND_DARK);
     });
 
-    yPosition += 8;
+    yPosition += 4; // Space before notes
+    
+    // Notes Box
+    checkPageBreak(25);
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(BRAND_DARK);
+    doc.text('Notes:', 25, yPosition);
+    
+    doc.setDrawColor(BRAND_GRAY);
+    doc.setLineWidth(0.2);
+    doc.roundedRect(25, yPosition + 2, pageWidth - 50, 18, 2, 2);
+    
+    yPosition += 25; // Height of notes box + padding
+
+    yPosition += 4;
   });
 
   // ==================== FINAL PAGE - MOTIVATIONAL CLOSE ====================
@@ -244,7 +269,7 @@ export function generateTrainingPlanPDF(options: PDFGenerationOptions): jsPDF {
     `${options.userName}, this plan is your roadmap to success. Trust the process,`,
     'show up consistently, and watch yourself transform.',
     '',
-    'Remember: Every champion was once a beginner who refused to give up.',
+    'Every champion was once a beginner who refused to give up.',
     '',
     'See you at the finish line!'
   ];
