@@ -59,6 +59,19 @@ const getSecurityHeaders = () => {
     cspDirectives.push("upgrade-insecure-requests");
   }
 
+  // In non-production environments, we need a less restrictive frame-ancestors policy
+  // to allow for previewing in iframes.
+  if (isStudio || isPreview) {
+      // Find and remove the default frame-ancestors policy if it exists
+      const faIndex = cspDirectives.findIndex(dir => dir.startsWith("frame-ancestors"));
+      if (faIndex > -1) {
+          cspDirectives.splice(faIndex, 1);
+      }
+      // Add a more permissive policy for development environments
+      cspDirectives.push("frame-ancestors 'self' https://*.cloudworkstations.dev https://*.idx.google.com");
+  }
+
+
   const finalHeaders = [
     ...baseSecurityHeaders,
     {
@@ -116,4 +129,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;
