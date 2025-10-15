@@ -33,11 +33,20 @@ export async function parseTrainingPlanCSV(csvPath: string): Promise<TrainingPla
       skipEmptyLines: true,
       complete: (results) => {
         const rows = results.data as TrainingPlanRow[];
-        // Convert workoutDay to number
-        const processedRows = rows.map(row => ({
-          ...row,
-          workoutDay: parseInt(row.workoutDay as any, 10)
-        }));
+        // Convert workoutDay to number and filter out invalid rows
+        const processedRows = rows
+          .map(row => ({
+            ...row,
+            workoutDay: parseInt(row.workoutDay as any, 10)
+          }))
+          .filter(row => {
+            // Filter out rows with invalid workoutDay
+            if (isNaN(row.workoutDay)) {
+              console.warn('Skipping row with invalid workoutDay:', row);
+              return false;
+            }
+            return true;
+          });
         resolve(processedRows);
       },
       error: (error: Error) => {
@@ -61,6 +70,17 @@ export function calculateStartDate(raceDate: Date): Date {
  * Calculate the date for a specific workout day
  */
 export function calculateWorkoutDate(raceDate: Date, workoutDay: number): Date {
+  // Validate inputs
+  if (isNaN(raceDate.getTime())) {
+    console.error('Invalid race date:', raceDate);
+    return new Date(); // Return current date as fallback
+  }
+
+  if (isNaN(workoutDay) || workoutDay < 1) {
+    console.error('Invalid workout day:', workoutDay);
+    return new Date(); // Return current date as fallback
+  }
+
   const startDate = calculateStartDate(raceDate);
   const workoutDate = new Date(startDate);
   workoutDate.setDate(workoutDate.getDate() + (workoutDay - 1)); // Day 1 is startDate + 0
@@ -100,8 +120,16 @@ export function groupWorkoutsByDay(
 /**
  * Format date for display
  */
-export function formatDate(date: Date): string {
-  return date.toLocaleDateString('en-US', {
+export function formatDate(date: Date | string): string {
+  const dateObj = typeof date === 'string' ? new Date(date) : date;
+
+  // Check if date is valid
+  if (isNaN(dateObj.getTime())) {
+    console.error('Invalid date:', date);
+    return 'Invalid Date';
+  }
+
+  return dateObj.toLocaleDateString('en-US', {
     weekday: 'short',
     year: 'numeric',
     month: 'short',
@@ -112,8 +140,16 @@ export function formatDate(date: Date): string {
 /**
  * Format date as YYYY-MM-DD
  */
-export function formatDateShort(date: Date): string {
-  return date.toISOString().split('T')[0];
+export function formatDateShort(date: Date | string): string {
+  const dateObj = typeof date === 'string' ? new Date(date) : date;
+
+  // Check if date is valid
+  if (isNaN(dateObj.getTime())) {
+    console.error('Invalid date:', date);
+    return 'Invalid Date';
+  }
+
+  return dateObj.toISOString().split('T')[0];
 }
 
 /**

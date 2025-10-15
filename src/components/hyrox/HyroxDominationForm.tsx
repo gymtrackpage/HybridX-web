@@ -160,7 +160,7 @@ export default function HyroxDominationForm({ initialEvents = [] }: HyroxDominat
           const eventDate = form.getValues('eventDate');
 
           // Parse the training plan CSV
-          const trainingPlanRows = await parseTrainingPlanCSV('/training-plans/hyrox-fusion-84.csv');
+          const trainingPlanRows = await parseTrainingPlanCSV('/training-plans/hyrox-fusion-86.csv');
 
           // Group workouts by day and calculate dates
           const workouts = groupWorkoutsByDay(trainingPlanRows, new Date(eventDate));
@@ -200,7 +200,9 @@ export default function HyroxDominationForm({ initialEvents = [] }: HyroxDominat
 
       generateFiles();
     }
-  }, [state, form, isGenerating]);
+    // Only depend on state to avoid infinite loop when form resets
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state]);
 
   return (
     <Form {...form}>

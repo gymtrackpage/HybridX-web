@@ -57,7 +57,7 @@ export async function signUpForTrainingPlan(
     });
 
     return {
-      message: 'Success! Your personalized training plan PDF is downloading now. Check your downloads folder!',
+      message: "Success! Your PDF and Calendar files are downloading. Find the '.ics' file and open it to add the full 12-week plan to your phone or computer's calendar (Google, Apple, Outlook).",
       type: 'success',
     };
 
@@ -66,7 +66,7 @@ export async function signUpForTrainingPlan(
     // Even if the sheet fails, we can still proceed with the PDF download for the user
     // You might want to add more robust error handling here, like logging to a dedicated service.
     return {
-      message: 'Success! Your PDF is downloading. (Note: There was an issue saving to our sheet.)',
+      message: "Success! Your PDF & Calendar files are downloading. Find the '.ics' file to add the plan to your calendar. (Note: There was an issue saving to our sheet.)",
       type: 'success', // Still a success for the user
     };
   }
