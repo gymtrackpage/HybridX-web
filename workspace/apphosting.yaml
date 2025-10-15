@@ -7,6 +7,9 @@ runConfig:
   # more instances in response to increased traffic.
   maxInstances: 1
 
+scripts:
+  buildCommand: npm run build
+
 env:
   - variable: GOOGLE_SHEET_ID
     value: 1D2qfGiF2FIlcDxzLKgU2IuY5c5O0MtxeVE-GNuZ6eHo
