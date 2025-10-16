@@ -1,6 +1,6 @@
-import type { NextConfig } from 'next';
+/** @type {import('next').NextConfig} */
 
-const nextConfig: NextConfig = {
+const nextConfig = {
   // ✅ ENABLED: Catch TypeScript errors during build
   typescript: {
     ignoreBuildErrors: false,
@@ -31,8 +31,6 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
   },
-  // The async headers() function is removed from here to prevent conflicts
-  // with middleware.ts, which is the root cause of the build error.
 };
 
-export default nextConfig;
+module.exports = nextConfig;
