@@ -5,10 +5,6 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
-  // ✅ ENABLED: Enforce code quality with ESLint
-  eslint: {
-    ignoreDuringBuilds: false,
-  },
   images: {
     remotePatterns: [
       {
