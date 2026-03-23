@@ -4,7 +4,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import { Inter, Space_Grotesk } from 'next/font/google';
-import { SITE_CONFIG, createOrganizationSchema } from '@/lib/seo';
+import { SITE_CONFIG, createOrganizationSchema, createWebSiteSchema, createSportsOrganizationSchema } from '@/lib/seo';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     'hybrid athlete',
     'functional fitness',
   ],
-  authors: [{ name: 'HybridX Hub' }],
+  authors: [{ name: 'HybridX Hub', url: 'https://hybridx.club' }],
   creator: 'HybridX Hub',
   publisher: 'HybridX Hub',
   robots: {
@@ -100,6 +100,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const organizationSchema = createOrganizationSchema();
+  const webSiteSchema = createWebSiteSchema();
+  const sportsOrgSchema = createSportsOrganizationSchema();
 
   return (
     <html lang="en" suppressHydrationWarning className={`${inter.variable} ${spaceGrotesk.variable}`}>
@@ -109,6 +111,18 @@ export default function RootLayout({
           id="organization-schema"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+        {/* WebSite Schema — entity recognition + sitelinks search for AI engines */}
+        <Script
+          id="website-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteSchema) }}
+        />
+        {/* SportsOrganization Schema — domain authority signal for Hyrox/fitness niche */}
+        <Script
+          id="sports-org-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(sportsOrgSchema) }}
         />
 
         {/* Google tag (gtag.js) */}

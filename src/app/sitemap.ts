@@ -120,6 +120,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'yearly' as const,
       priority: 0.3,
     },
+    // ── AI-answerable guide pages ─────────────────────────────────────────
+    {
+      url: `${baseUrl}/how-to-train-for-hyrox`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.95,
+    },
+    {
+      url: `${baseUrl}/hyrox-training-plan`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.95,
+    },
+    {
+      url: `${baseUrl}/hybrid-training-program`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.9,
+    },
   ];
 
   return routes;

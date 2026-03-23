@@ -10,6 +10,8 @@ import type { Metadata } from 'next';
 import Footer from '@/components/Footer';
 import ApparelPromotion from '@/components/ApparelPromotion';
 import TrainingPlanShowcase from '@/components/TrainingPlanShowcase';
+import Script from 'next/script';
+import { createCourseSchema, createSpeakableSchema } from '@/lib/seo';
 
 export const metadata: Metadata = {
   title: 'HybridX Hub | Hyrox Training Plans, Workout Programs & Coaching App',
@@ -50,9 +52,50 @@ export const metadata: Metadata = {
   },
 };
 
+const courseSchemas = [
+  createCourseSchema({
+    name: 'HybridX 12-Week Hyrox Training Plan',
+    description:
+      'A free, personalised 12-week Hyrox training plan for beginner, intermediate, and advanced athletes. Covers compromised running, all 8 race stations, and race-day strategy. RPE-based so it scales to your fitness level.',
+    url: '/free-hyrox-plan',
+    level: 'All levels',
+  }),
+  createCourseSchema({
+    name: 'HybridX Hybrid Running Training Plan',
+    description:
+      'A 12-week hybrid running plan combining elite running protocols with targeted strength work to improve race times and build functional endurance.',
+    url: '/free-hyrox-plan',
+    level: 'Intermediate',
+  }),
+  createCourseSchema({
+    name: 'HybridX Offseason Strength Plan',
+    description:
+      'A focused offseason strength and power programme for Hyrox and hybrid athletes, building the foundation for the next competitive season.',
+    url: '/free-hyrox-plan',
+    level: 'All levels',
+  }),
+];
+
+const speakableSchema = createSpeakableSchema(['h1', 'h2', '#faq', '#social-proof']);
+
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
+      {/* Course schemas — each plan is a Course entity for AI search citations */}
+      {courseSchemas.map((schema, i) => (
+        <Script
+          key={`course-schema-${i}`}
+          id={`course-schema-${i}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      ))}
+      {/* Speakable schema — marks key sections for AI voice and read-aloud responses */}
+      <Script
+        id="speakable-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(speakableSchema) }}
+      />
       <Header />
       <main className="flex-grow space-y-20 md:space-y-28">
         <HeroSection />

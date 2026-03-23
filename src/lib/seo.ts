@@ -200,3 +200,172 @@ export function createBreadcrumbSchema(items: { name: string; url: string }[]) {
     })),
   };
 }
+
+// WebSite schema with SearchAction — signals site identity and enables sitelinks search
+// Improves AI engine entity recognition for "HybridX" and "HybridX Hub" queries
+export function createWebSiteSchema() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: SITE_CONFIG.name,
+    url: SITE_CONFIG.url,
+    description: SITE_CONFIG.description,
+    inLanguage: 'en-GB',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${SITE_CONFIG.url}/calculators?q={search_term_string}`,
+      },
+      'query-input': 'required name=search_term_string',
+    },
+  };
+}
+
+// SportsOrganization schema — more specific than plain Organization for fitness/Hyrox niche
+// AI systems use this to understand domain authority and topic relevance
+export function createSportsOrganizationSchema() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'SportsOrganization',
+    name: SITE_CONFIG.name,
+    url: SITE_CONFIG.url,
+    logo: `${SITE_CONFIG.url}/Icon Logo.png`,
+    description:
+      'HybridX Hub provides expert Hyrox training plans, hybrid athlete coaching, fitness books, and a coaching app for athletes preparing for Hyrox competitions and hybrid fitness goals.',
+    sport: 'Hyrox',
+    sameAs: [
+      SITE_CONFIG.links.twitter,
+      SITE_CONFIG.links.instagram,
+      'https://app.hybridx.club',
+    ],
+    address: {
+      '@type': 'PostalAddress',
+      addressCountry: 'GB',
+    },
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'customer support',
+      url: SITE_CONFIG.url,
+    },
+    knowsAbout: [
+      'Hyrox training',
+      'Hyrox race preparation',
+      'Hybrid athlete training',
+      'Concurrent strength and endurance training',
+      'Compromised running',
+      'Functional fitness',
+      'Running training plans',
+      'Strength training',
+      'Sports nutrition for endurance athletes',
+    ],
+  };
+}
+
+// Course schema — used for the 12-week training plans
+// Directly improves visibility when users ask AI "best Hyrox training plan"
+export function createCourseSchema({
+  name,
+  description,
+  url,
+  level,
+}: {
+  name: string;
+  description: string;
+  url: string;
+  level: 'Beginner' | 'Intermediate' | 'Advanced' | 'All levels';
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Course',
+    name,
+    description,
+    url: `${SITE_CONFIG.url}${url}`,
+    provider: {
+      '@type': 'Organization',
+      name: SITE_CONFIG.name,
+      url: SITE_CONFIG.url,
+    },
+    educationalLevel: level,
+    courseWorkload: 'PT4H/P1W', // ~4 hours/week over the programme
+    hasCourseInstance: {
+      '@type': 'CourseInstance',
+      courseMode: 'online',
+      courseWorkload: 'PT4H/P1W',
+    },
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'GBP',
+      availability: 'https://schema.org/InStock',
+      url: `${SITE_CONFIG.url}${url}`,
+    },
+    teaches: [
+      'Hyrox race preparation',
+      'Compromised running training',
+      'Functional fitness station technique',
+      'Hybrid training periodisation',
+    ],
+    sport: 'Hyrox',
+  };
+}
+
+// Article schema — for content-heavy pages; boosts E-E-A-T signals for AI engines
+export function createArticleSchema({
+  title,
+  description,
+  url,
+  datePublished,
+  dateModified,
+}: {
+  title: string;
+  description: string;
+  url: string;
+  datePublished: string;
+  dateModified?: string;
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    url: `${SITE_CONFIG.url}${url}`,
+    datePublished,
+    dateModified: dateModified ?? datePublished,
+    author: {
+      '@type': 'Organization',
+      name: SITE_CONFIG.name,
+      url: SITE_CONFIG.url,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: SITE_CONFIG.name,
+      url: SITE_CONFIG.url,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${SITE_CONFIG.url}/Icon Logo.png`,
+      },
+    },
+    image: `${SITE_CONFIG.url}/Icon Logo.png`,
+    inLanguage: 'en-GB',
+    about: [
+      { '@type': 'Thing', name: 'Hyrox' },
+      { '@type': 'Thing', name: 'Hybrid Training' },
+      { '@type': 'Thing', name: 'Fitness Training Plans' },
+    ],
+  };
+}
+
+// SpeakableSpecification — marks content sections suitable for voice and AI read-aloud
+// Used by Google Assistant, Gemini voice, and other AI answer engines
+export function createSpeakableSchema(cssSelectors: string[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: cssSelectors,
+    },
+    url: SITE_CONFIG.url,
+  };
+}

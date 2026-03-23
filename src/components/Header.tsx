@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle } from '@/components/ui/sheet';
-import { Menu, LogIn, ChevronDown, ListChecks, Dumbbell, ClipboardList, ArrowUpRight, ShoppingCart, BookOpen } from 'lucide-react';
+import { Menu, LogIn, ChevronDown, ListChecks, Dumbbell, ClipboardList, ArrowUpRight, ShoppingCart, BookOpen, BookMarked } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,6 +32,15 @@ interface SubNavItem {
 const navItems: NavItem[] = [
   { label: 'Free Hyrox Plan', href: '/free-hyrox-plan' },
   { label: 'Our App', href: 'https://app.hybridx.club' },
+  {
+    label: 'Guides',
+    isDropdown: true,
+    items: [
+      { label: 'How to Train for Hyrox', href: '/how-to-train-for-hyrox', icon: <BookMarked className="mr-2 h-5 w-5" /> },
+      { label: '12 Week Hyrox Plan', href: '/hyrox-training-plan', icon: <ListChecks className="mr-2 h-5 w-5" /> },
+      { label: 'Hybrid Training Program', href: '/hybrid-training-program', icon: <Dumbbell className="mr-2 h-5 w-5" /> },
+    ]
+  },
   {
     label: 'Shop',
     isDropdown: true,

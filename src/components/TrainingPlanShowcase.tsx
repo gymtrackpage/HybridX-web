@@ -1,7 +1,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Activity, HeartPulse, Dumbbell } from 'lucide-react';
+import { Activity, HeartPulse, Dumbbell, Star } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 
@@ -12,6 +12,7 @@ interface Plan {
   icon: LucideIcon;
   ctaText: string;
   href: string;
+  isPopular?: boolean;
 }
 
 const plans: Plan[] = [
@@ -25,11 +26,12 @@ const plans: Plan[] = [
   },
   {
     id: 'hyrox-specific',
-    title: 'Hyrox Specific Plans',
-    description: 'For beginner, intermediate, and advanced athletes. Tailored programs to conquer every station and run.',
+    title: 'Hyrox 12 Week Training Plan',
+    description: 'Our most-chosen plan for Hyrox race preparation. Tailored programs for beginner, intermediate, and advanced athletes to conquer every station and run.',
     icon: HeartPulse,
     ctaText: 'View The Blueprint',
     href: '/free-hyrox-plan',
+    isPopular: true,
   },
   {
     id: 'offseason-strength',
@@ -53,24 +55,49 @@ export default function TrainingPlanShowcase() {
             Our training philosophy is built on the principle of concurrent training—developing strength and endurance in parallel. These plans are your roadmap to becoming a truly well-rounded hybrid athlete.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
           {plans.map((plan) => (
-            <Card key={plan.id} className="shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col bg-card/80 backdrop-blur-sm border-t-2 border-accent/50">
-              <CardHeader className="items-center text-center pt-8">
-                <div className="p-4 bg-accent/20 rounded-full mb-4 ring-2 ring-accent/30">
-                  <plan.icon className="h-10 w-10 text-accent" />
+            <div key={plan.id} className="relative pt-4">
+              {plan.isPopular && (
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 z-10 flex items-center gap-1.5 bg-accent text-accent-foreground font-headline font-bold text-xs px-4 py-1.5 rounded-full shadow-lg whitespace-nowrap">
+                  <Star className="h-3 w-3 fill-current" />
+                  Most Popular
+                  <Star className="h-3 w-3 fill-current" />
                 </div>
-                <CardTitle className="font-headline text-2xl text-primary">{plan.title}</CardTitle>
-              </CardHeader>
-              <CardContent className="flex-grow flex flex-col text-center">
-                <CardDescription className="font-body text-muted-foreground mb-6 flex-grow px-2">
-                  {plan.description}
-                </CardDescription>
-                <Button variant="outline" className="mt-auto border-accent text-accent hover:bg-accent hover:text-accent-foreground w-full transition-colors duration-300 font-headline py-3" asChild>
-                  <Link href={plan.href}>{plan.ctaText}</Link>
-                </Button>
-              </CardContent>
-            </Card>
+              )}
+              <Card className={`shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col bg-card/80 backdrop-blur-sm ${
+                plan.isPopular
+                  ? 'border-2 border-accent ring-2 ring-accent/20 shadow-accent/10'
+                  : 'border-t-2 border-accent/50'
+              }`}>
+                <CardHeader className="items-center text-center pt-8">
+                  <div className={`p-4 rounded-full mb-4 ${
+                    plan.isPopular
+                      ? 'bg-accent/30 ring-2 ring-accent/60'
+                      : 'bg-accent/20 ring-2 ring-accent/30'
+                  }`}>
+                    <plan.icon className="h-10 w-10 text-accent" />
+                  </div>
+                  <CardTitle className="font-headline text-2xl text-primary">{plan.title}</CardTitle>
+                </CardHeader>
+                <CardContent className="flex-grow flex flex-col text-center">
+                  <CardDescription className="font-body text-muted-foreground mb-6 flex-grow px-2">
+                    {plan.description}
+                  </CardDescription>
+                  <Button
+                    variant={plan.isPopular ? 'default' : 'outline'}
+                    className={`mt-auto w-full transition-colors duration-300 font-headline py-3 ${
+                      plan.isPopular
+                        ? 'bg-accent text-accent-foreground hover:bg-accent/90'
+                        : 'border-accent text-accent hover:bg-accent hover:text-accent-foreground'
+                    }`}
+                    asChild
+                  >
+                    <Link href={plan.href}>{plan.ctaText}</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
           ))}
         </div>
       </div>

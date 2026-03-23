@@ -2,7 +2,7 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
 import Link from 'next/link';
-import { ShieldCheck, Trophy, AlertTriangle, Calendar, TrendingUp, Dumbbell, Zap, Users } from 'lucide-react';
+import { ShieldCheck, Trophy, AlertTriangle, Calendar, TrendingUp, Dumbbell, Zap, Users, CheckCircle } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -50,8 +50,11 @@ const HeroSection = () => (
       <p className="text-lg md:text-xl text-muted-foreground font-body max-w-3xl mx-auto mb-8">
         (Or We'll Refund Every Penny)
       </p>
-      <p className="text-md md:text-lg text-muted-foreground font-body max-w-2xl mx-auto mb-10">
+      <p className="text-md md:text-lg text-muted-foreground font-body max-w-2xl mx-auto mb-6">
         The scientifically-backed 12-week blueprint that's helped over 1,000+ athletes shave minutes off their times - even if you've never stepped foot in a functional fitness gym before.
+      </p>
+      <p className="text-sm text-muted-foreground/80 font-body max-w-xl mx-auto mb-10 border border-border/40 rounded-lg px-5 py-3 bg-background/50">
+        HybridX provides a free personalised Hyrox training plan generator — athletes enter their race date and fitness level and receive a structured 12-week PDF plan covering all four training phases, every Hyrox station, and weekly compromised running sessions.
       </p>
       <Button size="lg" asChild className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg transform hover:scale-105 transition-transform duration-200">
         <Link href="#get-the-plan">YES! I Want My Free Hyrox Plan</Link>
@@ -123,8 +126,14 @@ const GetThePlanSection = ({ events }: { events: HyroxEvent[] }) => (
     <section id="get-the-plan" className="py-20 md:py-28 bg-secondary/30">
         <div className="container mx-auto px-6">
             <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-headline font-bold text-primary">Get Your Free Hyrox Training Plan</h2>
-                <p className="text-lg text-muted-foreground mt-2 max-w-2xl mx-auto">Select your target event, enter your email, and we'll automatically generate and send your personalized 12-week training plan.</p>
+                <h2 className="text-3xl md:text-4xl font-headline font-bold text-primary">Free Personalised Hyrox Training Plan Generator</h2>
+                <p className="text-lg text-muted-foreground mt-2 max-w-2xl mx-auto">Enter your race date and ability level — we build your personalised 12-week plan and send it to your inbox instantly.</p>
+                <ul className="mt-6 inline-flex flex-col items-start gap-2 text-left text-base text-muted-foreground font-body">
+                  <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-accent flex-shrink-0" /> Adapts to your exact race date</li>
+                  <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-accent flex-shrink-0" /> Adjusts to your ability level — beginner, intermediate, or advanced</li>
+                  <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-accent flex-shrink-0" /> Structured progressively over 12 weeks across 4 phases</li>
+                  <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-accent flex-shrink-0" /> Emailed instantly as a downloadable PDF — 100% free</li>
+                </ul>
             </div>
             <div className="flex justify-center">
                 <Card className="border-2 border-accent shadow-2xl relative overflow-hidden max-w-lg w-full">
@@ -141,10 +150,18 @@ const GetThePlanSection = ({ events }: { events: HyroxEvent[] }) => (
                     </CardContent>
                 </Card>
             </div>
+            <p className="text-center text-sm text-muted-foreground font-body mt-10">
+              Want to understand the methodology first? Read{' '}
+              <Link href="/how-to-train-for-hyrox" className="text-accent hover:underline font-semibold">How to Train for a Hyrox Event</Link>
+              {', '}the{' '}
+              <Link href="/hyrox-training-plan" className="text-accent hover:underline font-semibold">12-week plan structure</Link>
+              {', or the '}
+              <Link href="/hybrid-training-program" className="text-accent hover:underline font-semibold">hybrid training methodology</Link>.
+            </p>
         </div>
     </section>
 );
-  
+
 const WhatsIncludedSection = () => {
     const includedItems = [
       { icon: Calendar, title: "Beginner to Advanced Hyrox Race Preparation", value: "Included", description: "Complete 12-week progressive plans for every fitness level, from first-timers to elite competitors."},
