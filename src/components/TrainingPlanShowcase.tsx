@@ -89,7 +89,7 @@ export default function TrainingPlanShowcase() {
                     className={`mt-auto w-full transition-colors duration-300 font-headline py-3 ${
                       plan.isPopular
                         ? 'bg-accent text-accent-foreground hover:bg-accent/90'
-                        : 'border-accent text-accent hover:bg-accent hover:text-accent-foreground'
+                        : 'border-accent text-foreground hover:bg-accent hover:text-accent-foreground'
                     }`}
                     asChild
                   >
