@@ -187,7 +187,7 @@ export default function HybridTrainingProgram() {
               <Button size="lg" className="bg-accent text-black font-headline hover:bg-accent/90" asChild>
                 <Link href="/free-hyrox-plan">Get Your Free Training Plan <ArrowRight className="ml-2 h-4 w-4" /></Link>
               </Button>
-              <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 font-headline" asChild>
+              <Button size="lg" variant="outline" className="bg-transparent border-white/30 text-white hover:bg-white/10 hover:text-white font-headline" asChild>
                 <Link href="#sample-week">See a Sample Week</Link>
               </Button>
             </div>
@@ -411,7 +411,7 @@ export default function HybridTrainingProgram() {
               <Button size="lg" className="bg-accent text-black font-headline hover:bg-accent/90 text-lg px-8 py-6" asChild>
                 <Link href="/free-hyrox-plan">Get the Free Plan <ArrowRight className="ml-2 h-5 w-5" /></Link>
               </Button>
-              <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 font-headline text-lg px-8 py-6" asChild>
+              <Button size="lg" variant="outline" className="bg-transparent border-white/30 text-white hover:bg-white/10 hover:text-white font-headline text-lg px-8 py-6" asChild>
                 <Link href="https://app.hybridx.club" target="_blank" rel="noopener noreferrer">Try the App — £5/mo</Link>
               </Button>
             </div>
