@@ -13,6 +13,8 @@ import { createFAQSchema } from '@/lib/seo';
 import { fetchHyroxEvents, type HyroxEvent } from '@/lib/hyrox-events';
 
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Free Hyrox Training Plan (12-Week) | PDF Download',
   description: "Get a free, scientifically-backed 12-week Hyrox training plan. Achieve your best race time with our expert program. Download your personalized PDF now.",
