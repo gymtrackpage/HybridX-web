@@ -37,3 +37,19 @@ env:
     availability:
       - BUILD
       - RUNTIME
+  - variable: GOOGLE_SERVICE_ACCOUNT_EMAIL
+    secret: GOOGLE_SERVICE_ACCOUNT_EMAIL
+    availability:
+      - RUNTIME
+  - variable: GOOGLE_PRIVATE_KEY
+    secret: GOOGLE_PRIVATE_KEY
+    availability:
+      - RUNTIME
+  - variable: SMTP_USER
+    secret: SMTP_USER
+    availability:
+      - RUNTIME
+  - variable: SMTP_PASSWORD
+    secret: SMTP_PASSWORD
+    availability:
+      - RUNTIME
