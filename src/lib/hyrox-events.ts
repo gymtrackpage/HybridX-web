@@ -32,12 +32,10 @@ export async function fetchHyroxEvents(): Promise<HyroxEvent[]> {
       ? rawKey.replace(/\\n/g, '\n')
       : rawKey;
 
-    // Initialize Google Sheets API with service account credentials
-    const auth = new google.auth.GoogleAuth({
-      credentials: {
-        client_email: clientEmail,
-        private_key: privateKey,
-      },
+    // Use JWT directly — more compatible with Node 18+ / OpenSSL 3.x
+    const auth = new google.auth.JWT({
+      email: clientEmail,
+      key: privateKey,
       scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
     });
 

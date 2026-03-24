@@ -15,11 +15,9 @@ export async function GET() {
   let rowCount: number | null = null;
 
   try {
-    const auth = new google.auth.GoogleAuth({
-      credentials: {
-        client_email: clientEmail,
-        private_key: privateKey,
-      },
+    const auth = new google.auth.JWT({
+      email: clientEmail,
+      key: privateKey,
       scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
     });
 
