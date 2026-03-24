@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { fetchHyroxEvents } from '@/lib/hyrox-events';
+import { google } from 'googleapis';
 
 // TEMPORARY: Remove this file after debugging is complete
 export async function GET() {
@@ -7,26 +7,39 @@ export async function GET() {
   const rawKey = process.env.GOOGLE_PRIVATE_KEY;
   const sheetId = process.env.GOOGLE_SHEET_ID;
 
-  const diagnostics = {
+  const privateKey = rawKey?.includes('\\n')
+    ? rawKey.replace(/\\n/g, '\n')
+    : rawKey;
+
+  let sheetsError: string | null = null;
+  let rowCount: number | null = null;
+
+  try {
+    const auth = new google.auth.GoogleAuth({
+      credentials: {
+        client_email: clientEmail,
+        private_key: privateKey,
+      },
+      scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
+    });
+
+    const sheets = google.sheets({ version: 'v4', auth });
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId: sheetId,
+      range: 'Events!A:L',
+    });
+    rowCount = response.data.values?.length ?? 0;
+  } catch (e: unknown) {
+    sheetsError = e instanceof Error ? e.message : String(e);
+  }
+
+  return NextResponse.json({
     hasEmail: !!clientEmail,
-    emailPreview: clientEmail ? clientEmail.substring(0, 20) + '...' : null,
     hasKey: !!rawKey,
     keyLength: rawKey?.length ?? 0,
     keyHasEscapedNewlines: rawKey?.includes('\\n') ?? false,
-    keyStartsCorrectly: rawKey?.includes('BEGIN PRIVATE KEY') ?? false,
-    hasSheetId: !!sheetId,
     sheetId: sheetId ?? null,
-  };
-
-  let eventCount = 0;
-  let fetchError: string | null = null;
-
-  try {
-    const events = await fetchHyroxEvents();
-    eventCount = events.length;
-  } catch (e: unknown) {
-    fetchError = e instanceof Error ? e.message : String(e);
-  }
-
-  return NextResponse.json({ diagnostics, eventCount, fetchError });
+    sheetsError,
+    rowCount,
+  });
 }
