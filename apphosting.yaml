@@ -12,7 +12,7 @@ runConfig:
 
 env:
   - variable: GOOGLE_SHEET_ID
-    value: 1D2qfGiF2FIlcDxzLKgU2IuY5c5O0MtxeVE-GNuZ6eHo
+    value: 1IcVFTlCACocbeSbeDmN9HhIS2gC47pQj1JUe7grynnk
     availability:
       - BUILD
       - RUNTIME

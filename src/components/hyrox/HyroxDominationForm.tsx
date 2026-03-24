@@ -27,6 +27,12 @@ export interface HyroxEvent {
     name: string;
     startDate: string | null;
     endDate: string | null;
+    city: string | null;
+    country: string | null;
+    continent: string | null;
+    bookingStatus: string | null;
+    eventUrl: string | null;
+    eventId: string | null;
 }
 
 interface HyroxDominationFormProps {
