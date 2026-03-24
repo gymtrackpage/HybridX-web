@@ -14,11 +14,29 @@ export interface HyroxEvent {
 
 export async function fetchHyroxEvents(): Promise<HyroxEvent[]> {
   try {
+    const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
+    const rawKey = process.env.GOOGLE_PRIVATE_KEY;
+    const sheetId = process.env.GOOGLE_SHEET_ID;
+
+    if (!clientEmail || !rawKey || !sheetId) {
+      console.error('[hyrox-events] Missing env vars:', {
+        hasEmail: !!clientEmail,
+        hasKey: !!rawKey,
+        hasSheetId: !!sheetId,
+      });
+      return [];
+    }
+
+    // Handle both escaped (\n) and real newline formats from Secret Manager
+    const privateKey = rawKey.includes('\\n')
+      ? rawKey.replace(/\\n/g, '\n')
+      : rawKey;
+
     // Initialize Google Sheets API with service account credentials
     const auth = new google.auth.GoogleAuth({
       credentials: {
-        client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+        client_email: clientEmail,
+        private_key: privateKey,
       },
       scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
     });
@@ -27,7 +45,7 @@ export async function fetchHyroxEvents(): Promise<HyroxEvent[]> {
 
     // Fetch data from the Google Sheet (columns A-L)
     const response = await sheets.spreadsheets.values.get({
-      spreadsheetId: process.env.GOOGLE_SHEET_ID,
+      spreadsheetId: sheetId,
       range: 'Events!A:L',
     });
 
@@ -55,7 +73,7 @@ export async function fetchHyroxEvents(): Promise<HyroxEvent[]> {
 
     return events;
   } catch (error) {
-    console.error('Error fetching events from Google Sheets:', error);
+    console.error('[hyrox-events] Error fetching from Google Sheets:', error);
     return [];
   }
 }
