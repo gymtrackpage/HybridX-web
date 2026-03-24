@@ -1,5 +1,3 @@
-import { google } from 'googleapis';
-
 export interface HyroxEvent {
   name: string;
   startDate: string | null;
@@ -14,64 +12,89 @@ export interface HyroxEvent {
 
 export async function fetchHyroxEvents(): Promise<HyroxEvent[]> {
   try {
-    const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-    const rawKey = process.env.GOOGLE_PRIVATE_KEY;
     const sheetId = process.env.GOOGLE_SHEET_ID;
 
-    if (!clientEmail || !rawKey || !sheetId) {
-      console.error('[hyrox-events] Missing env vars:', {
-        hasEmail: !!clientEmail,
-        hasKey: !!rawKey,
-        hasSheetId: !!sheetId,
-      });
+    if (!sheetId) {
+      console.error('[hyrox-events] Missing GOOGLE_SHEET_ID env var');
       return [];
     }
 
-    // Handle both escaped (\n) and real newline formats from Secret Manager
-    const privateKey = rawKey.includes('\\n')
-      ? rawKey.replace(/\\n/g, '\n')
-      : rawKey;
+    // Fetch sheet as CSV via Google's public export URL (sheet must be publicly readable)
+    const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=Events`;
+    const response = await fetch(url, { next: { revalidate: 3600 } });
 
-    // Use JWT directly — more compatible with Node 18+ / OpenSSL 3.x
-    const auth = new google.auth.JWT({
-      email: clientEmail,
-      key: privateKey,
-      scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
-    });
-
-    const sheets = google.sheets({ version: 'v4', auth });
-
-    // Fetch data from the Google Sheet (columns A-L)
-    const response = await sheets.spreadsheets.values.get({
-      spreadsheetId: sheetId,
-      range: 'Events!A:L',
-    });
-
-    const rows = response.data.values;
-
-    if (!rows || rows.length === 0) {
+    if (!response.ok) {
+      console.error('[hyrox-events] Failed to fetch sheet:', response.status, response.statusText);
       return [];
     }
 
-    // Skip the header row and filter out empty cells
-    const events = rows
-      .slice(1) // Skip header row
-      .filter((row) => row[0] && row[0].trim() !== '') // Filter out empty rows
+    const csv = await response.text();
+    const rows = parseCSV(csv);
+
+    if (rows.length < 2) return [];
+
+    // Skip header row (row[0]), map data rows
+    return rows.slice(1)
+      .filter((row) => row[0] && row[0].trim() !== '')
       .map((row) => ({
         name: row[0].trim(),
-        startDate: row[1] || null,        // Column B
-        endDate: row[2] || null,          // Column C
-        city: row[5] || null,             // Column F
-        country: row[4] || null,          // Column E
-        continent: row[6] || null,        // Column G
-        bookingStatus: row[7] || null,    // Column H
-        eventUrl: row[9] || null,         // Column J
-        eventId: row[10] || null,         // Column K
+        startDate: row[1] || null,      // Column B: Start Date
+        endDate: row[2] || null,        // Column C: End Date
+        city: row[5] || null,           // Column F: City
+        country: row[4] || null,        // Column E: Country
+        continent: row[6] || null,      // Column G: Continent
+        bookingStatus: row[7] || null,  // Column H: Booking Status
+        eventUrl: row[9] || null,       // Column J: Event URL
+        eventId: row[10] || null,       // Column K: Event ID
       }));
-
-    return events;
   } catch (error) {
-    console.error('[hyrox-events] Error fetching from Google Sheets:', error);
+    console.error('[hyrox-events] Error fetching events:', error);
     return [];
   }
+}
+
+// Minimal CSV parser that handles quoted fields with commas/newlines
+function parseCSV(csv: string): string[][] {
+  const rows: string[][] = [];
+  let row: string[] = [];
+  let field = '';
+  let inQuotes = false;
+
+  for (let i = 0; i < csv.length; i++) {
+    const ch = csv[i];
+    const next = csv[i + 1];
+
+    if (inQuotes) {
+      if (ch === '"' && next === '"') {
+        field += '"';
+        i++;
+      } else if (ch === '"') {
+        inQuotes = false;
+      } else {
+        field += ch;
+      }
+    } else {
+      if (ch === '"') {
+        inQuotes = true;
+      } else if (ch === ',') {
+        row.push(field);
+        field = '';
+      } else if (ch === '\n' || (ch === '\r' && next === '\n')) {
+        if (ch === '\r') i++;
+        row.push(field);
+        rows.push(row);
+        row = [];
+        field = '';
+      } else {
+        field += ch;
+      }
+    }
+  }
+
+  if (field || row.length > 0) {
+    row.push(field);
+    rows.push(row);
+  }
+
+  return rows;
 }
