@@ -1,103 +1,238 @@
 
-import { DailyWorkout, formatDateForICS, getWeekNumber } from './training-plan-utils';
+import { DailyWorkout, getWeekNumber } from './training-plan-utils';
 
-export interface ICSGenerationOptions {
+// HybridX app link for CTAs
+const APP_URL = 'https://app.hybridx.club/';
+
+// Phase labels for calendar event context
+function getPhaseLabel(weekNumber: number): string {
+  if (weekNumber <= 4) return 'Phase 1: Base Building';
+  if (weekNumber <= 6) return 'Phase 2: Build';
+  if (weekNumber === 7) return 'Phase 2: Deload';
+  if (weekNumber <= 10) return 'Phase 3: Competition Prep';
+  return 'Phase 4: Taper & Race';
+}
+
+// CTA messages that rotate through calendar events
+const CTA_MESSAGES = [
+  `Track your progress and get personalised coaching - ${APP_URL}`,
+  `Want a training plan built around YOUR strengths and weaknesses? - ${APP_URL}`,
+  `Join the HybridX community of hybrid athletes - ${APP_URL}`,
+  `Level up with personalised programming at HybridX Club - ${APP_URL}`,
+  `Log this workout and track your gains in the HybridX app - ${APP_URL}`,
+];
+
+function getCTAForDay(dayNumber: number): string {
+  return CTA_MESSAGES[dayNumber % CTA_MESSAGES.length];
+}
+
+// Milestone messages for key weeks
+function getMilestoneMessage(weekNumber: number, dayNumber: number): string | null {
+  if (dayNumber === 1) {
+    return 'BENCHMARK DAY - Record your results! You\'ll retest at Week 8 to track progress.';
+  }
+  if (weekNumber === 4 && dayNumber === 28) {
+    return 'Phase 1 Complete! You\'ve built a strong aerobic and strength foundation.';
+  }
+  if (weekNumber === 7) {
+    return 'DELOAD WEEK - Reduced volume to let your body absorb the hard work. Trust the science.';
+  }
+  if (dayNumber === 52) {
+    return 'BENCHMARK RETEST - Compare to Week 1 and celebrate your progress!';
+  }
+  if (dayNumber === 60) {
+    return 'FULL DRESS REHEARSAL - Complete Hyrox simulation at race weights. Record your time!';
+  }
+  if (weekNumber === 11) {
+    return 'RACE WEEK - The work is done. Focus on rest, nutrition, and mental preparation.';
+  }
+  if (dayNumber === 77) {
+    return 'RACE DAY! Trust your training. Start controlled. Nail your transitions. HAVE FUN!';
+  }
+  return null;
+}
+
+/**
+ * Escape special characters for iCalendar format
+ */
+function escapeICS(text: string): string {
+  return text
+    .replace(/\\/g, '\\\\')
+    .replace(/;/g, '\\;')
+    .replace(/,/g, '\\,')
+    .replace(/\n/g, '\\n');
+}
+
+/**
+ * Format a Date to iCalendar date format (YYYYMMDD for all-day events)
+ */
+function formatICSDate(date: Date): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}${m}${d}`;
+}
+
+/**
+ * Format a Date to iCalendar datetime format for timed events
+ */
+function formatICSDateTime(date: Date, hours: number, minutes: number = 0): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  const h = String(hours).padStart(2, '0');
+  const min = String(minutes).padStart(2, '0');
+  return `${y}${m}${d}T${h}${min}00`;
+}
+
+/**
+ * Generate a UID for calendar events
+ */
+function generateUID(dayNumber: number, eventDate: string): string {
+  return `hybridx-hyrox-day${dayNumber}-${eventDate}@hybridx.club`;
+}
+
+export interface CalendarGenerationOptions {
   userName: string;
   eventName: string;
+  eventDate: string;
   workouts: DailyWorkout[];
+  /** Preferred training time in 24h format (default: 7 for 7:00 AM) */
+  preferredHour?: number;
+  /** Use all-day events instead of timed events (default: false) */
+  allDayEvents?: boolean;
 }
 
-/**
- * Generates the string content for an .ics iCalendar file.
- */
-export function generateICSContent(options: ICSGenerationOptions): string {
-  const { eventName, workouts } = options;
-  const calName = `Hyrox Training Plan: ${eventName}`;
-  const prodId = '-//HybridX Hub//Training Plan//EN';
+// Backward-compatible alias for existing callers
+export type ICSGenerationOptions = CalendarGenerationOptions;
 
-  let icsString = [
+/**
+ * Generate an ICS calendar file with all training days
+ */
+export function generateTrainingCalendar(options: CalendarGenerationOptions): string {
+  const { userName, eventName, workouts, preferredHour = 7, allDayEvents = false } = options;
+
+  const lines: string[] = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    `PRODID:${prodId}`,
-    `NAME:${calName}`,
-    `X-WR-CALNAME:${calName}`,
-    'BEGIN:VTIMEZONE',
-    'TZID:Europe/London',
-    'LAST-MODIFIED:20201011T015911Z',
-    'TZURL:http://tzurl.org/zoneinfo-outlook/Europe/London',
-    'X-LIC-LOCATION:Europe/London',
-    'BEGIN:DAYLIGHT',
-    'TZNAME:BST',
-    'TZOFFSETFROM:+0000',
-    'TZOFFSETTO:+0100',
-    'DTSTART:19700329T010000',
-    'RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU',
-    'END:DAYLIGHT',
-    'BEGIN:STANDARD',
-    'TZNAME:GMT',
-    'TZOFFSETFROM:+0100',
-    'TZOFFSETTO:+0000',
-    'DTSTART:19701025T020000',
-    'RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU',
-    'END:STANDARD',
-    'END:VTIMEZONE',
-  ].join('\r\n');
+    'PRODID:-//HybridX Club//Hyrox Training Plan//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    `X-WR-CALNAME:HybridX - ${userName}'s Hyrox Plan`,
+    'X-WR-CALDESC:Your personalised Hyrox training schedule from HybridX Club',
+  ];
 
-  workouts.forEach(workout => {
-    // Escape special characters in ICS format
-    const escapeICS = (str: string) => str.replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');
-    
-    const weekNum = getWeekNumber(workout.day);
-    const dayOfWeek = (workout.day - 1) % 7 + 1;
-    const summaryPrefix = `W${weekNum}D${dayOfWeek}`;
-    
-    const summary = escapeICS(`${summaryPrefix}: ${workout.workoutTitle}`);
-    
-    const description = escapeICS(
-        workout.exercises.map(ex => `• ${ex.name}: ${ex.details}`).join('\\n') + // Use single \n for better list formatting
-        `\\n\\n---\\nGenerated by HybridX Hub for ${eventName}`
-    );
+  workouts.forEach((workout) => {
+    const weekNumber = getWeekNumber(workout.day);
+    const phaseLabel = getPhaseLabel(weekNumber);
+    const milestone = getMilestoneMessage(weekNumber, workout.day);
+    const cta = getCTAForDay(workout.day);
 
-    const startDate = formatDateForICS(workout.date);
-    // For all-day events, DTEND should be the day after DTSTART
-    const endDate = formatDateForICS(new Date(workout.date.getTime() + 24 * 60 * 60 * 1000));
-    const uid = `${startDate}-${workout.day}@hybridx.club`;
+    // Build description
+    const descParts: string[] = [];
 
-    icsString += [
-      '',
-      'BEGIN:VEVENT',
-      `DTSTART;VALUE=DATE:${startDate}`,
-      `DTEND;VALUE=DATE:${endDate}`,
-      `DTSTAMP:${formatDateForICS(new Date())}Z`,
-      `UID:${uid}`,
-      `SUMMARY:${summary}`,
-      `DESCRIPTION:${description}`,
-      'TRANSP:TRANSPARENT', // Show as "Free" in calendar
-      'END:VEVENT',
-    ].join('\r\n');
+    descParts.push(`Week ${weekNumber} | ${phaseLabel}`);
+    descParts.push('');
+
+    if (milestone) {
+      descParts.push(milestone);
+      descParts.push('');
+    }
+
+    workout.exercises.forEach((exercise) => {
+      descParts.push(`- ${exercise.name}`);
+      if (exercise.details) {
+        descParts.push(`  ${exercise.details}`);
+      }
+      descParts.push('');
+    });
+
+    const isRestDay = workout.workoutTitle.toLowerCase().includes('rest');
+    if (!isRestDay) {
+      descParts.push('---');
+      descParts.push(cta);
+    }
+
+    const description = escapeICS(descParts.join('\n'));
+    const eventSummary = escapeICS(`HybridX Day ${workout.day}: ${workout.workoutTitle}`);
+
+    lines.push('BEGIN:VEVENT');
+    lines.push(`UID:${generateUID(workout.day, options.eventDate)}`);
+    lines.push(`DTSTAMP:${formatICSDate(new Date())}T000000Z`);
+
+    if (allDayEvents || isRestDay) {
+      lines.push(`DTSTART;VALUE=DATE:${formatICSDate(workout.date)}`);
+      const nextDay = new Date(workout.date);
+      nextDay.setDate(nextDay.getDate() + 1);
+      lines.push(`DTEND;VALUE=DATE:${formatICSDate(nextDay)}`);
+    } else {
+      lines.push(`DTSTART:${formatICSDateTime(workout.date, preferredHour)}`);
+      lines.push(`DTEND:${formatICSDateTime(workout.date, preferredHour + 1)}`);
+
+      // Add reminder 30 minutes before for training days
+      lines.push('BEGIN:VALARM');
+      lines.push('TRIGGER:-PT30M');
+      lines.push('ACTION:DISPLAY');
+      lines.push(`DESCRIPTION:Time to train! ${workout.workoutTitle}`);
+      lines.push('END:VALARM');
+    }
+
+    lines.push(`SUMMARY:${eventSummary}`);
+    lines.push(`DESCRIPTION:${description}`);
+    lines.push(`URL:${APP_URL}`);
+    lines.push(`CATEGORIES:HybridX,Hyrox Training,${phaseLabel}`);
+    lines.push('STATUS:CONFIRMED');
+    lines.push('END:VEVENT');
   });
 
-  icsString += '\r\nEND:VCALENDAR';
+  // Add race day event with special formatting
+  const raceDate = new Date(options.eventDate);
+  lines.push('BEGIN:VEVENT');
+  lines.push(`UID:hybridx-raceday-${options.eventDate}@hybridx.club`);
+  lines.push(`DTSTAMP:${formatICSDate(new Date())}T000000Z`);
+  lines.push(`DTSTART;VALUE=DATE:${formatICSDate(raceDate)}`);
+  const raceDayEnd = new Date(raceDate);
+  raceDayEnd.setDate(raceDayEnd.getDate() + 1);
+  lines.push(`DTEND;VALUE=DATE:${formatICSDate(raceDayEnd)}`);
+  lines.push(`SUMMARY:${escapeICS(`HYROX RACE DAY - ${eventName}`)}`);
+  lines.push(`DESCRIPTION:${escapeICS(
+    `RACE DAY: ${eventName}\n\n` +
+    `Race Strategy Reminders:\n` +
+    `1) Start controlled - don't sprint the first run\n` +
+    `2) Pull back 2-3 sec/500m on SkiErg and Rower\n` +
+    `3) Breaks on sleds and Wall Balls are OK\n` +
+    `4) Nail your transitions - posture reset, breathing control\n` +
+    `5) 85% effort through stations 1-6, then empty the tank\n\n` +
+    `HAVE FUN! You've trained for this.\n\n` +
+    `---\n` +
+    `Share your result and plan your next race with HybridX Club - ${APP_URL}`
+  )}`);
+  lines.push(`URL:${APP_URL}`);
+  lines.push('CATEGORIES:HybridX,Hyrox,Race Day');
+  lines.push('STATUS:CONFIRMED');
+  lines.push('END:VEVENT');
 
-  return icsString;
+  lines.push('END:VCALENDAR');
+
+  return lines.join('\r\n');
 }
 
-
 /**
- * Triggers a browser download of the generated .ics file.
+ * Generate and trigger download of the ICS calendar file
  */
-export function downloadTrainingPlanICS(options: ICSGenerationOptions): void {
-  const icsContent = generateICSContent(options);
-  const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8;' });
+export function downloadTrainingCalendar(options: CalendarGenerationOptions): void {
+  const icsContent = generateTrainingCalendar(options);
+  const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
   const url = URL.createObjectURL(blob);
-
   const link = document.createElement('a');
   link.href = url;
-  const fileName = `Hyrox-Plan-${options.eventName.replace(/\s+/g, '-')}.ics`;
-  link.setAttribute('download', fileName);
-  
+  link.download = `HybridX-Hyrox-Training-${options.userName.replace(/\s+/g, '-')}.ics`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
 }
+
+// Backward-compatible alias used by HyroxDominationForm
+export const downloadTrainingPlanICS = downloadTrainingCalendar;
+export const generateICSContent = generateTrainingCalendar;
