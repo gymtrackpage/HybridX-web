@@ -356,6 +356,44 @@ export function createArticleSchema({
   };
 }
 
+// WebApplication schema — for interactive tools and calculators
+// Signals to Google and AI engines that this is a free, usable web app
+export function createWebApplicationSchema({
+  name,
+  description,
+  url,
+  keywords = [],
+}: {
+  name: string;
+  description: string;
+  url: string;
+  keywords?: string[];
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name,
+    description,
+    url: `${SITE_CONFIG.url}${url}`,
+    applicationCategory: 'SportsApplication',
+    operatingSystem: 'All',
+    browserRequirements: 'Requires JavaScript',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'GBP',
+    },
+    provider: {
+      '@type': 'Organization',
+      name: SITE_CONFIG.name,
+      url: SITE_CONFIG.url,
+    },
+    keywords: keywords.join(', '),
+    inLanguage: 'en-GB',
+    isAccessibleForFree: true,
+  };
+}
+
 // SpeakableSpecification — marks content sections suitable for voice and AI read-aloud
 // Used by Google Assistant, Gemini voice, and other AI answer engines
 export function createSpeakableSchema(cssSelectors: string[]) {
