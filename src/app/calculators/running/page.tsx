@@ -3,7 +3,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Route, TrendingUp, HeartPulse, Timer, ArrowRight } from 'lucide-react';
+import { Route, TrendingUp, HeartPulse, Timer, Activity, ArrowRight } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 import type { Metadata } from 'next';
@@ -54,6 +54,14 @@ const runningCalculators: CalculatorInfo[] = [
     icon: Timer,
     href: '/calculators/split-time-calculator',
     ctaText: 'Plan My Splits',
+  },
+  {
+    id: 'vdot-calculator',
+    title: 'VDOT Calculator',
+    description: 'Calculate your Jack Daniels VDOT score from any race result. Get precise training paces for all five zones — Easy, Marathon, Threshold, Interval, and Repetition.',
+    icon: Activity,
+    href: '/vdot',
+    ctaText: 'Calculate My VDOT',
   },
 ];
 

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle } from '@/components/ui/sheet';
-import { Menu, LogIn, ChevronDown, ListChecks, Dumbbell, ClipboardList, ArrowUpRight, ShoppingCart, BookOpen, BookMarked } from 'lucide-react';
+import { Menu, LogIn, ChevronDown, ListChecks, Dumbbell, ClipboardList, ArrowUpRight, ShoppingCart, BookOpen, BookMarked, Activity } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -55,6 +55,7 @@ const navItems: NavItem[] = [
     isDropdown: true,
     items: [
       { label: 'Running Calculators', href: '/calculators/running', icon: <ListChecks className="mr-2 h-5 w-5" /> },
+      { label: 'VDOT Calculator', href: '/vdot', icon: <Activity className="mr-2 h-5 w-5" /> },
       { label: 'Strength Calculators', href: '/calculators/strength', icon: <Dumbbell className="mr-2 h-5 w-5" /> },
       { label: 'General Health Calculators', href: '/calculators/general-health', icon: <ClipboardList className="mr-2 h-5 w-5" /> },
     ]
