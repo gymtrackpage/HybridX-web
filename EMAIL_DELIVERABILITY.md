@@ -71,8 +71,8 @@ Once you have run for a week or two with no failures in the reports, raise enfor
 
 ## 3. From / Reply-To identity (already fixed in code)
 
-The previous setup sent **From `noreply@hybridx.com`** while the site is **hybridx.club**.
-That domain mismatch alone is a major spam trigger — you cannot authenticate a domain you
+The previous setup sent **From a `noreply@` address on the wrong (`.com`) domain** while the
+site is **hybridx.club**. That domain mismatch alone is a major spam trigger — you cannot authenticate a domain you
 do not send from.
 
 Now centralised and corrected:
@@ -106,7 +106,7 @@ monitored. If you prefer different addresses, set `EMAIL_FROM` / `EMAIL_REPLY_TO
     (ConvertKit / MailerLite / Resend Audiences), the ESP handles this for you on those
     emails automatically.
 - **Consistent branding and domain** across all templates (fixed the stray
-  `www.hybridx.com` link in the training-plan email).
+  `.com` link in the training-plan PDF — everything now points to `hybridx.club`).
 
 ---
 

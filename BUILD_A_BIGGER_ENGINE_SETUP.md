@@ -47,7 +47,7 @@ the **inbox** (open it → Show original → SPF/DKIM/DMARC should all PASS).
 
 > Mail now sends from `info@training.hybridx.club` (a dedicated, authenticated sending
 > subdomain) with replies and unsubscribes routed to your monitored `training@hybridx.club`
-> inbox. This replaces the mismatched `noreply@hybridx.com`. Override via `EMAIL_FROM` /
+> inbox. This replaces the old mismatched `noreply@` address on the wrong domain. Override via `EMAIL_FROM` /
 > `EMAIL_REPLY_TO` in `apphosting.yaml` if you want different addresses.
 
 **The PDF** is served from `public/build-a-bigger-engine/HybridX-Build-A-Bigger-Engine-VO2max-Guide.pdf`

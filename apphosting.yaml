@@ -29,7 +29,7 @@ env:
     availability:
       - RUNTIME
   - variable: SMTP_FROM
-    value: '"HybridX" <noreply@hybridx.com>'
+    value: '"HybridX" <info@training.hybridx.club>'
     availability:
       - RUNTIME
   # ── Email deliverability ──────────────────────────────────────────────────
