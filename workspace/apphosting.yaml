@@ -30,14 +30,14 @@ env:
     availability:
       - RUNTIME
   - variable: SMTP_FROM
-    value: "\"HybridX\" <info@training.hybridx.club>"
+    value: "\"HybridX\" <info@train.hybridx.club>"
     availability:
       - RUNTIME
   # ── Email deliverability (see EMAIL_DELIVERABILITY.md) ─────────────────────
-  # Send from the dedicated subdomain training.hybridx.club (authenticated in
+  # Send from the dedicated subdomain train.hybridx.club (authenticated in
   # Resend). Replies go to the monitored root mailbox training@hybridx.club.
   - variable: EMAIL_FROM
-    value: "\"HybridX\" <info@training.hybridx.club>"
+    value: "\"HybridX\" <info@train.hybridx.club>"
     availability:
       - RUNTIME
   - variable: EMAIL_REPLY_TO

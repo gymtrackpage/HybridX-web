@@ -45,7 +45,7 @@ Once the key is set, all email (this guide + the Hyrox training plan) routes thr
 automatically. To verify, submit the form on the live page and confirm the email arrives in
 the **inbox** (open it → Show original → SPF/DKIM/DMARC should all PASS).
 
-> Mail now sends from `info@training.hybridx.club` (a dedicated, authenticated sending
+> Mail now sends from `info@train.hybridx.club` (a dedicated, authenticated sending
 > subdomain) with replies and unsubscribes routed to your monitored `training@hybridx.club`
 > inbox. This replaces the old mismatched `noreply@` address on the wrong domain. Override via `EMAIL_FROM` /
 > `EMAIL_REPLY_TO` in `apphosting.yaml` if you want different addresses.

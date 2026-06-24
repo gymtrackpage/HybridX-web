@@ -13,12 +13,12 @@ both: the code is done, here is what you do on your side.
 ## 1. Switch sending to Resend (do this first)
 
 1. **Create a Resend account** at resend.com and add your sending domain.
-   - Use the dedicated subdomain **`training.hybridx.club`**. Sending from a subdomain keeps
+   - Use the dedicated subdomain **`train.hybridx.club`**. Sending from a subdomain keeps
      this funnel's reputation separate from your normal `@hybridx.club` Google Workspace
      mail, so a marketing dip never threatens your day-to-day email. (Mail still sends from
-     `info@training.hybridx.club`, with replies routed to `training@hybridx.club`.)
+     `info@train.hybridx.club`, with replies routed to `training@hybridx.club`.)
 2. **Add the DNS records Resend gives you** at your domain registrar / DNS host. Add them
-   for the **`training.hybridx.club`** subdomain (Resend will scope them automatically once
+   for the **`train.hybridx.club`** subdomain (Resend will scope them automatically once
    you enter that domain). Resend will show you three things to add:
    - **SPF** (a `TXT` record, or an MX/`include` depending on subdomain)
    - **DKIM** (usually `CNAME` records — this is the signature that proves the mail is
@@ -56,7 +56,7 @@ gentle, then tighten:
 
 ```
 Type: TXT
-Host: _dmarc.training.hybridx.club
+Host: _dmarc.train.hybridx.club
 Value: v=DMARC1; p=none; rua=mailto:training@hybridx.club; fo=1
 ```
 
@@ -77,15 +77,15 @@ do not send from.
 
 Now centralised and corrected:
 
-- **From:** `"HybridX" <info@training.hybridx.club>` (override with `EMAIL_FROM`)
+- **From:** `"HybridX" <info@train.hybridx.club>` (override with `EMAIL_FROM`)
 - **Reply-To:** `training@hybridx.club` (override with `EMAIL_REPLY_TO`)
 
 Two trust wins baked in:
-- The From domain (`training.hybridx.club`) is the **authenticated sending domain**.
+- The From domain (`train.hybridx.club`) is the **authenticated sending domain**.
 - Replies route to a **real, monitored mailbox** (`training@hybridx.club`) rather than a
   `noreply@`. Replies and engagement are positive reputation signals; keep that inbox watched.
 
-**Action:** make sure the `info@training.hybridx.club` sender is configured in Resend and
+**Action:** make sure the `info@train.hybridx.club` sender is configured in Resend and
 that `training@hybridx.club` (used for both Reply-To and the unsubscribe mailto) is
 monitored. If you prefer different addresses, set `EMAIL_FROM` / `EMAIL_REPLY_TO` in
 `apphosting.yaml`.
