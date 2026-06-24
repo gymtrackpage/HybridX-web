@@ -34,13 +34,14 @@ env:
     availability:
       - RUNTIME
   # ── Email deliverability (see EMAIL_DELIVERABILITY.md) ─────────────────────
-  # From / Reply-To must be on an authenticated domain (hybridx.club, not .com).
+  # Send from the dedicated subdomain training.hybridx.club (authenticated in
+  # Resend). Replies go to the monitored root mailbox training@hybridx.club.
   - variable: EMAIL_FROM
-    value: "\"HybridX\" <hello@hybridx.club>"
+    value: "\"HybridX\" <info@training.hybridx.club>"
     availability:
       - RUNTIME
   - variable: EMAIL_REPLY_TO
-    value: hello@hybridx.club
+    value: training@hybridx.club
     availability:
       - RUNTIME
   # When set, all mail routes through Resend instead of Gmail SMTP.

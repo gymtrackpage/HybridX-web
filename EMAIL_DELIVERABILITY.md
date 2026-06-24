@@ -12,12 +12,14 @@ both: the code is done, here is what you do on your side.
 
 ## 1. Switch sending to Resend (do this first)
 
-1. **Create a Resend account** at resend.com and add your domain.
-   - Use **`hybridx.club`** (or a subdomain like `mail.hybridx.club` — a subdomain keeps
-     marketing reputation separate from your normal Google Workspace mail, which is the
-     recommended setup).
-2. **Add the DNS records Resend gives you** at your domain registrar / DNS host. Resend
-   will show you three things to add:
+1. **Create a Resend account** at resend.com and add your sending domain.
+   - Use the dedicated subdomain **`training.hybridx.club`**. Sending from a subdomain keeps
+     this funnel's reputation separate from your normal `@hybridx.club` Google Workspace
+     mail, so a marketing dip never threatens your day-to-day email. (Mail still sends from
+     `info@training.hybridx.club`, with replies routed to `training@hybridx.club`.)
+2. **Add the DNS records Resend gives you** at your domain registrar / DNS host. Add them
+   for the **`training.hybridx.club`** subdomain (Resend will scope them automatically once
+   you enter that domain). Resend will show you three things to add:
    - **SPF** (a `TXT` record, or an MX/`include` depending on subdomain)
    - **DKIM** (usually `CNAME` records — this is the signature that proves the mail is
      really from you)
@@ -49,13 +51,18 @@ mail. Get all three green and you have solved most spam-folder problems:
 | **DKIM** | Cryptographically signs each email so receivers can verify it | Resend gives you the CNAMEs |
 | **DMARC** | Tells Gmail what to do with mail that fails the above, and gives you reports | You add this one |
 
-**DMARC** is not created by Resend — add it yourself. Start gentle, then tighten:
+**DMARC** is not created by Resend — add it yourself, on the sending subdomain. Start
+gentle, then tighten:
 
 ```
 Type: TXT
-Host: _dmarc.hybridx.club
-Value: v=DMARC1; p=none; rua=mailto:dmarc@hybridx.club; fo=1
+Host: _dmarc.training.hybridx.club
+Value: v=DMARC1; p=none; rua=mailto:training@hybridx.club; fo=1
 ```
+
+> If you already have an organisation-level DMARC record at `_dmarc.hybridx.club`, the
+> subdomain inherits it unless you add this more specific one. Adding the subdomain record
+> lets you test enforcement on the funnel mail without touching your main domain policy.
 
 Once you have run for a week or two with no failures in the reports, raise enforcement to
 `p=quarantine` and eventually `p=reject`. That progression is what builds trust.
@@ -70,17 +77,18 @@ do not send from.
 
 Now centralised and corrected:
 
-- **From:** `"HybridX" <hello@hybridx.club>` (override with `EMAIL_FROM`)
-- **Reply-To:** `hello@hybridx.club` (override with `EMAIL_REPLY_TO`)
+- **From:** `"HybridX" <info@training.hybridx.club>` (override with `EMAIL_FROM`)
+- **Reply-To:** `training@hybridx.club` (override with `EMAIL_REPLY_TO`)
 
 Two trust wins baked in:
-- The From domain now **matches the authenticated domain**.
-- We send from a **real, monitored mailbox** (`hello@`) rather than `noreply@`. Replies and
-  engagement are positive reputation signals; make sure that inbox is actually watched.
+- The From domain (`training.hybridx.club`) is the **authenticated sending domain**.
+- Replies route to a **real, monitored mailbox** (`training@hybridx.club`) rather than a
+  `noreply@`. Replies and engagement are positive reputation signals; keep that inbox watched.
 
-**Action:** make sure `hello@hybridx.club` (and `unsubscribe@hybridx.club`, see below)
-exist and are monitored. If you prefer different addresses, set `EMAIL_FROM` /
-`EMAIL_REPLY_TO` in `apphosting.yaml`.
+**Action:** make sure the `info@training.hybridx.club` sender is configured in Resend and
+that `training@hybridx.club` (used for both Reply-To and the unsubscribe mailto) is
+monitored. If you prefer different addresses, set `EMAIL_FROM` / `EMAIL_REPLY_TO` in
+`apphosting.yaml`.
 
 ---
 
@@ -89,7 +97,7 @@ exist and are monitored. If you prefer different addresses, set `EMAIL_FROM` /
 - **Plain-text alternative on every email.** HTML-only mail is a classic spam signal; both
   the guide email and the training-plan email now ship a text part too.
 - **`List-Unsubscribe` header** on the marketing guide email
-  (`<mailto:unsubscribe@hybridx.club>`). A working, easy opt-out is a strong positive
+  (`<mailto:training@hybridx.club?subject=Unsubscribe>`). A working, easy opt-out is a strong positive
   signal and is part of Gmail's bulk-sender rules.
   - **Upgrade path (recommended):** add a real HTTPS unsubscribe route, then pass
     `oneClickUnsubscribe: true` to `sendEmail()` with a `List-Unsubscribe` value that

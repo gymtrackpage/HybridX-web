@@ -17,10 +17,11 @@ if (process.env.NODE_ENV !== 'production') {
  * trust and engagement signals.
  */
 export const EMAIL_FROM =
-  process.env.EMAIL_FROM || '"HybridX" <hello@hybridx.club>';
+  process.env.EMAIL_FROM || '"HybridX" <info@training.hybridx.club>';
 
 /** Where replies go. Keep this a real, monitored inbox. */
-export const EMAIL_REPLY_TO = process.env.EMAIL_REPLY_TO || 'hello@hybridx.club';
+export const EMAIL_REPLY_TO =
+  process.env.EMAIL_REPLY_TO || 'training@hybridx.club';
 
 export interface EmailAttachment {
   filename: string;

@@ -33,14 +33,14 @@ env:
     availability:
       - RUNTIME
   # ── Email deliverability ──────────────────────────────────────────────────
-  # From / Reply-To must be on an authenticated domain (SPF + DKIM + DMARC).
-  # The site is hybridx.club, so use hybridx.club here, NOT hybridx.com.
+  # Send from the dedicated subdomain training.hybridx.club (authenticate it in
+  # Resend with SPF + DKIM + DMARC). Replies go to the monitored root mailbox.
   - variable: EMAIL_FROM
-    value: '"HybridX" <hello@hybridx.club>'
+    value: '"HybridX" <info@training.hybridx.club>'
     availability:
       - RUNTIME
   - variable: EMAIL_REPLY_TO
-    value: hello@hybridx.club
+    value: training@hybridx.club
     availability:
       - RUNTIME
   # Resend API key. When set, all mail goes through Resend instead of Gmail SMTP.
