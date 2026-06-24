@@ -97,6 +97,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: `${baseUrl}/build-a-bigger-engine`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.9,
+    },
+    {
       url: `${baseUrl}/12-week-hyrox`,
       lastModified: new Date(),
       changeFrequency: 'weekly' as const,

@@ -108,3 +108,42 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* ── "Build a Bigger Engine" funnel motion ─────────────────────────────── */
+
+/* One-time ECG line draw on load. */
+.engine-ecg-draw {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: engine-ecg-draw 1.6s ease-out forwards;
+}
+
+@keyframes engine-ecg-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Fade-and-rise on scroll for section content. */
+.engine-rise {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  will-change: opacity, transform;
+}
+.engine-rise.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .engine-ecg-draw {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .engine-rise {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

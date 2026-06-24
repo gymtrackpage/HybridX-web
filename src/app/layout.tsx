@@ -3,7 +3,7 @@ import Script from 'next/script';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
-import { Inter, Space_Grotesk } from 'next/font/google';
+import { Inter, Space_Grotesk, Anton, Archivo } from 'next/font/google';
 import { SITE_CONFIG, createOrganizationSchema, createWebSiteSchema, createSportsOrganizationSchema } from '@/lib/seo';
 
 const inter = Inter({
@@ -18,6 +18,21 @@ const spaceGrotesk = Space_Grotesk({
   display: 'swap',
   variable: '--font-space-grotesk',
   weight: ['300', '400', '500', '700'],
+});
+
+// Display + label faces for the "Build a Bigger Engine" funnel (self-hosted by Next).
+const anton = Anton({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-anton',
+  weight: ['400'],
+});
+
+const archivo = Archivo({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-archivo',
+  weight: ['600', '700', '800', '900'],
 });
 
 export const metadata: Metadata = {
@@ -104,7 +119,7 @@ export default function RootLayout({
   const sportsOrgSchema = createSportsOrganizationSchema();
 
   return (
-    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${spaceGrotesk.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${spaceGrotesk.variable} ${anton.variable} ${archivo.variable}`}>
       <head>
         {/* Organization Schema */}
         <Script
