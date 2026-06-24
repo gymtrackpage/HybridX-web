@@ -28,21 +28,26 @@ events, SEO/OG, sitemap) is done and live in this branch.
 ## 1. Email delivery (already wired)
 
 The instant "here is your guide" email is sent by the server action
-`src/app/build-a-bigger-engine/actions.ts` using the existing nodemailer service
-(`src/lib/email/service.ts`). The template is `src/lib/email/send-engine-guide.ts`.
+`src/app/build-a-bigger-engine/actions.ts` via the shared `sendEmail()` function in
+`src/lib/email/service.ts`. The template is `src/lib/email/send-engine-guide.ts`.
 
-It reuses the SMTP secrets already configured in `apphosting.yaml`:
+`sendEmail()` **prefers Resend** (when `RESEND_API_KEY` is set) and **falls back to Gmail
+SMTP** otherwise. Gmail SMTP is rate-limited and lands in spam at volume, so for this
+funnel you should send through Resend.
 
-- `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_FROM` (plain env, already set)
-- `SMTP_USER`, `SMTP_PASSWORD` (Secret Manager, already set)
+**Action:** follow **[EMAIL_DELIVERABILITY.md](./EMAIL_DELIVERABILITY.md)** to:
 
-**Action:** none required if your Hyrox plan emails currently send. To verify, submit the
-form on the live page and confirm the email arrives.
+1. Add `hybridx.club` to Resend and verify SPF + DKIM.
+2. Add a DMARC record.
+3. Set the `RESEND_API_KEY` secret (`firebase apphosting:secrets:set RESEND_API_KEY`).
 
-> Deliverability tip: Gmail SMTP works but is rate limited and can land in spam at volume.
-> For a marketing funnel, consider switching `SMTP_*` to a transactional provider
-> (Resend, SendGrid, Mailgun, Postmark) and authenticating your domain with SPF + DKIM.
-> No code change needed, just swap the secret values.
+Once the key is set, all email (this guide + the Hyrox training plan) routes through Resend
+automatically. To verify, submit the form on the live page and confirm the email arrives in
+the **inbox** (open it → Show original → SPF/DKIM/DMARC should all PASS).
+
+> The From identity is now `hello@hybridx.club` (was the mismatched `noreply@hybridx.com`).
+> Make sure that mailbox, plus `unsubscribe@hybridx.club`, exist and are monitored. Override
+> via `EMAIL_FROM` / `EMAIL_REPLY_TO` in `apphosting.yaml` if you want different addresses.
 
 **The PDF** is served from `public/build-a-bigger-engine/HybridX-Build-A-Bigger-Engine-VO2max-Guide.pdf`
 so the email link works with zero extra setup. If you would rather gate it behind double

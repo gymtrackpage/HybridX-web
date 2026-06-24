@@ -32,6 +32,23 @@ env:
     value: '"HybridX" <noreply@hybridx.com>'
     availability:
       - RUNTIME
+  # ── Email deliverability ──────────────────────────────────────────────────
+  # From / Reply-To must be on an authenticated domain (SPF + DKIM + DMARC).
+  # The site is hybridx.club, so use hybridx.club here, NOT hybridx.com.
+  - variable: EMAIL_FROM
+    value: '"HybridX" <hello@hybridx.club>'
+    availability:
+      - RUNTIME
+  - variable: EMAIL_REPLY_TO
+    value: hello@hybridx.club
+    availability:
+      - RUNTIME
+  # Resend API key. When set, all mail goes through Resend instead of Gmail SMTP.
+  # Create it in Secret Manager: firebase apphosting:secrets:set RESEND_API_KEY
+  - variable: RESEND_API_KEY
+    secret: RESEND_API_KEY
+    availability:
+      - RUNTIME
   - variable: NEXT_PUBLIC_HYROX_SCRIPT_URL
     value: https://script.google.com/macros/s/AKfycbyAtEd75pgGttM3iStIgq63fJNFCfKA0NZXq87l4aBhNHJwN0ZhamRPwVC3fVEJx1LeJw/exec
     availability:
