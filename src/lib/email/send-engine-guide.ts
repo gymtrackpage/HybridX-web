@@ -1,4 +1,4 @@
-import { emailTransporter } from './service';
+import { sendEmail } from './service';
 
 interface SendEngineGuideOptions {
   to: string;
@@ -20,7 +20,6 @@ export async function sendEngineGuideEmail({
   siteUrl,
   firstName,
 }: SendEngineGuideOptions): Promise<void> {
-  const transporter = emailTransporter;
   const greeting = firstName ? `Hi ${firstName},` : 'Hi there,';
   const year = new Date().getFullYear();
 
@@ -104,11 +103,14 @@ export async function sendEngineGuideEmail({
     `${siteUrl}`,
   ].join('\n');
 
-  await transporter.sendMail({
-    from: process.env.SMTP_FROM || '"HybridX" <noreply@hybridx.com>',
+  await sendEmail({
     to,
     subject: 'Your free guide is here: Build a Bigger Engine',
     html,
     text,
+    // Marketing/list mail: give recipients an easy opt-out. This is a strong
+    // positive signal to Gmail and Yahoo. Upgrade to a one-click HTTPS endpoint
+    // once an unsubscribe route exists (see EMAIL_SETUP notes).
+    listUnsubscribe: '<mailto:training@hybridx.club?subject=Unsubscribe>',
   });
 }

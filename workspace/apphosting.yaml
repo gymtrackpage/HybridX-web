@@ -30,7 +30,23 @@ env:
     availability:
       - RUNTIME
   - variable: SMTP_FROM
-    value: "\"HybridX\" <noreply@hybridx.com>"
+    value: "\"HybridX\" <info@train.hybridx.club>"
+    availability:
+      - RUNTIME
+  # ── Email deliverability (see EMAIL_DELIVERABILITY.md) ─────────────────────
+  # Send from the dedicated subdomain train.hybridx.club (authenticated in
+  # Resend). Replies go to the monitored root mailbox training@hybridx.club.
+  - variable: EMAIL_FROM
+    value: "\"HybridX\" <info@train.hybridx.club>"
+    availability:
+      - RUNTIME
+  - variable: EMAIL_REPLY_TO
+    value: training@hybridx.club
+    availability:
+      - RUNTIME
+  # When set, all mail routes through Resend instead of Gmail SMTP.
+  - variable: RESEND_API_KEY
+    secret: RESEND_API_KEY
     availability:
       - RUNTIME
   - variable: GOOGLE_SERVICE_ACCOUNT_EMAIL

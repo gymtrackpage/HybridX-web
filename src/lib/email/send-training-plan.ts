@@ -1,4 +1,4 @@
-import { emailTransporter } from './service';
+import { sendEmail } from './service';
 
 export async function sendTrainingPlanEmail(
   userEmail: string,
@@ -6,19 +6,37 @@ export async function sendTrainingPlanEmail(
   eventDate: string,
   pdfBuffer: Buffer
 ): Promise<void> {
-  const transporter = emailTransporter;
-
   const formattedDate = new Date(eventDate).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   });
 
+  const text = [
+    `Your Custom Hyrox Training Plan - ${eventName}`,
+    '',
+    `Your personalized 84-day Hyrox Fusion Training Plan is attached and ready to go.`,
+    '',
+    `Event: ${eventName}`,
+    `Race Date: ${formattedDate}`,
+    `Program Duration: 84 Days (12 Weeks)`,
+    '',
+    'Next steps:',
+    '1. Download and save your PDF training plan',
+    '2. Review the program overview',
+    '3. Mark your calendar with your start date',
+    '4. Get ready to crush your Hyrox goals',
+    '',
+    'Train hard, race smart!',
+    'The HybridX Team',
+    'https://hybridx.club',
+  ].join('\n');
+
   // Send email with PDF attachment
-  await transporter.sendMail({
-    from: process.env.SMTP_FROM || '"HybridX" <noreply@hybridx.com>',
+  await sendEmail({
     to: userEmail,
     subject: `Your Custom Hyrox Training Plan - ${eventName}`,
+    text,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background-color: #fadb5c; padding: 20px; text-align: center;">
@@ -68,7 +86,7 @@ export async function sendTrainingPlanEmail(
         <div style="background-color: #000000; padding: 20px; text-align: center; color: #ffffff; font-size: 12px;">
           <p style="margin: 0;">© ${new Date().getFullYear()} HybridX. All rights reserved.</p>
           <p style="margin: 10px 0 0 0;">
-            <a href="https://www.hybridx.com" style="color: #fadb5c; text-decoration: none;">www.hybridx.com</a>
+            <a href="https://hybridx.club" style="color: #fadb5c; text-decoration: none;">hybridx.club</a>
           </p>
         </div>
       </div>
