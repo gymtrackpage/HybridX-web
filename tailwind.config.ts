@@ -17,8 +17,26 @@ export default {
         body: ['var(--font-inter)', 'sans-serif'],
         headline: ['var(--font-space-grotesk)', 'sans-serif'],
         code: ['monospace'],
+        // "Build a Bigger Engine" funnel faces
+        anton: ['var(--font-anton)', 'sans-serif'],
+        archivo: ['var(--font-archivo)', 'sans-serif'],
       },
       colors: {
+        // "Build a Bigger Engine" VO2max funnel palette (scoped, matches the guide + carousel)
+        engine: {
+          ox: '#5C0F1A',       // deep oxblood — dark section backgrounds
+          oxdeep: '#2C0710',   // darkest maroon — gradient floor
+          crimson: '#C1121F',  // primary hero red — buttons, accents
+          crimsonD: '#9E0E1A',
+          heart: '#E63946',    // lively accent — highlights, pulse line on dark
+          paper: '#FBF5EF',    // warm cream — light section backgrounds
+          paper2: '#F5E7E1',
+          blush: '#F7EAE5',    // soft panels / stat tiles
+          ink: '#2A1619',      // primary text on light
+          inkSoft: '#4A3034',  // secondary text on light
+          mutedrose: '#8A7375',
+          line: '#E5D7D1',
+        },
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
