@@ -3,7 +3,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Route, TrendingUp, HeartPulse, Timer, Activity, ArrowRight } from 'lucide-react';
+import { Route, TrendingUp, HeartPulse, Timer, Activity, FileCog, ArrowRight } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 import type { Metadata } from 'next';
@@ -54,6 +54,14 @@ const runningCalculators: CalculatorInfo[] = [
     icon: Timer,
     href: '/calculators/split-time-calculator',
     ctaText: 'Plan My Splits',
+  },
+  {
+    id: 'garmin-tcx-generator',
+    title: 'Treadmill FIT & TCX Generator',
+    description: 'Watch mangled your treadmill intervals? Rebuild the session you actually ran — paces, inclines and real heart rate — and export a FIT or TCX file for Garmin Connect or Strava.',
+    icon: FileCog,
+    href: '/calculators/garmin-tcx-generator',
+    ctaText: 'Rebuild My Session',
   },
   {
     id: 'vdot-calculator',
