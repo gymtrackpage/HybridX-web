@@ -10,6 +10,7 @@ import type { Metadata } from 'next';
 import Footer from '@/components/Footer';
 import ApparelPromotion from '@/components/ApparelPromotion';
 import TrainingPlanShowcase from '@/components/TrainingPlanShowcase';
+import FreeToolsSection from '@/components/FreeToolsSection';
 import Script from 'next/script';
 import { createCourseSchema, createSpeakableSchema } from '@/lib/seo';
 
@@ -102,6 +103,7 @@ export default function Home() {
         <SocialProofSection />
         <TrainingPlanShowcase />
         <AppPromotion />
+        <FreeToolsSection />
         <AmazonBookPromotion />
         <ApparelPromotion />
         <FaqSection />
