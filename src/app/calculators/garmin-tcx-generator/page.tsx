@@ -5,30 +5,32 @@ import TreadmillTcxGeneratorForm from '@/components/calculators/TreadmillTcxGene
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Free Garmin TCX Generator for Treadmill Workouts | HybridX Hub',
+  title: 'Free Garmin FIT & TCX Generator for Treadmill Workouts | HybridX Hub',
   description:
-    'Rebuild treadmill interval sessions your watch mangled. Define intervals, paces and inclines, keep your real heart rate, and export a TCX file Garmin Connect and Strava accept — free and fully in your browser.',
+    'Rebuild treadmill interval sessions your watch mangled. Define intervals, paces and inclines, keep your real heart rate, and export a FIT or TCX file Garmin Connect and Strava accept — free and fully in your browser.',
   keywords: [
+    'fit file generator',
     'tcx generator',
-    'garmin tcx file creator',
+    'garmin fit file creator',
     'treadmill workout garmin connect',
+    'create fit file online',
     'create tcx file online',
     'treadmill interval workout tracker',
     'fix treadmill distance garmin',
     'manual activity file garmin',
   ],
   openGraph: {
-    title: 'Free Garmin TCX Generator for Treadmill Workouts',
+    title: 'Free Garmin FIT & TCX Generator for Treadmill Workouts',
     description:
-      'Rebuild the treadmill session your watch should have recorded and export a TCX file for Garmin Connect or Strava — splits, inclines and real heart rate included.',
+      'Rebuild the treadmill session your watch should have recorded and export a FIT or TCX file for Garmin Connect or Strava — splits, inclines and real heart rate included.',
     url: 'https://hybridx.club/calculators/garmin-tcx-generator',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Free Garmin TCX Generator for Treadmill Workouts',
+    title: 'Free Garmin FIT & TCX Generator for Treadmill Workouts',
     description:
-      'Rebuild the treadmill session your watch mangled and export a Garmin-ready TCX file, real heart rate included.',
+      'Rebuild the treadmill session your watch mangled and export a Garmin-ready FIT or TCX file, real heart rate included.',
   },
 };
 
@@ -40,12 +42,12 @@ export default function GarminTcxGeneratorPage() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-8 md:mb-10">
             <h1 className="text-3xl md:text-4xl font-headline font-bold text-primary mb-3">
-              Treadmill TCX Generator
+              Treadmill FIT &amp; TCX Generator
             </h1>
             <p className="text-lg text-muted-foreground font-body max-w-2xl mx-auto">
               Your watch lost the plot on the treadmill. Rebuild the session it should have recorded — define the
-              intervals, paces and inclines you actually ran, keep your real heart rate, and export a TCX file that
-              Garmin Connect and Strava read as a real running activity, splits and all.
+              intervals, paces and inclines you actually ran, keep your real heart rate, and export a FIT or TCX
+              file that Garmin Connect and Strava read as a real running activity, splits and all.
             </p>
           </div>
 
@@ -74,10 +76,15 @@ export default function GarminTcxGeneratorPage() {
                   Optionally attach the GPX or TCX file your watch recorded: the heart rate and cadence stream is
                   lifted out and re-timed onto the rebuilt session, while its wrong pace and distance are discarded.
                 </li>
-                <li>Check the effort profile and lap splits, set the session name and start time, then export.</li>
+                <li>
+                  Check the effort profile and lap splits, set the session name and start time, then export — FIT is
+                  recommended, since it imports as <em>Treadmill Running</em> automatically; TCX is there for
+                  platforms that can&apos;t read FIT.
+                </li>
                 <li>
                   Upload the file in Garmin Connect via <em>Import Data</em> (top-right cloud icon), or directly to
-                  Strava. Each segment appears as its own lap.
+                  Strava. Each segment appears as its own lap. On a phone, use connect.garmin.com in the browser —
+                  the Garmin Connect app itself doesn&apos;t support file imports.
                 </li>
               </ol>
             </div>
@@ -87,10 +94,20 @@ export default function GarminTcxGeneratorPage() {
                 <div>
                   <h3 className="font-headline font-semibold text-lg mb-1">Will Garmin Connect accept the file?</h3>
                   <p className="text-muted-foreground font-body">
-                    Yes — the export is a standard TCX (Training Center XML) running activity with laps, trackpoints,
-                    speed, elevation, and optional heart rate, the same format Garmin devices have exported for
-                    years. Note that manually imported activities don&apos;t count toward Garmin badges or challenges,
-                    and won&apos;t update device-computed metrics like VO2max.
+                    Yes — the FIT export is built with Garmin&apos;s own FIT SDK and carries laps, trackpoints, speed,
+                    elevation, optional heart rate, and a native treadmill-running activity type. The TCX alternative
+                    is the standard Training Center XML format Garmin devices have exported for years. Note that
+                    manually imported activities don&apos;t count toward Garmin badges or challenges, and won&apos;t
+                    update device-computed metrics like VO2max.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="font-headline font-semibold text-lg mb-1">Should I export FIT or TCX?</h3>
+                  <p className="text-muted-foreground font-body">
+                    FIT, unless you have a reason not to. It&apos;s Garmin&apos;s native binary format: smaller, tagged
+                    as Treadmill Running automatically (TCX can&apos;t express a treadmill type at all), and treated as
+                    first-class by Strava, TrainingPeaks and most other platforms. Choose TCX only for older tools
+                    that can&apos;t read FIT.
                   </p>
                 </div>
                 <div>

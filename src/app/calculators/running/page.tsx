@@ -57,8 +57,8 @@ const runningCalculators: CalculatorInfo[] = [
   },
   {
     id: 'garmin-tcx-generator',
-    title: 'Treadmill TCX Generator',
-    description: 'Watch mangled your treadmill intervals? Rebuild the session you actually ran — paces, inclines and real heart rate — and export a TCX file for Garmin Connect or Strava.',
+    title: 'Treadmill FIT & TCX Generator',
+    description: 'Watch mangled your treadmill intervals? Rebuild the session you actually ran — paces, inclines and real heart rate — and export a FIT or TCX file for Garmin Connect or Strava.',
     icon: FileCog,
     href: '/calculators/garmin-tcx-generator',
     ctaText: 'Rebuild My Session',

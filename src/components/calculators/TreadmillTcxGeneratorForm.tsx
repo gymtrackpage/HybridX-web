@@ -13,12 +13,14 @@ import {
   ArrowUp,
   Download,
   FileHeart,
+  Loader2,
   Plus,
   Repeat as RepeatIcon,
   Trash2,
   UploadCloud,
   X,
 } from 'lucide-react';
+import { generateFit } from '@/lib/fit';
 import { useToast } from '@/hooks/use-toast';
 import {
   type BlockDraft,
@@ -364,6 +366,7 @@ export default function TreadmillTcxGeneratorForm() {
   const [sensor, setSensor] = useState<SensorTrack | null>(null);
   const [sensorAlign, setSensorAlign] = useState<SensorAlign>('stretch');
   const [showSplits, setShowSplits] = useState(false);
+  const [fitExporting, setFitExporting] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const [hydrated, setHydrated] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -530,37 +533,69 @@ export default function TreadmillTcxGeneratorForm() {
 
   const canExport = blocks.length > 0 && totals.timeSec > 0 && !hasErrors;
 
-  const handleExport = () => {
-    if (!canExport) return;
-    const tcx = generateTcx({
-      name: sessionName,
-      startTime: startTime ? new Date(startTime) : new Date(),
-      segments,
-      resolutionSec: parseInt(resolution, 10) || 1,
-      startElevationM: parseFloat(startElev) || 0,
-      sensor,
-      sensorAlign,
-      weightKg: weightKg > 0 ? weightKg : null,
-      route:
-        sessionType === 'outdoor'
-          ? {
-              lat: clamp(parseFloat(anchorLat), -89, 89, 51.014),
-              lon: clamp(parseFloat(anchorLon), -180, 180, -3.0136),
-              radiusM: Math.max(5, parseFloat(loopRadius) || 22),
-            }
-          : null,
-    });
+  const buildActivityOptions = () => ({
+    name: sessionName,
+    startTime: startTime ? new Date(startTime) : new Date(),
+    segments,
+    resolutionSec: parseInt(resolution, 10) || 1,
+    startElevationM: parseFloat(startElev) || 0,
+    sensor,
+    sensorAlign,
+    weightKg: weightKg > 0 ? weightKg : null,
+    route:
+      sessionType === 'outdoor'
+        ? {
+            lat: clamp(parseFloat(anchorLat), -89, 89, 51.014),
+            lon: clamp(parseFloat(anchorLon), -180, 180, -3.0136),
+            radiusM: Math.max(5, parseFloat(loopRadius) || 22),
+          }
+        : null,
+  });
 
-    const blob = new Blob([tcx], { type: 'application/vnd.garmin.tcx+xml' });
+  const downloadFile = (data: BlobPart, mime: string, ext: string) => {
+    const blob = new Blob([data], { type: mime });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     const stamp = new Date().toISOString().slice(0, 10);
     a.href = url;
-    a.download = `${(sessionName || 'treadmill-session').trim().replace(/\s+/g, '_').toLowerCase()}_${stamp}.tcx`;
+    a.download = `${(sessionName || 'treadmill-session').trim().replace(/\s+/g, '_').toLowerCase()}_${stamp}.${ext}`;
     document.body.appendChild(a);
     a.click();
     a.remove();
     URL.revokeObjectURL(url);
+  };
+
+  const handleExportFit = async () => {
+    if (!canExport || fitExporting) return;
+    setFitExporting(true);
+    try {
+      const bytes = await generateFit({
+        ...buildActivityOptions(),
+        treadmill: sessionType === 'treadmill',
+      });
+      // Copy into a fresh Uint8Array so TS sees a plain ArrayBuffer-backed BlobPart
+      downloadFile(new Uint8Array(bytes), 'application/octet-stream', 'fit');
+      toast({
+        title: 'FIT exported',
+        description:
+          sessionType === 'treadmill'
+            ? 'Tagged as Treadmill Running. Upload it at connect.garmin.com via Import Data, or to Strava.'
+            : 'Upload it at connect.garmin.com via Import Data, or straight into Strava.',
+      });
+    } catch (err) {
+      toast({
+        variant: 'destructive',
+        title: 'FIT export failed',
+        description: err instanceof Error ? err.message : 'Something went wrong encoding the file.',
+      });
+    } finally {
+      setFitExporting(false);
+    }
+  };
+
+  const handleExportTcx = () => {
+    if (!canExport) return;
+    downloadFile(generateTcx(buildActivityOptions()), 'application/vnd.garmin.tcx+xml', 'tcx');
     toast({
       title: 'TCX exported',
       description: 'Upload it at connect.garmin.com via Import Data, or straight into Strava.',
@@ -765,9 +800,17 @@ export default function TreadmillTcxGeneratorForm() {
                 </div>
               )}
 
-              <Button type="button" className="w-full py-6 text-base font-headline" disabled={!canExport} onClick={handleExport}>
-                <Download className="mr-2 h-5 w-5" /> Export TCX
+              <Button type="button" className="w-full py-6 text-base font-headline" disabled={!canExport || fitExporting} onClick={handleExportFit}>
+                {fitExporting ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Download className="mr-2 h-5 w-5" />} Export FIT
+                <span className="ml-2 rounded bg-background/20 px-1.5 py-0.5 text-[10px] font-body font-semibold uppercase tracking-wider">recommended</span>
               </Button>
+              <Button type="button" variant="outline" className="w-full font-headline" disabled={!canExport} onClick={handleExportTcx}>
+                <Download className="mr-2 h-4 w-4" /> Export TCX
+              </Button>
+              <p className="text-xs leading-relaxed text-muted-foreground">
+                FIT imports into Garmin Connect as <em>Treadmill Running</em> automatically and is the most reliable
+                format. Use TCX only for platforms that can&apos;t read FIT.
+              </p>
               <p className="text-center font-mono text-xs text-muted-foreground">
                 {!blocks.length || totals.timeSec <= 0
                   ? 'Add at least one segment'
@@ -886,8 +929,8 @@ export default function TreadmillTcxGeneratorForm() {
                   ))}
                 </div>
                 <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
-                  Garmin infers indoor vs outdoor mainly from whether GPS points are present — this choice controls
-                  that.
+                  FIT exports are tagged as treadmill running natively. For TCX, Garmin infers indoor vs outdoor
+                  from whether GPS points are present — this choice controls both.
                 </p>
               </div>
               <div className="grid grid-cols-2 gap-3">

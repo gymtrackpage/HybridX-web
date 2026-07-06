@@ -354,11 +354,11 @@ export function createSensorSampler(points: SensorPoint[]) {
   };
 }
 
-/* ---------------- TCX generation ---------------- */
+/* ---------------- activity simulation (shared by TCX & FIT export) ---------------- */
 
 export type SensorAlign = 'stretch' | 'realtime';
 
-export interface TcxOptions {
+export interface ActivityOptions {
   name: string;
   startTime: Date;
   segments: FlatSegment[];
@@ -374,10 +374,33 @@ export interface TcxOptions {
   route?: { lat: number; lon: number; radiusM: number } | null;
 }
 
-export function generateTcx(opts: TcxOptions): string {
+export interface ActivityPoint {
+  elapsedSec: number;
+  cumDistM: number;
+  elevationM: number;
+  speedMps: number;
+  hr: number | null;
+  cad: number | null;
+  lat: number | null;
+  lon: number | null;
+}
+
+export interface ActivityLap {
+  segment: FlatSegment;
+  startElapsedSec: number;
+  points: ActivityPoint[];
+  calories: number;
+  avgHr: number | null;
+  maxHr: number | null;
+}
+
+/**
+ * Run the workout simulation once: one lap per flattened segment, with
+ * elapsed time, cumulative distance and elevation carried across the whole
+ * activity, sensor data re-timed on, and an optional simulated GPS loop.
+ */
+export function buildActivity(opts: ActivityOptions): ActivityLap[] {
   const {
-    name,
-    startTime,
     segments,
     resolutionSec,
     startElevationM,
@@ -390,9 +413,6 @@ export function generateTcx(opts: TcxOptions): string {
   const totals = computeTotals(segments);
   const hasSensor = !!(sensor && sensor.points.length);
   const sample = hasSensor ? createSensorSampler(sensor.points) : null;
-
-  const isoAt = (elapsedSec: number) =>
-    new Date(startTime.getTime() + elapsedSec * 1000).toISOString().split('.')[0] + 'Z';
 
   const sensorAt = (elapsedSec: number, key: 'hr' | 'cad'): number | null => {
     if (!sample || !sensor) return null;
@@ -408,71 +428,101 @@ export function generateTcx(opts: TcxOptions): string {
   const circumference = route ? 2 * Math.PI * route.radiusM : 0;
   const cosLat = route ? Math.cos((route.lat * Math.PI) / 180) : 1;
 
-  // One lap per flattened segment; elapsed time, cumulative distance and
-  // elevation carry across the whole activity.
   let elapsed = 0;
   let cumDist = 0;
   let elevation = startElevationM;
 
-  const lapXml = segments
-    .map((seg) => {
-      const lapStartElapsed = elapsed;
-      const hrs: number[] = [];
-      const trkpts: string[] = [];
-      let t = 0;
-      while (t < seg.timeSec - 1e-9) {
-        const dt = Math.min(resolutionSec, seg.timeSec - t);
-        const dDist = seg.speedMps * dt;
-        cumDist += dDist;
-        elevation += dDist * (seg.incline / 100);
-        elapsed += dt;
-        t += dt;
+  return segments.map((seg) => {
+    const startElapsedSec = elapsed;
+    const points: ActivityPoint[] = [];
+    const hrs: number[] = [];
+    let t = 0;
+    while (t < seg.timeSec - 1e-9) {
+      const dt = Math.min(resolutionSec, seg.timeSec - t);
+      const dDist = seg.speedMps * dt;
+      cumDist += dDist;
+      elevation += dDist * (seg.incline / 100);
+      elapsed += dt;
+      t += dt;
 
-        const hr = sensorAt(elapsed, 'hr');
-        const cad = sensorAt(elapsed, 'cad');
-        if (hr !== null) hrs.push(hr);
+      const hr = sensorAt(elapsed, 'hr');
+      const cad = sensorAt(elapsed, 'cad');
+      if (hr !== null) hrs.push(hr);
 
-        let posXml = '';
-        if (route) {
-          const wobble = 1.6 * Math.sin(cumDist * 0.045) + 0.9 * Math.sin(cumDist * 0.013 + 1.7);
-          const r = route.radiusM + wobble;
-          const angle = ((cumDist % circumference) / circumference) * 2 * Math.PI;
-          const xM = r * Math.cos(angle);
-          const yM = r * Math.sin(angle);
-          const lat = route.lat + yM / 111320;
-          const lon = route.lon + xM / (111320 * cosLat);
-          posXml = `<Position><LatitudeDegrees>${lat.toFixed(6)}</LatitudeDegrees><LongitudeDegrees>${lon.toFixed(6)}</LongitudeDegrees></Position>`;
-        }
-
-        const tpx =
-          `<Speed>${seg.speedMps.toFixed(3)}</Speed>` +
-          (cad !== null ? `<RunCadence>${Math.round(cad)}</RunCadence>` : '');
-
-        trkpts.push(
-          `<Trackpoint><Time>${isoAt(elapsed)}</Time>${posXml}` +
-            `<AltitudeMeters>${elevation.toFixed(1)}</AltitudeMeters>` +
-            `<DistanceMeters>${cumDist.toFixed(2)}</DistanceMeters>` +
-            (hr !== null ? `<HeartRateBpm><Value>${Math.round(hr)}</Value></HeartRateBpm>` : '') +
-            `<Extensions><TPX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">${tpx}</TPX></Extensions>` +
-            `</Trackpoint>`,
-        );
+      let lat: number | null = null;
+      let lon: number | null = null;
+      if (route) {
+        const wobble = 1.6 * Math.sin(cumDist * 0.045) + 0.9 * Math.sin(cumDist * 0.013 + 1.7);
+        const r = route.radiusM + wobble;
+        const angle = ((cumDist % circumference) / circumference) * 2 * Math.PI;
+        lat = route.lat + (r * Math.sin(angle)) / 111320;
+        lon = route.lon + (r * Math.cos(angle)) / (111320 * cosLat);
       }
 
-      const lapCalories =
-        weightKg && weightKg > 0 ? estimateCalories([seg], weightKg) : 0;
-      const avgHrXml = hrs.length
-        ? `<AverageHeartRateBpm><Value>${Math.round(hrs.reduce((a, b) => a + b, 0) / hrs.length)}</Value></AverageHeartRateBpm>`
-        : '';
-      const maxHrXml = hrs.length
-        ? `<MaximumHeartRateBpm><Value>${Math.round(Math.max(...hrs))}</Value></MaximumHeartRateBpm>`
-        : '';
+      points.push({
+        elapsedSec: elapsed,
+        cumDistM: cumDist,
+        elevationM: elevation,
+        speedMps: seg.speedMps,
+        hr,
+        cad,
+        lat,
+        lon,
+      });
+    }
+
+    return {
+      segment: seg,
+      startElapsedSec,
+      points,
+      calories: weightKg && weightKg > 0 ? estimateCalories([seg], weightKg) : 0,
+      avgHr: hrs.length ? Math.round(hrs.reduce((a, b) => a + b, 0) / hrs.length) : null,
+      maxHr: hrs.length ? Math.round(Math.max(...hrs)) : null,
+    };
+  });
+}
+
+/* ---------------- TCX generation ---------------- */
+
+export function generateTcx(opts: ActivityOptions): string {
+  const { name, startTime } = opts;
+  const laps = buildActivity(opts);
+
+  const isoAt = (elapsedSec: number) =>
+    new Date(startTime.getTime() + elapsedSec * 1000).toISOString().split('.')[0] + 'Z';
+
+  const lapXml = laps
+    .map((lap) => {
+      const seg = lap.segment;
+      const trkpts = lap.points.map((p) => {
+        const posXml =
+          p.lat !== null && p.lon !== null
+            ? `<Position><LatitudeDegrees>${p.lat.toFixed(6)}</LatitudeDegrees><LongitudeDegrees>${p.lon.toFixed(6)}</LongitudeDegrees></Position>`
+            : '';
+        const tpx =
+          `<Speed>${p.speedMps.toFixed(3)}</Speed>` +
+          (p.cad !== null ? `<RunCadence>${Math.round(p.cad)}</RunCadence>` : '');
+        return (
+          `<Trackpoint><Time>${isoAt(p.elapsedSec)}</Time>${posXml}` +
+          `<AltitudeMeters>${p.elevationM.toFixed(1)}</AltitudeMeters>` +
+          `<DistanceMeters>${p.cumDistM.toFixed(2)}</DistanceMeters>` +
+          (p.hr !== null ? `<HeartRateBpm><Value>${Math.round(p.hr)}</Value></HeartRateBpm>` : '') +
+          `<Extensions><TPX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">${tpx}</TPX></Extensions>` +
+          `</Trackpoint>`
+        );
+      });
+
+      const avgHrXml =
+        lap.avgHr !== null ? `<AverageHeartRateBpm><Value>${lap.avgHr}</Value></AverageHeartRateBpm>` : '';
+      const maxHrXml =
+        lap.maxHr !== null ? `<MaximumHeartRateBpm><Value>${lap.maxHr}</Value></MaximumHeartRateBpm>` : '';
 
       return (
-        `<Lap StartTime="${isoAt(lapStartElapsed)}">` +
+        `<Lap StartTime="${isoAt(lap.startElapsedSec)}">` +
         `<TotalTimeSeconds>${seg.timeSec.toFixed(1)}</TotalTimeSeconds>` +
         `<DistanceMeters>${seg.distanceM.toFixed(2)}</DistanceMeters>` +
         `<MaximumSpeed>${seg.speedMps.toFixed(3)}</MaximumSpeed>` +
-        `<Calories>${lapCalories}</Calories>` +
+        `<Calories>${lap.calories}</Calories>` +
         avgHrXml +
         maxHrXml +
         `<Intensity>Active</Intensity>` +
