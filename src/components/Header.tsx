@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle } from '@/components/ui/sheet';
-import { Menu, LogIn, ChevronDown, ListChecks, Dumbbell, ClipboardList, ArrowUpRight, ShoppingCart, BookOpen, BookMarked, Activity } from 'lucide-react';
+import { Menu, LogIn, ChevronDown, ListChecks, Dumbbell, ClipboardList, ArrowUpRight, ShoppingCart, BookOpen, BookMarked, Activity, FileCog } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -56,6 +56,7 @@ const navItems: NavItem[] = [
     items: [
       { label: 'Running Calculators', href: '/calculators/running', icon: <ListChecks className="mr-2 h-5 w-5" /> },
       { label: 'VDOT Calculator', href: '/vdot', icon: <Activity className="mr-2 h-5 w-5" /> },
+      { label: 'Treadmill FIT/TCX Generator', href: '/calculators/garmin-tcx-generator', icon: <FileCog className="mr-2 h-5 w-5" /> },
       { label: 'Strength Calculators', href: '/calculators/strength', icon: <Dumbbell className="mr-2 h-5 w-5" /> },
       { label: 'General Health Calculators', href: '/calculators/general-health', icon: <ClipboardList className="mr-2 h-5 w-5" /> },
     ]
@@ -130,7 +131,7 @@ export default function Header() {
                 <span className="sr-only">Toggle Menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[320px] bg-background p-6 border-l-border/60">
+            <SheetContent side="right" className="w-[300px] sm:w-[320px] bg-background p-6 border-l-border/60 overflow-y-auto">
                <div className="flex justify-between items-center mb-6">
                  <Link href="/" className="flex items-center space-x-2">
                     <Image
