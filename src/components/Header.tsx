@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ThemeToggleButton } from '@/components/ThemeToggleButton';
+import TrackedLink from '@/components/TrackedLink';
 
 interface NavItem {
   label: string;
@@ -106,13 +107,15 @@ export default function Header() {
               </DropdownMenu>
             ) : (
               <Button key={item.label} variant="ghost" asChild className="transition-colors hover:bg-accent focus:bg-accent text-foreground/80 hover:text-accent-foreground focus:text-accent-foreground font-body px-2 lg:px-3 py-2 text-sm group">
-                <Link 
+                <TrackedLink
                   href={item.href!}
                   {...(item.href?.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                  event={item.href?.startsWith('http') ? 'cta_app_click' : undefined}
+                  eventParams={{ location: 'header_nav', label: item.label }}
                 >
                   {item.icon} {item.label}
                   {item.href?.startsWith('http') && <ArrowUpRight className="ml-1 h-4 w-4 text-muted-foreground/80 group-hover:text-accent-foreground" />}
-                </Link>
+                </TrackedLink>
               </Button>
             )
           ))}
@@ -120,9 +123,15 @@ export default function Header() {
         <div className="flex flex-1 items-center justify-end space-x-2">
           <ThemeToggleButton />
           <Button className="hidden md:inline-flex bg-accent text-accent-foreground hover:bg-accent/90 font-headline" asChild>
-            <Link href="https://app.hybridx.club" target="_blank" rel="noopener noreferrer">
+            <TrackedLink
+              href="https://app.hybridx.club"
+              target="_blank"
+              rel="noopener noreferrer"
+              event="cta_app_click"
+              eventParams={{ location: 'header_signup' }}
+            >
               <LogIn className="mr-2 h-4 w-4" /> Sign Up
-            </Link>
+            </TrackedLink>
           </Button>
           <Sheet>
             <SheetTrigger asChild>
@@ -174,16 +183,18 @@ export default function Header() {
                     </React.Fragment>
                   ) : (
                     <SheetClose asChild key={`${item.label}-mobile`}>
-                      <Link
+                      <TrackedLink
                         href={item.href!}
                         {...(item.href?.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                        event={item.href?.startsWith('http') ? 'cta_app_click' : undefined}
+                        eventParams={{ location: 'header_nav_mobile', label: item.label }}
                         className="flex items-center justify-between rounded-md px-3 py-3 transition-colors hover:bg-accent/10 text-base font-headline text-foreground/90 group"
                       >
                         <span className="flex items-center">
                           {item.icon} {item.label}
                         </span>
                         {item.href?.startsWith('http') && <ArrowUpRight className="h-5 w-5 text-muted-foreground/60 group-hover:text-accent" />}
-                      </Link>
+                      </TrackedLink>
                     </SheetClose>
                   )
                 )}
@@ -193,9 +204,15 @@ export default function Header() {
                 </div>
                 <SheetClose asChild>
                   <Button className="bg-accent text-accent-foreground hover:bg-accent/90 mt-4 py-3 text-base font-headline w-full" asChild>
-                    <Link href="https://app.hybridx.club" target="_blank" rel="noopener noreferrer">
+                    <TrackedLink
+                      href="https://app.hybridx.club"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      event="cta_app_click"
+                      eventParams={{ location: 'header_signup_mobile' }}
+                    >
                        <LogIn className="mr-2 h-5 w-5" /> Sign Up
-                    </Link>
+                    </TrackedLink>
                   </Button>
                 </SheetClose>
               </nav>

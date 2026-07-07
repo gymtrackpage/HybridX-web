@@ -3,6 +3,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import TrackedLink from '@/components/TrackedLink';
 import Script from 'next/script';
 import type { Metadata } from 'next';
 import { createCourseSchema, createFAQSchema } from '@/lib/seo';
@@ -345,7 +346,7 @@ export default function HyroxTrainingPlan() {
               </Link>
             </div>
             <p className="text-sm text-muted-foreground font-body mt-5">
-              Or <Link href="https://app.hybridx.club" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline font-semibold">use the HybridX app</Link> — every session tracked, adaptive training, and coaching for £5/month.
+              Or <TrackedLink href="https://app.hybridx.club" target="_blank" rel="noopener noreferrer" event="cta_app_click" eventParams={{ location: 'guide_training_plan' }} className="text-accent hover:underline font-semibold">use the HybridX app</TrackedLink> — every session tracked, adaptive training, and coaching for £5/month.
             </p>
           </div>
         </section>
@@ -364,7 +365,7 @@ export default function HyroxTrainingPlan() {
                 <Link href="/free-hyrox-plan"><Download className="mr-2 h-5 w-5" /> Download the Free Plan <ArrowRight className="ml-2 h-5 w-5" /></Link>
               </Button>
               <Button size="lg" variant="outline" className="bg-transparent border-white/30 text-white hover:bg-white/10 hover:text-white font-headline text-lg px-8 py-6" asChild>
-                <Link href="https://app.hybridx.club" target="_blank" rel="noopener noreferrer">Use the App — £5/mo</Link>
+                <TrackedLink href="https://app.hybridx.club" target="_blank" rel="noopener noreferrer" event="cta_app_click" eventParams={{ location: 'guide_training_plan_final' }}>Use the App — £5/mo</TrackedLink>
               </Button>
             </div>
           </div>
