@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/privacy-policy' },
   title: 'Privacy Policy | HybridX Hub',
   description: 'Learn how HybridX Hub collects, uses, and protects your personal information and activity data.',
 };

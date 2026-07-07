@@ -9,6 +9,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/calculators' },
   title: 'Free Fitness & Health Calculators | HybridX Hub',
   description: 'A comprehensive suite of free calculators for running, strength training, and general health. Calculate your pace, 1RM, body fat, and more to optimize your fitness journey.',
   keywords: [

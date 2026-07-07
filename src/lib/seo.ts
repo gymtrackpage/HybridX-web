@@ -21,7 +21,7 @@ export const SITE_CONFIG = {
   name: 'HybridX Hub',
   description: 'Expert Hyrox training plans and hybrid workout programs. Master Hyrox competitions with scientifically-backed training plans, books, and coaching app. Free fitness calculators.',
   url: getBaseUrl(),
-  ogImage: '/Icon Logo.png', // Update with your OG image path
+  ogImage: '/og-default.png',
   links: {
     twitter: 'https://twitter.com/hybridxhub', // Update with your Twitter
     instagram: 'https://instagram.com/hybridx.club', // Update with your Instagram
@@ -346,7 +346,7 @@ export function createArticleSchema({
         url: `${SITE_CONFIG.url}/Icon Logo.png`,
       },
     },
-    image: `${SITE_CONFIG.url}/Icon Logo.png`,
+    image: `${SITE_CONFIG.url}/og-default.png`,
     inLanguage: 'en-GB',
     about: [
       { '@type': 'Thing', name: 'Hyrox' },

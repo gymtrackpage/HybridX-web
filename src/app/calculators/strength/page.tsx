@@ -9,6 +9,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/calculators/strength' },
   title: 'Free Strength Calculators (1RM, Percentage, Wilks) | HybridX Hub',
   description: 'A suite of free strength calculators for athletes. Estimate your one-rep max, calculate percentage-based training weights, and determine your powerlifting score.',
 };

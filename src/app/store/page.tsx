@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/store' },
   title: 'HybridX Store | Training Gear and Apparel',
   description: 'Shop official HybridX training gear, apparel, and accessories. Get equipped to dominate your training and races.',
   keywords: [

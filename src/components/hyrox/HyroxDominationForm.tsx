@@ -7,7 +7,8 @@ import { signUpForTrainingPlan, type SignUpFormState } from '@/app/free-hyrox-pl
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
+import { Loader2, CheckCircle2, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
   Form,
@@ -97,6 +98,7 @@ export default function HyroxDominationForm({ initialEvents = [] }: HyroxDominat
   const [selectedEvent, setSelectedEvent] = useState<HyroxEvent | null>(null);
   const [availableDates, setAvailableDates] = useState<string[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [completed, setCompleted] = useState(false);
   const leadFiredRef = useRef(false);
 
   // zod validation for client side
@@ -218,6 +220,7 @@ export default function HyroxDominationForm({ initialEvents = [] }: HyroxDominat
           setAvailableDates([]);
         } finally {
           setIsGenerating(false);
+          setCompleted(true);
         }
       };
 
@@ -226,6 +229,48 @@ export default function HyroxDominationForm({ initialEvents = [] }: HyroxDominat
     // Only depend on state to avoid infinite loop when form resets
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
+
+  // Success state: this is the highest-intent moment on the site — show the
+  // download confirmation and the app trial CTA instead of an empty form.
+  if (completed) {
+    return (
+      <div className="text-center py-4" role="status" aria-live="polite">
+        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-green-500/15">
+          <CheckCircle2 className="h-8 w-8 text-green-500" />
+        </div>
+        <h3 className="font-headline text-2xl font-bold text-primary mb-2">Your plan is downloading</h3>
+        <p className="font-body text-muted-foreground mb-1">
+          Check your downloads for the PDF and the <span className="font-semibold">.ics</span> calendar file —
+          open the .ics to add all 12 weeks to your phone or computer&apos;s calendar.
+        </p>
+        <p className="font-body text-sm text-muted-foreground/80 mb-6">A copy is also on its way to your inbox.</p>
+
+        <div className="rounded-xl border border-accent/40 bg-accent/10 p-5 text-left">
+          <p className="font-headline font-bold text-primary mb-1">Want it guided, day by day?</p>
+          <p className="font-body text-sm text-muted-foreground mb-4">
+            The app delivers this plan one session at a time, tracks every rep and run, and adapts as you go.
+            First month free — cancel anytime.
+          </p>
+          <Button asChild className="w-full bg-accent text-accent-foreground hover:bg-accent/90 font-headline">
+            <Link
+              href="/app"
+              onClick={() => trackEvent('cta_app_click', { location: 'free_plan_success' })}
+            >
+              Try the App Free <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setCompleted(false)}
+          className="mt-4 text-sm text-muted-foreground hover:text-accent underline underline-offset-2 font-body"
+        >
+          Generate another plan
+        </button>
+      </div>
+    );
+  }
 
   return (
     <Form {...form}>

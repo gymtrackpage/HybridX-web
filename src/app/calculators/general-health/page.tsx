@@ -9,6 +9,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/calculators/general-health' },
   title: 'Free Health Calculators (Body Fat, Calories) | HybridX Hub',
   description: 'A suite of free health calculators to understand body composition, daily calorie needs, and macronutrient targets for your fitness and nutrition goals.',
 };

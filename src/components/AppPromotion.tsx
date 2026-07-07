@@ -50,7 +50,6 @@ export default function AppPromotion() {
                 height={718}
                 className="object-cover w-full h-full"
                 sizes="(max-width: 767px) 100vw, 50vw"
-                priority
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
             </div>

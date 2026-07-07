@@ -7,6 +7,7 @@ import CalculatorCTA from '@/components/calculators/CalculatorCTA';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/calculators/race-time-predictor' },
   title: 'Free Race Time Predictor (5k, 10k, Marathon) | HybridX Hub',
   description: 'Free Race Time Predictor. Estimate your finish times for a 5k, 10k, half marathon, or full marathon based on a recent performance.',
 };

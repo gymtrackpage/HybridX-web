@@ -7,6 +7,7 @@ import CalculatorCTA from '@/components/calculators/CalculatorCTA';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/calculators/pace-calculator' },
   title: 'Free Pace Calculator for Running | HybridX Hub',
   description: 'Easily calculate your running pace, finish time, or distance with our free Pace Calculator. Perfect for marathon, 10k, and 5k training.',
 };

@@ -7,6 +7,7 @@ import CalculatorCTA from '@/components/calculators/CalculatorCTA';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/calculators/heart-rate-zone-calculator' },
   title: 'Free Heart Rate Zone Calculator | HybridX Hub',
   description: 'Find your optimal training zones with our free Heart Rate Zone Calculator. Uses the Karvonen formula for accurate cardio and running training.',
 };

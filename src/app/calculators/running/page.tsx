@@ -9,6 +9,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/calculators/running' },
   title: 'Free Running Calculators (Pace, Race Time, Splits) | HybridX Hub',
   description: 'A suite of free, essential running calculators. Plan your pace, predict race times for 5k to marathon, find heart rate zones, and strategize your race splits.',
 };

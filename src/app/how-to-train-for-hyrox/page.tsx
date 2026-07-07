@@ -363,7 +363,7 @@ export default function HowToTrainForHyrox() {
         <section className="py-14 md:py-16 bg-secondary/30">
           <div className="container mx-auto px-6 max-w-4xl">
             <h2 className="text-xl font-headline font-bold text-primary mb-6">Read Next</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <Link href="/free-hyrox-plan" className="group bg-card border border-border hover:border-accent/50 rounded-xl p-5 transition-colors">
                 <p className="text-xs font-headline font-bold text-accent uppercase tracking-wider mb-2">Free Tool</p>
                 <h3 className="font-headline font-bold text-primary text-base mb-1 group-hover:text-accent transition-colors">Free Personalised Hyrox Plan Generator</h3>
@@ -378,6 +378,11 @@ export default function HowToTrainForHyrox() {
                 <p className="text-xs font-headline font-bold text-accent uppercase tracking-wider mb-2">Methodology</p>
                 <h3 className="font-headline font-bold text-primary text-base mb-1 group-hover:text-accent transition-colors">Hybrid Athlete Training Program</h3>
                 <p className="text-muted-foreground font-body text-sm leading-snug">The science behind combining strength and endurance — and why it is the foundation of Hyrox performance.</p>
+              </Link>
+              <Link href="/build-a-bigger-engine" className="group bg-card border border-border hover:border-accent/50 rounded-xl p-5 transition-colors">
+                <p className="text-xs font-headline font-bold text-accent uppercase tracking-wider mb-2">Free Guide</p>
+                <h3 className="font-headline font-bold text-primary text-base mb-1 group-hover:text-accent transition-colors">Build a Bigger Engine: VO2max</h3>
+                <p className="text-muted-foreground font-body text-sm leading-snug">The science of raising your VO2max — the aerobic ceiling behind every Hyrox run.</p>
               </Link>
             </div>
             <p className="text-sm text-muted-foreground font-body mt-5">

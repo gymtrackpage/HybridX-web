@@ -1,7 +1,7 @@
 
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Route, TrendingUp, HeartPulse, Activity, Dumbbell, FileCog, ArrowRight, Calculator } from 'lucide-react';
+import { Route, TrendingUp, HeartPulse, Activity, Dumbbell, FileCog, ArrowRight, Calculator, Gauge, Footprints } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 
@@ -57,6 +57,21 @@ const tools: Tool[] = [
     description: 'Estimate your one-rep max from any set and load your strength sessions with the right percentages.',
     icon: Dumbbell,
     href: '/calculators/one-rep-max-calculator',
+  },
+  {
+    id: 'vo2max-guide',
+    title: 'VO2max Guide: Build a Bigger Engine',
+    description: 'The science of raising your VO2max — Norwegian 4x4s, the 80/20 rule, and a sample week. Free guide.',
+    icon: Gauge,
+    href: '/build-a-bigger-engine',
+    isNew: true,
+  },
+  {
+    id: 'running-plan',
+    title: '12-Week Running Plan for Hyrox',
+    description: 'A free interactive week-by-week running plan built for Hyrox — threshold, intervals, and compromised running.',
+    icon: Footprints,
+    href: '/12-week-running-hyrox',
   },
 ];
 

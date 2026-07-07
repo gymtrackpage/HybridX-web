@@ -7,6 +7,7 @@ import CalculatorCTA from '@/components/calculators/CalculatorCTA';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/calculators/percentage-based-weight-calculator' },
   title: 'Free Percentage-Based Weight Calculator | HybridX Hub',
   description: 'Calculate specific training weights with our free Percentage-Based Weight Calculator. Perfect for programming based on your 1RM.',
 };
