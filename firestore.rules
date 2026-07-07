@@ -1,0 +1,13 @@
+rules_version = '2';
+
+// All reads/writes to `leads` go through the Admin SDK on the server
+// (server actions + /admin/leads, both gated by the ADMIN_EMAILS allow-list).
+// No client ever talks to Firestore directly, so client access is denied
+// entirely as a defense-in-depth default.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

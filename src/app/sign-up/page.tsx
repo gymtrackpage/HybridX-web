@@ -1,58 +1,30 @@
 
 'use client';
 
-import { useState, FormEvent } from 'react';
+import { useActionState, useEffect, useRef } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import { trackEvent } from '@/lib/analytics';
+import { subscribeToNewsletter, type SubscribeState } from './actions';
 
-// This is the URL for your deployed Apps Script Web App
-const SCRIPT_URL = 'https://script.google.com/a/macros/hybridx.club/s/AKfycbxCDBD1B5-1p2fF4_VJs2SCX2HdQm9V3PkWNEr2gn-1_Pedu2ogLmrciyze2iz_LWL4/exec';
-
+const initialState: SubscribeState = { status: 'idle', message: '' };
 
 export default function SignUpPage() {
-    const [firstName, setFirstName] = useState('');
-    const [email, setEmail] = useState('');
-    const [status, setStatus] = useState('idle'); // 'idle', 'loading', 'success', 'error'
-    const [message, setMessage] = useState('');
+    const [state, formAction, isPending] = useActionState(subscribeToNewsletter, initialState);
+    const trackedRef = useRef<SubscribeState['status'] | null>(null);
 
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setStatus('loading');
-        setMessage('');
-
-        try {
-            await fetch(SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors', // Essential for cross-origin requests to Apps Script
-                headers: {
-                  // This header is important, but be aware 'no-cors' mode might restrict it.
-                  // The key part is sending the data in the format the script expects.
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  firstName,
-                  email,
-                }),
-            });
-            
-            // In 'no-cors' mode, we cannot read the response. We assume success if no error is thrown.
-            setStatus('success');
-            setMessage('Thank you for subscribing! Your first email is on its way.');
+    useEffect(() => {
+        if (state.status === trackedRef.current) return;
+        trackedRef.current = state.status;
+        if (state.status === 'success') {
             trackEvent('generate_lead', { placement: 'sign_up_page', currency: 'GBP', value: 0 });
-
-        } catch (error) {
-            setStatus('error');
-            const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
-            setMessage(`An error occurred: ${errorMessage}. Please try again later.`);
-            trackEvent('lead_submit_error', { placement: 'sign_up_page', message: errorMessage });
-            console.error('Submission Error:', error);
+        } else if (state.status === 'error') {
+            trackEvent('lead_submit_error', { placement: 'sign_up_page', message: state.message });
         }
-    };
-
+    }, [state]);
 
   return (
     <div className="flex flex-col min-h-screen bg-black text-white font-body">
@@ -68,57 +40,53 @@ export default function SignUpPage() {
                 <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-10">
                     For the hybrid athlete who knows their performance is being limited by a generic PDF. Get the elite structure you need, powered by an AI coach that provides the personalized guidance you've been missing.
                 </p>
-                
-                {status !== 'success' && (
+
+                {state.status !== 'success' && (
                     <div id="signup-form-container" className="bg-[#1a1a1a] p-8 rounded-lg max-w-md mx-auto">
                         <p className="text-center font-semibold text-white mb-4">
                             Get exclusive insights and early access to the app that adapts to you.
                         </p>
-                        <form onSubmit={handleSubmit} className="space-y-4">
+                        <form action={formAction} className="space-y-4">
                             <Input
                                 type="text"
                                 id="firstName"
                                 name="firstName"
-                                value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
                                 className="w-full p-6 text-base rounded-md border border-gray-700 bg-gray-800 text-white placeholder-gray-500 focus:ring-yellow-400 focus:border-yellow-400"
                                 placeholder="Your First Name"
                                 required
-                                disabled={status === 'loading'}
+                                disabled={isPending}
                             />
                             <Input
                                 type="email"
                                 id="email"
                                 name="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
                                 className="w-full p-6 text-base rounded-md border border-gray-700 bg-gray-800 text-white placeholder-gray-500 focus:ring-yellow-400 focus:border-yellow-400"
                                 placeholder="Your Best Email Address"
                                 required
-                                disabled={status === 'loading'}
+                                disabled={isPending}
                             />
                             <Button
                                 type="submit"
                                 id="submit-button"
                                 className="w-full p-6 text-lg font-semibold bg-yellow-400 text-black rounded-md hover:bg-yellow-500 transition-colors duration-200 disabled:bg-gray-600 disabled:cursor-not-allowed"
-                                disabled={status === 'loading'}
+                                disabled={isPending}
                             >
-                                {status === 'loading' ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> SUBMITTING...</> : 'GET EARLY ACCESS'}
+                                {isPending ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> SUBMITTING...</> : 'GET EARLY ACCESS'}
                             </Button>
                         </form>
                         <p className="text-xs text-gray-500 opacity-70 mt-4">*100% free. No spam. Unsubscribe anytime.*</p>
                     </div>
                 )}
-                
-                {status === 'success' && (
+
+                {state.status === 'success' && (
                     <div id="success-message" className="bg-[#1a1a1a] p-8 rounded-lg max-w-md mx-auto">
                         <h3 className="text-2xl font-headline font-bold text-yellow-400">Thank You!</h3>
-                        <p className="text-white mt-2">{message}</p>
+                        <p className="text-white mt-2">{state.message}</p>
                     </div>
                 )}
 
-                 {status === 'error' && (
-                    <p className="text-red-500 mt-4">{message}</p>
+                 {state.status === 'error' && (
+                    <p className="text-red-500 mt-4">{state.message}</p>
                  )}
 
             </div>

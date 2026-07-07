@@ -2,6 +2,8 @@
 'use server';
 
 import { z } from 'zod';
+import { headers } from 'next/headers';
+import { saveLead } from '@/lib/leads';
 
 const SignUpSchema = z.object({
   name: z.string().min(2, { message: 'Please enter your name.' }),
@@ -13,6 +15,10 @@ const SignUpSchema = z.object({
 export type SignUpFormState = {
   message: string;
   type: 'success' | 'error' | '';
+  /** Whether the lead was actually recorded. The PDF is generated client-side
+   * regardless, so a storage failure here must not block delivery — but it
+   * must not be silently invisible either. */
+  leadSaved?: boolean;
 };
 
 export async function signUpForTrainingPlan(
@@ -34,40 +40,29 @@ export async function signUpForTrainingPlan(
   }
 
   const { name, email, event, eventDate } = validatedFields.data;
-  const scriptUrl = process.env.NEXT_PUBLIC_HYROX_SCRIPT_URL;
 
-  if (!scriptUrl) {
-    console.error('Google Apps Script URL is not defined in environment variables.');
-    return {
-      message: 'Server configuration error. Could not process signup.',
-      type: 'error',
-    };
-  }
+  const hdrs = await headers();
+  const ip = hdrs.get('x-forwarded-for')?.split(',')[0]?.trim() || hdrs.get('x-real-ip') || 'unknown';
+  const userAgent = hdrs.get('user-agent') || '';
 
+  let leadSaved = true;
   try {
-    // Send data to Google Apps Script
-    await fetch(scriptUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name, email, event, eventDate }),
-      // We don't wait for the response to make the UX faster.
-      // The Apps Script will handle the rest.
+    await saveLead({
+      source: 'free_hyrox_plan',
+      email,
+      name,
+      extra: { event, eventDate },
+      ip,
+      userAgent,
     });
-
-    return {
-      message: "Success! Your PDF and Calendar files are downloading. Find the '.ics' file and open it to add the full 12-week plan to your phone or computer's calendar (Google, Apple, Outlook).",
-      type: 'success',
-    };
-
   } catch (error) {
-    console.error('Error sending data to Google Sheet:', error);
-    // Even if the sheet fails, we can still proceed with the PDF download for the user
-    // You might want to add more robust error handling here, like logging to a dedicated service.
-    return {
-      message: "Success! Your PDF & Calendar files are downloading. Find the '.ics' file to add the plan to your calendar. (Note: There was an issue saving to our sheet.)",
-      type: 'success', // Still a success for the user
-    };
+    leadSaved = false;
+    console.error('[free-hyrox-plan] Failed to save lead:', error);
   }
+
+  return {
+    message: "Success! Your PDF and Calendar files are downloading. Find the '.ics' file and open it to add the full 12-week plan to your phone or computer's calendar (Google, Apple, Outlook).",
+    type: 'success',
+    leadSaved,
+  };
 }

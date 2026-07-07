@@ -159,7 +159,12 @@ export default function HyroxDominationForm({ initialEvents = [] }: HyroxDominat
   useEffect(() => {
     if (state.type === 'success' && !leadFiredRef.current) {
       leadFiredRef.current = true;
-      trackEvent('generate_lead', { placement: 'free_hyrox_plan', currency: 'GBP', value: 0 });
+      if (state.leadSaved !== false) {
+        trackEvent('generate_lead', { placement: 'free_hyrox_plan', currency: 'GBP', value: 0 });
+      } else {
+        // PDF still downloads for the user, but the backend record failed to save.
+        trackEvent('lead_storage_failed', { placement: 'free_hyrox_plan' });
+      }
     }
     if (state.type === 'error' && state.message) {
       trackEvent('lead_submit_error', { placement: 'free_hyrox_plan', message: state.message });
