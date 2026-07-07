@@ -2,7 +2,13 @@ import { cookies } from 'next/headers';
 import { adminAuth } from '@/lib/firebase-admin';
 
 export const ADMIN_SESSION_COOKIE = 'admin_session';
-const SESSION_EXPIRES_IN_MS = 5 * 24 * 60 * 60 * 1000; // 5 days
+
+// Firebase ID tokens are valid for 1 hour; store the token itself (verified
+// via verifyIdToken, which needs no special IAM grant) rather than a Firebase
+// "session cookie" (which requires signBlob / Service Account Token Creator
+// permission on the backend's service account to mint). Set the cookie to
+// expire a little before the token actually does, to be safe.
+const SESSION_EXPIRES_IN_MS = 55 * 60 * 1000; // 55 minutes
 
 function getAllowedEmails(): string[] {
   return (process.env.ADMIN_EMAILS || '')
@@ -16,14 +22,14 @@ export interface AdminSession {
   email: string;
 }
 
-/** Verifies the session cookie and checks the email allow-list. Returns null if not a valid admin. */
+/** Verifies the stored ID token and checks the email allow-list. Returns null if not a valid admin. */
 export async function getAdminSession(): Promise<AdminSession | null> {
   const cookieStore = await cookies();
-  const sessionCookie = cookieStore.get(ADMIN_SESSION_COOKIE)?.value;
-  if (!sessionCookie) return null;
+  const idToken = cookieStore.get(ADMIN_SESSION_COOKIE)?.value;
+  if (!idToken) return null;
 
   try {
-    const decoded = await adminAuth.verifySessionCookie(sessionCookie, true);
+    const decoded = await adminAuth.verifyIdToken(idToken);
     const email = (decoded.email || '').toLowerCase();
     const allowed = getAllowedEmails();
     if (!email || !allowed.includes(email)) return null;
@@ -39,8 +45,7 @@ export async function createAdminSessionCookie(idToken: string): Promise<{ cooki
   const allowed = getAllowedEmails();
   if (!email || !allowed.includes(email)) return null;
 
-  const cookie = await adminAuth.createSessionCookie(idToken, { expiresIn: SESSION_EXPIRES_IN_MS });
-  return { cookie, email };
+  return { cookie: idToken, email };
 }
 
 export { SESSION_EXPIRES_IN_MS };
