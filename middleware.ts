@@ -37,7 +37,7 @@ export function middleware(request: NextRequest) {
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: https: http:",
     "font-src 'self' data:",
-    "connect-src 'self' https://*.google-analytics.com https://www.google-analytics.com https://app.ecwid.com https://script.google.com",
+    "connect-src 'self' https://*.google-analytics.com https://www.google-analytics.com https://app.ecwid.com https://script.google.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com",
     "frame-src 'self' https://app.ecwid.com https://script.google.com",
     "object-src 'none'",
     "base-uri 'self'",
