@@ -3,6 +3,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CalorieMacronutrientCalculatorForm from '@/components/calculators/CalorieMacronutrientCalculatorForm';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import CalculatorCTA from '@/components/calculators/CalculatorCTA';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -27,6 +28,7 @@ export default function CalorieMacronutrientCalculatorPage() {
               <CalorieMacronutrientCalculatorForm />
             </CardContent>
           </Card>
+          <CalculatorCTA calculator="calorie-macronutrient-calculator" />
         </div>
       </main>
       <Footer />

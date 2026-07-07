@@ -32,7 +32,7 @@ interface SubNavItem {
 
 const navItems: NavItem[] = [
   { label: 'Free Hyrox Plan', href: '/free-hyrox-plan' },
-  { label: 'Our App', href: 'https://app.hybridx.club' },
+  { label: 'Our App', href: '/app' },
   {
     label: 'Guides',
     isDropdown: true,
@@ -110,7 +110,7 @@ export default function Header() {
                 <TrackedLink
                   href={item.href!}
                   {...(item.href?.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                  event={item.href?.startsWith('http') ? 'cta_app_click' : undefined}
+                  event={item.href === '/app' || item.href?.startsWith('http') ? 'cta_app_click' : undefined}
                   eventParams={{ location: 'header_nav', label: item.label }}
                 >
                   {item.icon} {item.label}
@@ -186,7 +186,7 @@ export default function Header() {
                       <TrackedLink
                         href={item.href!}
                         {...(item.href?.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                        event={item.href?.startsWith('http') ? 'cta_app_click' : undefined}
+                        event={item.href === '/app' || item.href?.startsWith('http') ? 'cta_app_click' : undefined}
                         eventParams={{ location: 'header_nav_mobile', label: item.label }}
                         className="flex items-center justify-between rounded-md px-3 py-3 transition-colors hover:bg-accent/10 text-base font-headline text-foreground/90 group"
                       >

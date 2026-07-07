@@ -29,9 +29,9 @@ const trainingOptions = [
     price: "£5/mo",
     description: "The most affordable training app on the market. Daily workouts, tracking, and more. First month free.",
     cta: "Explore The App",
-    href: "https://app.hybridx.club",
+    href: "/app",
     variant: "default" as const,
-    isExternal: true,
+    isExternal: false,
   }
 ];
 
@@ -139,7 +139,7 @@ export default function HeroSection() {
                     <TrackedLink
                       href={option.href}
                       target={option.isExternal ? '_blank' : '_self'}
-                      event={option.isExternal ? 'cta_app_click' : undefined}
+                      event={option.href.includes('app.hybridx.club') || option.href === '/app' ? 'cta_app_click' : undefined}
                       eventParams={{ location: 'hero' }}
                     >
                       {option.cta} <ArrowRight className="ml-2 h-4 w-4" />

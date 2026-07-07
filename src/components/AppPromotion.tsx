@@ -1,7 +1,7 @@
 
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Smartphone, CheckCircle, BarChart2, Zap, ArrowUpRight } from 'lucide-react';
+import { Smartphone, CheckCircle, BarChart2, Zap, ArrowRight } from 'lucide-react';
 import TrackedLink from '@/components/TrackedLink';
 
 const appFeatures = [
@@ -33,13 +33,11 @@ export default function AppPromotion() {
             </div>
             <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg transform hover:scale-105 transition-transform duration-200" asChild>
               <TrackedLink
-                href="https://app.hybridx.club"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/app"
                 event="cta_app_click"
                 eventParams={{ location: 'app_promotion' }}
               >
-                <Smartphone className="mr-2 h-5 w-5" /> Access the App Now <ArrowUpRight className="ml-2 h-5 w-5" />
+                <Smartphone className="mr-2 h-5 w-5" /> See the App <ArrowRight className="ml-2 h-5 w-5" />
               </TrackedLink>
             </Button>
           </div>

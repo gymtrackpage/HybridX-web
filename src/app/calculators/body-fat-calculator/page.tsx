@@ -3,6 +3,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import BodyFatCalculatorForm from '@/components/calculators/BodyFatCalculatorForm';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import CalculatorCTA from '@/components/calculators/CalculatorCTA';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -45,6 +46,7 @@ export default function BodyFatCalculatorPage() {
               <BodyFatCalculatorForm />
             </CardContent>
           </Card>
+          <CalculatorCTA calculator="body-fat-calculator" />
         </div>
       </main>
       <Footer />

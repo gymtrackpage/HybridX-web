@@ -3,6 +3,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import PowerliftingScoreCalculatorForm from '@/components/calculators/PowerliftingScoreCalculatorForm';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import CalculatorCTA from '@/components/calculators/CalculatorCTA';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -27,6 +28,7 @@ export default function PowerliftingScoreCalculatorPage() {
               <PowerliftingScoreCalculatorForm />
             </CardContent>
           </Card>
+          <CalculatorCTA calculator="powerlifting-score-calculator" />
         </div>
       </main>
       <Footer />

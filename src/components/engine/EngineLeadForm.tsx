@@ -9,8 +9,6 @@ import {
 import Heartbeat from './Heartbeat';
 import { trackEvent } from '@/lib/analytics';
 
-const APP_URL = 'https://app.hybridx.club';
-
 type Variant = 'dark' | 'light' | 'band';
 
 interface EngineLeadFormProps {
@@ -125,9 +123,7 @@ export default function EngineLeadForm({
 
         <div className="mt-6">
           <a
-            href={APP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/app"
             onClick={() => trackEvent('cta_app_click', { placement })}
             className={`inline-flex items-center gap-1.5 font-archivo font-bold text-sm uppercase tracking-wider transition-colors ${
               dark ? 'text-engine-heart hover:text-engine-paper' : 'text-engine-crimson hover:text-engine-crimsonD'

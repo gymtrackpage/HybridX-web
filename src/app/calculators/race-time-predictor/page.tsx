@@ -3,6 +3,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import RaceTimePredictorForm from '@/components/calculators/RaceTimePredictorForm';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import CalculatorCTA from '@/components/calculators/CalculatorCTA';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -27,6 +28,7 @@ export default function RaceTimePredictorPage() {
               <RaceTimePredictorForm />
             </CardContent>
           </Card>
+          <CalculatorCTA calculator="race-time-predictor" />
         </div>
       </main>
       <Footer />
