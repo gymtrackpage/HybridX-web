@@ -2,18 +2,20 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
 import Link from 'next/link';
-import { ShieldCheck, Trophy, AlertTriangle, Calendar, TrendingUp, Dumbbell, Zap, Users, CheckCircle } from 'lucide-react';
+import { Trophy, Calendar, TrendingUp, Dumbbell, CheckCircle, Smartphone } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import HyroxDominationForm from '@/components/hyrox/HyroxDominationForm';
+import TrackedLink from '@/components/TrackedLink';
 import { createFAQSchema } from '@/lib/seo';
 import { fetchHyroxEvents, type HyroxEvent } from '@/lib/hyrox-events';
 
-
-export const dynamic = 'force-dynamic';
+// Events change infrequently — revalidate hourly instead of blocking every
+// request on the Google Sheet fetch.
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: 'Free Hyrox Training Plan (12-Week) | PDF Download',
@@ -43,93 +45,53 @@ export const metadata: Metadata = {
 // --- Section Components ---
 
 const HeroSection = () => (
-  <section className="relative bg-background text-center py-20 md:py-32 overflow-hidden">
+  <section className="relative bg-background text-center py-16 md:py-24 overflow-hidden">
     <div className="absolute inset-0 bg-subtle-x-light dark:bg-subtle-x-dark opacity-30 dark:opacity-20 mix-blend-multiply dark:mix-blend-screen"></div>
     <div className="container mx-auto px-6 relative z-10">
       <h1 className="text-4xl md:text-6xl font-headline font-bold text-primary mb-4 leading-tight">
-        Stop Guessing. Start <span className="text-accent">ACHIEVING</span>. The Free Hyrox Training Plan That Gets Results.
+        Your Free 12-Week <span className="text-accent">Hyrox Training Plan</span>
       </h1>
-      <p className="text-lg md:text-xl text-muted-foreground font-body max-w-3xl mx-auto mb-8">
-        (Or We'll Refund Every Penny)
-      </p>
-      <p className="text-md md:text-lg text-muted-foreground font-body max-w-2xl mx-auto mb-6">
-        The scientifically-backed 12-week blueprint that's helped over 1,000+ athletes shave minutes off their times - even if you've never stepped foot in a functional fitness gym before.
-      </p>
-      <p className="text-sm text-muted-foreground/80 font-body max-w-xl mx-auto mb-10 border border-border/40 rounded-lg px-5 py-3 bg-background/50">
-        HybridX provides a free personalised Hyrox training plan generator — athletes enter their race date and fitness level and receive a structured 12-week PDF plan covering all four training phases, every Hyrox station, and weekly compromised running sessions.
+      <p className="text-lg md:text-xl text-muted-foreground font-body max-w-2xl mx-auto mb-8">
+        Enter your race date and ability level. Get a personalised, phase-by-phase plan — covering every station and every compromised running session — emailed to you instantly. No cost, no account.
       </p>
       <Button size="lg" asChild className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg transform hover:scale-105 transition-transform duration-200">
-        <Link href="#get-the-plan">YES! I Want My Free Hyrox Plan</Link>
+        <Link href="#get-the-plan">Get My Free Plan</Link>
       </Button>
     </div>
   </section>
 );
 
-const ProblemAgitationSection = () => (
-  <section className="py-20 md:py-28 bg-secondary/30">
+const WhyThisPlanSection = () => (
+  <section className="py-16 md:py-20 bg-secondary/30">
     <div className="container mx-auto px-6 text-center">
-      <h2 className="text-3xl md:text-4xl font-headline font-bold text-primary mb-8">Here's What NOBODY Tells You About Hyrox Training...</h2>
-      <p className="text-lg text-muted-foreground font-body max-w-2xl mx-auto mb-12">
-        Let me guess. You've signed up for a Hyrox race and now you're panicking, right? You've probably tried following random CrossFit workouts or copying some influencer's "Hyrox prep" reel from Instagram. <br></br><span className="font-bold text-primary">Spoiler: it doesn't work.</span>
+      <h2 className="text-2xl md:text-3xl font-headline font-bold text-primary mb-3">Most Hyrox prep fails for the same reasons</h2>
+      <p className="text-base text-muted-foreground font-body max-w-2xl mx-auto mb-10">
+        Random CrossFit workouts, no plan for pacing between stations, and strength training that doesn&apos;t translate to race day. This plan is built to fix all three.
       </p>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto text-left">
-        <Card className="bg-background/80">
-          <CardHeader>
-            <CardTitle className="text-destructive flex items-center"><AlertTriangle className="mr-2" /> The Brutal Truth</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4 font-body text-muted-foreground">
-            <p>❌ You're wasting MONTHS on ineffective training that'll leave you gasping for air at station 3.</p>
-            <p>❌ You have no idea how to pace your runs between stations (and it's costing you precious minutes).</p>
-            <p>❌ Your "cardio base" means nothing when you can't maintain running speed after the sleds.</p>
-            <p>❌ You're worried you won't perform your best because you trained all wrong.</p>
-          </CardContent>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto text-left">
+        <Card>
+          <CardHeader><CardTitle className="text-lg">Phase-Specific Structure</CardTitle></CardHeader>
+          <CardContent className="text-muted-foreground text-sm">Foundation, strength-endurance, peak performance, and a competition taper — in that order, for a reason.</CardContent>
         </Card>
-        <div className="bg-primary text-primary-foreground p-8 rounded-lg flex flex-col justify-center">
-          <h3 className="font-headline text-2xl mb-4 text-accent">The Worst Part?</h3>
-          <p className="font-body text-lg">
-            You KNOW you're capable of so much more, but you're following advice from people who are not like you and probably don't follow their own 'advice'. Most of the training advice out there is for clicks and attention for 'new innovative methods' or POV's that aren't actually real. </p><p className="font-body text-lg">It wont get you prepared.
-          </p>
-        </div>
+        <Card>
+          <CardHeader><CardTitle className="text-lg">Compromised Running</CardTitle></CardHeader>
+          <CardContent className="text-muted-foreground text-sm">Weekly sessions that train you to run fast immediately after a station, not just run fast on fresh legs.</CardContent>
+        </Card>
+        <Card>
+          <CardHeader><CardTitle className="text-lg">RPE-Based Intensity</CardTitle></CardHeader>
+          <CardContent className="text-muted-foreground text-sm">Scales automatically to your fitness level — no guessing paces or copying someone else&apos;s numbers.</CardContent>
+        </Card>
       </div>
     </div>
   </section>
 );
 
-const SolutionRevealSection = () => (
-    <section className="py-20 md:py-28 bg-secondary/30">
-      <div className="container mx-auto px-6 text-center">
-        <h2 className="text-3xl md:text-4xl font-headline font-bold text-primary mb-4">Finally, The Hyrox Performance System</h2>
-        <p className="text-xl text-muted-foreground font-body max-w-3xl mx-auto mb-12">
-            Built from the ground up for ONE PURPOSE: Making you faster, stronger, and more efficient at every single Hyrox station. This isn't just a collection of workouts; it's a complete system for peak performance.
-        </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <Card>
-                <CardHeader><CardTitle>Phase-Specific Periodization</CardTitle></CardHeader>
-                <CardContent>Foundation, Strength Endurance, Peak Performance, and a Competition Taper.</CardContent>
-            </Card>
-            <Card>
-                <CardHeader><CardTitle>Compromised Running With A Purpose</CardTitle></CardHeader>
-                <CardContent>The secret sauce. Master the art of running fast AFTER your legs are screaming from stations.</CardContent>
-            </Card>
-            <Card>
-                <CardHeader><CardTitle>Hyrox-Specific Skill Development</CardTitle></CardHeader>
-                <CardContent>Optimize every movement for maximum efficiency and minimum energy waste.</CardContent>
-            </Card>
-            <Card>
-                <CardHeader><CardTitle>RPE-Based Programming</CardTitle></CardHeader>
-                <CardContent>Precise intensity targets that adapt to YOUR fitness level, eliminating guesswork and not trying to match an influencers pace.</CardContent>
-            </Card>
-        </div>
-      </div>
-    </section>
-  );
-
 const GetThePlanSection = ({ events }: { events: HyroxEvent[] }) => (
-    <section id="get-the-plan" className="py-20 md:py-28 bg-secondary/30">
+    <section id="get-the-plan" className="py-16 md:py-24 bg-secondary/30">
         <div className="container mx-auto px-6">
-            <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-headline font-bold text-primary">Free Personalised Hyrox Training Plan Generator</h2>
-                <p className="text-lg text-muted-foreground mt-2 max-w-2xl mx-auto">Enter your race date and ability level — we build your personalised 12-week plan and send it to your inbox instantly.</p>
+            <div className="text-center mb-10">
+                <h2 className="text-3xl md:text-4xl font-headline font-bold text-primary">Get Your Personalised Plan</h2>
+                <p className="text-lg text-muted-foreground mt-2 max-w-2xl mx-auto">Enter your race date and ability level — we build your 12-week plan and send it to your inbox instantly.</p>
                 <ul className="mt-6 inline-flex flex-col items-start gap-2 text-left text-base text-muted-foreground font-body">
                   <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-accent flex-shrink-0" /> Adapts to your exact race date</li>
                   <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-accent flex-shrink-0" /> Adjusts to your ability level — beginner, intermediate, or advanced</li>
@@ -166,34 +128,26 @@ const GetThePlanSection = ({ events }: { events: HyroxEvent[] }) => (
 
 const WhatsIncludedSection = () => {
     const includedItems = [
-      { icon: Calendar, title: "Beginner to Advanced Hyrox Race Preparation", value: "Included", description: "Complete 12-week progressive plans for every fitness level, from first-timers to elite competitors."},
-      { icon: TrendingUp, title: "Running Specific Plan", value: "Included", description: "Build a massive running threshold with specialized protocols for speed, endurance, and compromised running."},
-      { icon: Dumbbell, title: "Strength Improvement Plan", value: "Included", description: "Targeted strength and conditioning to power through every station with confidence and reduce injury risk."},
-      { icon: Zap, title: "Off-Season Olympic Lifting Plan", value: "Included", description: "Build explosive power and speed in your offseason with our specialized Olympic lifting and plyometrics program."},
-      { icon: Users, title: "Specific Pairs Plan", value: "Included", description: "Excel in the pairs division with strategies and workouts designed for seamless transitions and synchronized effort."},
-      { icon: Trophy, title: "BONUS: Race Day Execution Plan", value: "Included", description: "Detailed warm-up, nutrition, and mental preparation protocols to ensure you peak on race day."},
+      { icon: Calendar, title: "Beginner to Advanced", description: "Progressive 12-week plans for every fitness level, from first-timers to competitors."},
+      { icon: TrendingUp, title: "Running-Specific Sessions", description: "Speed, endurance, and compromised running protocols built into every week."},
+      { icon: Dumbbell, title: "Station-by-Station Strength", description: "Targeted work for every one of the 8 stations, to reduce injury risk and build confidence."},
     ];
-  
+
     return (
-      <section className="py-20 md:py-28 bg-background">
+      <section className="py-16 md:py-20 bg-background">
         <div className="container mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-headline font-bold text-primary">Looking for a more complete experience?</h2>
-            <p className="text-lg text-muted-foreground mt-2">Try our app now for Free</p>
-            <p className="text-lg text-muted-foreground mt-2">Free to start training now!</p>
+          <div className="text-center mb-10">
+            <h2 className="text-2xl md:text-3xl font-headline font-bold text-primary">What&apos;s in the plan</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             {includedItems.map((item, index) => (
-              <Card key={index} className="shadow-lg border-primary/20">
+              <Card key={index} className="shadow-sm border-primary/20">
                 <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <item.icon className="h-8 w-8 text-accent"/>
-                    <span className="text-sm font-bold text-accent bg-accent/10 px-2 py-1 rounded">{item.value}</span>
-                  </div>
-                  <CardTitle className="pt-2">{item.title}</CardTitle>
+                  <item.icon className="h-7 w-7 text-accent mb-2"/>
+                  <CardTitle className="text-lg">{item.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground">{item.description}</p>
+                  <p className="text-muted-foreground text-sm">{item.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -203,38 +157,40 @@ const WhatsIncludedSection = () => {
     );
   };
 
-const GuaranteeSection = () => (
-    <section className="py-20 md:py-28 bg-background">
+const AppUpsellSection = () => (
+    <section className="py-16 md:py-20 bg-background">
       <div className="container mx-auto px-6 max-w-3xl">
         <Card className="bg-primary/5 border-primary/20 p-8 text-center">
-          <ShieldCheck className="h-16 w-16 text-accent mx-auto mb-4"/>
-          <h2 className="text-3xl font-headline font-bold text-primary">60-Day "Faster Or Free" Guarantee</h2>
-          <p className="text-lg text-muted-foreground mt-4 font-body">
-            Follow the plan for 12 weeks. If you don't improve your Hyrox time by at least 5 minutes (or complete your first race if you're a beginner), I'll refund every penny. No questions asked. No hoops to jump through.
+          <Smartphone className="h-12 w-12 text-accent mx-auto mb-4"/>
+          <h2 className="text-2xl md:text-3xl font-headline font-bold text-primary">Want it guided, day by day?</h2>
+          <p className="text-lg text-muted-foreground mt-3 font-body max-w-xl mx-auto">
+            The HybridX app delivers this plan one session at a time, tracks every rep and run, and adapts as you progress. Try it free for a month — cancel anytime in two clicks.
           </p>
-          <p className="mt-4 font-bold text-primary font-body">Why am I so confident? Because this system works. Period.</p>
+          <Button size="lg" asChild className="mt-6 bg-accent text-accent-foreground hover:bg-accent/90">
+            <TrackedLink href="/app" event="cta_app_click" eventParams={{ location: 'free_plan_upsell' }}>See the app</TrackedLink>
+          </Button>
         </Card>
       </div>
     </section>
 );
-  
+
 const FaqSection = () => {
   const hyroxFaqItems = [
     {
       question: "What if I'm a complete beginner?",
-      answer: "Perfect. This plan is designed to take you from wherever you are to Hyrox-ready in 12 weeks. It uses RPE (Rate of Perceived Exertion) so the intensity automatically scales to your current fitness level. My biggest success stories are people who thought they weren't ready.",
+      answer: "This plan is designed to take you from wherever you are to Hyrox-ready in 12 weeks. It uses RPE (Rate of Perceived Exertion), so intensity automatically scales to your current fitness level.",
     },
     {
       question: "How much time do I need to train per week?",
-      answer: "You don't need to live in the gym. Sessions range from 45-90 minutes, with most under 75 minutes, 4-5 days a week. If you have time to scroll social media, you have time to transform your fitness.",
+      answer: "Sessions run 45-90 minutes, most under 75, across 4-5 days a week.",
     },
     {
       question: "Why is this free? What's the catch?",
-      answer: "There's no catch. We believe this is the most effective Hyrox training system available, and we want to prove it to you. Our hope is that you'll get incredible results, love the system, and consider our premium app or books in the future. But this 12-week plan is 100% free.",
+      answer: "No catch. It's 100% free — we hope you'll get results, like the system, and consider the app or books later.",
     },
     {
       question: "What equipment do I need for this plan?",
-      answer: "The plan is designed for a standard functional fitness gym. You'll need access to things like a squat rack, barbells, dumbbells, kettlebells, a rowing machine, a ski-erg, and space for sled pushes/pulls. We provide substitution suggestions where possible.",
+      answer: "A standard functional fitness gym: squat rack, barbells, dumbbells, kettlebells, a rowing machine, a ski-erg, and space for sled pushes/pulls. Substitutions are suggested where possible.",
     },
   ];
 
@@ -247,46 +203,22 @@ const FaqSection = () => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(hyroxFaqSchema) }}
       />
-      <section className="py-20 md:py-28 bg-secondary/30">
+      <section className="py-16 md:py-20 bg-secondary/30">
         <div className="container mx-auto px-6 max-w-3xl">
-          <h2 className="text-3xl font-headline font-bold text-primary text-center mb-8">Frequently Asked Questions about Hyrox Training</h2>
+          <h2 className="text-2xl md:text-3xl font-headline font-bold text-primary text-center mb-8">FAQ</h2>
           <Accordion type="single" collapsible className="w-full">
-            <AccordionItem value="faq-1">
-              <AccordionTrigger>What if I'm a complete beginner?</AccordionTrigger>
-              <AccordionContent>Perfect. This plan is designed to take you from wherever you are to Hyrox-ready in 12 weeks. It uses RPE (Rate of Perceived Exertion) so the intensity automatically scales to your current fitness level. My biggest success stories are people who thought they "weren't ready."</AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="faq-2">
-              <AccordionTrigger>How much time do I need to train per week?</AccordionTrigger>
-              <AccordionContent>You don't need to live in the gym. Sessions range from 45-90 minutes, with most under 75 minutes, 4-5 days a week. If you have time to scroll social media, you have time to transform your fitness.</AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="faq-3">
-              <AccordionTrigger>Why is this free? What's the catch?</AccordionTrigger>
-              <AccordionContent>There's no catch. We believe this is the most effective Hyrox training system available, and we want to prove it to you. Our hope is that you'll get incredible results, love the system, and consider our premium app or books in the future. But this 12-week plan is 100% free.</AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="faq-4">
-              <AccordionTrigger>What equipment do I need for this plan?</AccordionTrigger>
-              <AccordionContent>The plan is designed for a standard functional fitness gym. You'll need access to things like a squat rack, barbells, dumbbells, kettlebells, a rowing machine, a ski-erg, and space for sled pushes/pulls. We provide substitution suggestions where possible.</AccordionContent>
-            </AccordionItem>
+            {hyroxFaqItems.map((item, i) => (
+              <AccordionItem value={`faq-${i + 1}`} key={item.question}>
+                <AccordionTrigger>{item.question}</AccordionTrigger>
+                <AccordionContent>{item.answer}</AccordionContent>
+              </AccordionItem>
+            ))}
           </Accordion>
         </div>
       </section>
     </>
   );
 };
-
-const FinalCloseSection = () => (
-    <section className="py-20 md:py-28 bg-primary text-primary-foreground">
-      <div className="container mx-auto px-6 text-center">
-        <h2 className="text-3xl md:text-4xl font-headline font-bold mb-4 text-accent">The Choice Is Yours</h2>
-        <p className="text-lg font-body max-w-3xl mx-auto mb-8">
-            Keep doing what you're doing and regret what could have been, or invest in a proven system and cross the finish line knowing you gave it your best. Which athlete do you want to be?
-        </p>
-        <Button size="lg" asChild className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg transform hover:scale-105 transition-transform duration-200">
-            <Link href="#get-the-plan">Get My Free Plan Now</Link>
-        </Button>
-      </div>
-    </section>
-);
 
 // --- Main Page Component ---
 
@@ -299,13 +231,11 @@ export default async function FreeHyroxPlanPage() {
       <Header />
       <main>
         <HeroSection />
-        <ProblemAgitationSection />
-        <SolutionRevealSection />
+        <WhyThisPlanSection />
         <GetThePlanSection events={events} />
         <WhatsIncludedSection />
-        <GuaranteeSection />
+        <AppUpsellSection />
         <FaqSection />
-        <FinalCloseSection />
       </main>
       <Footer />
     </div>

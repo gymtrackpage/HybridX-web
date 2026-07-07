@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { headers } from 'next/headers';
 import { SITE_CONFIG } from '@/lib/seo';
 import { sendEngineGuideEmail } from '@/lib/email/send-engine-guide';
+import { saveLead } from '@/lib/leads';
 
 // Public path to the lead magnet (served from /public).
 const PDF_PATH = '/build-a-bigger-engine/HybridX-Build-A-Bigger-Engine-VO2max-Guide.pdf';
@@ -44,25 +45,6 @@ function isRateLimited(ip: string): boolean {
   }
   entry.count += 1;
   return entry.count > RATE_LIMIT;
-}
-
-/**
- * Best-effort lead persistence. Reuses the existing Google Apps Script endpoint so Jon
- * does not need to stand up new infrastructure. The script can branch on `magnet`/`tag`
- * to route these into a dedicated sheet or tab. Never blocks the user on failure.
- */
-async function storeLead(payload: Record<string, unknown>): Promise<void> {
-  const scriptUrl = process.env.NEXT_PUBLIC_HYROX_SCRIPT_URL;
-  if (!scriptUrl) return;
-  try {
-    await fetch(scriptUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-  } catch (error) {
-    console.error('[engine-lead] Failed to store lead:', error);
-  }
 }
 
 export async function submitEngineLead(
@@ -116,17 +98,19 @@ export async function submitEngineLead(
   const pdfUrl = `${SITE_CONFIG.url}${PDF_PATH}`;
 
   // 1) Persist the lead (best effort, never blocks delivery).
-  await storeLead({
-    type: 'lead',
-    magnet: 'build-a-bigger-engine',
-    tag: ESP_TAG,
-    email,
-    firstName: firstName || '',
-    source,
-    utm,
-    userAgent,
-    createdAt: new Date().toISOString(),
-  });
+  try {
+    await saveLead({
+      source: 'build_a_bigger_engine',
+      email,
+      name: firstName,
+      extra: { magnet: 'build-a-bigger-engine', tag: ESP_TAG, src: source },
+      utm,
+      ip,
+      userAgent,
+    });
+  } catch (error) {
+    console.error('[engine-lead] Failed to save lead:', error);
+  }
 
   // 2) Deliver the guide. This is the critical action the user is waiting on.
   try {

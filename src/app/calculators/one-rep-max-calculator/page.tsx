@@ -3,6 +3,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import OneRepMaxCalculatorForm from '@/components/calculators/OneRepMaxCalculatorForm';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import CalculatorCTA from '@/components/calculators/CalculatorCTA';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -27,6 +28,7 @@ export default function OneRepMaxCalculatorPage() {
               <OneRepMaxCalculatorForm />
             </CardContent>
           </Card>
+          <CalculatorCTA calculator="one-rep-max-calculator" />
         </div>
       </main>
       <Footer />

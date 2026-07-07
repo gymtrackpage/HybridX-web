@@ -2,6 +2,7 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import TreadmillTcxGeneratorForm from '@/components/calculators/TreadmillTcxGeneratorForm';
+import CalculatorCTA from '@/components/calculators/CalculatorCTA';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -52,6 +53,10 @@ export default function GarminTcxGeneratorPage() {
           </div>
 
           <TreadmillTcxGeneratorForm />
+
+          <div className="max-w-2xl mx-auto">
+            <CalculatorCTA calculator="garmin-tcx-generator" />
+          </div>
 
           <div className="mt-16 max-w-4xl mx-auto space-y-8 text-left">
             <div>

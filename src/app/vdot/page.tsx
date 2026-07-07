@@ -5,6 +5,7 @@ import Footer from '@/components/Footer';
 import VDOTCalculatorForm from '@/components/calculators/VDOTCalculatorForm';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import CalculatorCTA from '@/components/calculators/CalculatorCTA';
 import {
   createMetadata,
   createFAQSchema,
@@ -129,6 +130,8 @@ export default function VDOTCalculatorPage() {
               <VDOTCalculatorForm />
             </CardContent>
           </Card>
+
+          <CalculatorCTA calculator="vdot-calculator" />
 
           {/* FAQ — collapsible, subordinate to the tool */}
           <section aria-label="VDOT frequently asked questions">
