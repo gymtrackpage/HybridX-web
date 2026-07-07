@@ -7,6 +7,7 @@ import CalculatorCTA from '@/components/calculators/CalculatorCTA';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/calculators/calorie-macronutrient-calculator' },
   title: 'Free Calorie & Macronutrient Calculator | HybridX Hub',
   description: 'Free Calorie and Macronutrient Calculator. Estimate your daily calorie and macro needs for fat loss, maintenance, or muscle gain.',
 };

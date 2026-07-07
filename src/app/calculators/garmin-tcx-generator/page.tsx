@@ -6,6 +6,7 @@ import CalculatorCTA from '@/components/calculators/CalculatorCTA';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/calculators/garmin-tcx-generator' },
   title: 'Free Garmin FIT & TCX Generator for Treadmill Workouts | HybridX Hub',
   description:
     'Rebuild treadmill interval sessions your watch mangled. Define intervals, paces and inclines, keep your real heart rate, and export a FIT or TCX file Garmin Connect and Strava accept — free and fully in your browser.',

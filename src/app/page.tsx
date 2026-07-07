@@ -15,6 +15,7 @@ import Script from 'next/script';
 import { createCourseSchema, createSpeakableSchema } from '@/lib/seo';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/' },
   title: 'HybridX Hub | Hyrox Training Plans, Workout Programs & Coaching App',
   description: 'Expert Hyrox training plans and hybrid workout programs. Achieve your best performance in Hyrox competitions with our scientifically-backed training plans, books, and coaching app. Free calculators and resources.',
   keywords: [
@@ -38,7 +39,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/Icon Logo.png',
+        url: '/og-default.png',
         width: 1200,
         height: 630,
         alt: 'HybridX Hub - Training Plans and Coaching App',
@@ -49,7 +50,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'HybridX Hub | Hyrox Training Plans, Workout Programs & Coaching App',
     description: 'Expert Hyrox training plans and hybrid workout programs. Achieve your best performance in Hyrox competitions with our scientifically-backed training plans, books, and coaching app.',
-    images: ['/Icon Logo.png'],
+    images: ['/og-default.png'],
   },
 };
 

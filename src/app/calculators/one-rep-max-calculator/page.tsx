@@ -7,6 +7,7 @@ import CalculatorCTA from '@/components/calculators/CalculatorCTA';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/calculators/one-rep-max-calculator' },
   title: 'Free One-Rep Max (1RM) Calculator | HybridX Hub',
   description: 'Estimate your one-rep max (1RM) for key lifts like squat, bench, and deadlift. Use our free calculator to find your true strength.',
 };

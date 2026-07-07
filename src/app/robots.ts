@@ -1,54 +1,53 @@
 import { MetadataRoute } from 'next';
 
+// Robots.txt semantics: a crawler obeys ONLY the most specific user-agent
+// group that matches it — a named group REPLACES the '*' group entirely for
+// that bot. So every named group must carry the same disallow list, or the
+// named bots are formally allowed into /admin and /api.
+const DISALLOW = ['/api/', '/admin/'];
+
+// Bots we explicitly welcome (traditional search + AI answer engines).
+// Being explicit is a positive signal to AI crawlers that they're wanted.
+const WELCOMED_BOTS = [
+  // Traditional search engines
+  'Googlebot',
+  'Bingbot',
+  'Slurp', // Yahoo
+  'DuckDuckBot',
+  // OpenAI / ChatGPT: GPTBot trains models, OAI-SearchBot powers ChatGPT
+  // search, ChatGPT-User is live browsing sessions
+  'GPTBot',
+  'OAI-SearchBot',
+  'ChatGPT-User',
+  // Google AI (Gemini / AI Overviews)
+  'Google-Extended',
+  // Anthropic / Claude
+  'ClaudeBot',
+  'Claude-Web',
+  // Perplexity
+  'PerplexityBot',
+  // Meta AI
+  'FacebookBot',
+  // Microsoft Copilot / Bing AI
+  'bingbot',
+  'MicrosoftBot',
+  // You.com
+  'YouBot',
+  // Cohere
+  'cohere-ai',
+];
+
 export default function robots(): MetadataRoute.Robots {
   const baseUrl = 'https://hybridx.club';
 
   return {
     rules: [
-      // Default: allow all crawlers, block private routes
-      {
-        userAgent: '*',
+      { userAgent: '*', allow: '/', disallow: DISALLOW },
+      ...WELCOMED_BOTS.map((userAgent) => ({
+        userAgent,
         allow: '/',
-        disallow: ['/api/', '/admin/', '/hyrox-alerts'],
-      },
-
-      // ── Traditional search engines ──────────────────────────────────────
-      { userAgent: 'Googlebot',  allow: '/' },
-      { userAgent: 'Bingbot',    allow: '/' },
-      { userAgent: 'Slurp',      allow: '/' }, // Yahoo
-      { userAgent: 'DuckDuckBot',allow: '/' },
-
-      // ── OpenAI / ChatGPT ────────────────────────────────────────────────
-      // GPTBot        → trains OpenAI models (future citations)
-      // OAI-SearchBot → powers ChatGPT real-time web search
-      // ChatGPT-User  → ChatGPT browsing plugin sessions
-      { userAgent: 'GPTBot',       allow: '/' },
-      { userAgent: 'OAI-SearchBot',allow: '/' },
-      { userAgent: 'ChatGPT-User', allow: '/' },
-
-      // ── Google AI (Gemini / AI Overviews) ───────────────────────────────
-      // Google-Extended → feeds Gemini and Google AI Overviews
-      { userAgent: 'Google-Extended', allow: '/' },
-
-      // ── Anthropic / Claude ──────────────────────────────────────────────
-      { userAgent: 'ClaudeBot',  allow: '/' },
-      { userAgent: 'Claude-Web', allow: '/' },
-
-      // ── Perplexity AI ───────────────────────────────────────────────────
-      { userAgent: 'PerplexityBot', allow: '/' },
-
-      // ── Meta AI ─────────────────────────────────────────────────────────
-      { userAgent: 'FacebookBot', allow: '/' },
-
-      // ── Microsoft Copilot / Bing AI ─────────────────────────────────────
-      { userAgent: 'bingbot',    allow: '/' },
-      { userAgent: 'MicrosoftBot', allow: '/' },
-
-      // ── You.com ─────────────────────────────────────────────────────────
-      { userAgent: 'YouBot', allow: '/' },
-
-      // ── Cohere ──────────────────────────────────────────────────────────
-      { userAgent: 'cohere-ai', allow: '/' },
+        disallow: DISALLOW,
+      })),
     ],
     sitemap: `${baseUrl}/sitemap.xml`,
     host: baseUrl,

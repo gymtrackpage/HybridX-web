@@ -18,6 +18,7 @@ import { fetchHyroxEvents, type HyroxEvent } from '@/lib/hyrox-events';
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/free-hyrox-plan' },
   title: 'Free Hyrox Training Plan (12-Week) | PDF Download',
   description: "Get a free, scientifically-backed 12-week Hyrox training plan. Achieve your best race time with our expert program. Download your personalized PDF now.",
   keywords: [

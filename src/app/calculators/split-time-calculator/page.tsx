@@ -7,6 +7,7 @@ import CalculatorCTA from '@/components/calculators/CalculatorCTA';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/calculators/split-time-calculator' },
   title: 'Free Race Split Time Calculator (GPX, AI) | HybridX Hub',
   description: 'Plan your race with our free Split Time Calculator. Generate even splits or upload a GPX file for AI-powered, elevation-adjusted split recommendations.',
 };

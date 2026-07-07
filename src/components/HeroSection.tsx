@@ -58,7 +58,7 @@ export default function HeroSection() {
         </div>
 
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-headline font-extrabold text-primary mb-4 leading-tight">
-          Your Path to <span className="text-accent">Peak Performance</span> Starts Here.
+          Your Path to <span className="text-accent">Peak Hyrox Performance</span> Starts Here.
         </h1>
         <p className="text-lg md:text-xl text-muted-foreground font-body max-w-3xl mx-auto mb-10">
           Whatever your budget or training style, we have a scientifically-backed plan to help you achieve your best. Choose the option that's right for you.

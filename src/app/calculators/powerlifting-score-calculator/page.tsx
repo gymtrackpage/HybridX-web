@@ -7,6 +7,7 @@ import CalculatorCTA from '@/components/calculators/CalculatorCTA';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/calculators/powerlifting-score-calculator' },
   title: 'Free Powerlifting Score Calculator (Wilks, DOTS) | HybridX Hub',
   description: 'Use our free Powerlifting Score Calculator to find your Wilks or DOTS score. Benchmark your strength against other lifters.',
 };
