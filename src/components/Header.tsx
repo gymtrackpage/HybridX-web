@@ -46,7 +46,7 @@ const navItems: NavItem[] = [
     label: 'Shop',
     isDropdown: true,
     items: [
-      { label: 'Books', href: '/#book-promotion', icon: <BookOpen className="mr-2 h-5 w-5" /> },
+      { label: 'Books', href: '/books', icon: <BookOpen className="mr-2 h-5 w-5" /> },
       { label: 'Store', href: '/store', icon: <ShoppingCart className="mr-2 h-5 w-5" /> },
     ]
   },
