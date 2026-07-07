@@ -120,7 +120,7 @@ export default function Header() {
         <div className="flex flex-1 items-center justify-end space-x-2">
           <ThemeToggleButton />
           <Button className="hidden md:inline-flex bg-accent text-accent-foreground hover:bg-accent/90 font-headline" asChild>
-            <Link href="/sign-up">
+            <Link href="https://app.hybridx.club" target="_blank" rel="noopener noreferrer">
               <LogIn className="mr-2 h-4 w-4" /> Sign Up
             </Link>
           </Button>
@@ -193,7 +193,7 @@ export default function Header() {
                 </div>
                 <SheetClose asChild>
                   <Button className="bg-accent text-accent-foreground hover:bg-accent/90 mt-4 py-3 text-base font-headline w-full" asChild>
-                    <Link href="/sign-up">
+                    <Link href="https://app.hybridx.club" target="_blank" rel="noopener noreferrer">
                        <LogIn className="mr-2 h-5 w-5" /> Sign Up
                     </Link>
                   </Button>
