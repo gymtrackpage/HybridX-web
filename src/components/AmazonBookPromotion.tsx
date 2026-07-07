@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { BookOpenCheck, ShoppingCart, ArrowUpRight } from 'lucide-react';
-import Link from 'next/link';
+import TrackedLink from '@/components/TrackedLink';
 
 const books = [
   {
@@ -81,9 +81,15 @@ export default function AmazonBookPromotion() {
                   </CardContent>
                   <CardFooter className="p-0 mt-4">
                     <Button className="bg-accent text-accent-foreground hover:bg-accent/90 w-full md:w-auto transition-colors duration-300 font-headline py-3 text-sm md:text-base" asChild>
-                      <Link href={book.amazonUrl} target="_blank" rel="noopener noreferrer">
+                      <TrackedLink
+                        href={book.amazonUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        event="cta_book_click"
+                        eventParams={{ book_id: book.id, location: 'book_promotion' }}
+                      >
                         <ShoppingCart className="mr-2 h-5 w-5" /> {book.ctaText} <ArrowUpRight className="ml-1.5 h-4 w-4" />
-                      </Link>
+                      </TrackedLink>
                     </Button>
                   </CardFooter>
                 </div>

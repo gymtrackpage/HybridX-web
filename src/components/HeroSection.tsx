@@ -1,6 +1,6 @@
 
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
+import TrackedLink from '@/components/TrackedLink';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Download, BookOpen, Smartphone, ArrowRight, ShieldCheck, Users, BookMarked, TrendingUp } from 'lucide-react';
 
@@ -136,9 +136,14 @@ export default function HeroSection() {
                 </CardContent>
                 <CardFooter className="pb-6">
                   <Button className="w-full font-headline bg-accent text-accent-foreground hover:bg-accent/80 transition-colors" variant={option.variant === 'default' ? 'default' : 'secondary'} asChild>
-                    <Link href={option.href} target={option.isExternal ? '_blank' : '_self'}>
+                    <TrackedLink
+                      href={option.href}
+                      target={option.isExternal ? '_blank' : '_self'}
+                      event={option.isExternal ? 'cta_app_click' : undefined}
+                      eventParams={{ location: 'hero' }}
+                    >
                       {option.cta} <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
+                    </TrackedLink>
                   </Button>
                 </CardFooter>
               </Card>

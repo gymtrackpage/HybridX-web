@@ -22,6 +22,7 @@ import { z } from 'zod';
 import { parseTrainingPlanCSV, groupWorkoutsByDay } from '@/lib/training-plan-utils';
 import { downloadTrainingPlanPDF } from '@/lib/pdf-generator';
 import { downloadTrainingPlanICS } from '@/lib/ical-generator';
+import { trackEvent } from '@/lib/analytics';
 
 export interface HyroxEvent {
     name: string;
@@ -96,7 +97,8 @@ export default function HyroxDominationForm({ initialEvents = [] }: HyroxDominat
   const [selectedEvent, setSelectedEvent] = useState<HyroxEvent | null>(null);
   const [availableDates, setAvailableDates] = useState<string[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
-  
+  const leadFiredRef = useRef(false);
+
   // zod validation for client side
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -153,6 +155,16 @@ export default function HyroxDominationForm({ initialEvents = [] }: HyroxDominat
     });
     return () => subscription.unsubscribe();
   }, [form, hyroxEvents]);
+
+  useEffect(() => {
+    if (state.type === 'success' && !leadFiredRef.current) {
+      leadFiredRef.current = true;
+      trackEvent('generate_lead', { placement: 'free_hyrox_plan', currency: 'GBP', value: 0 });
+    }
+    if (state.type === 'error' && state.message) {
+      trackEvent('lead_submit_error', { placement: 'free_hyrox_plan', message: state.message });
+    }
+  }, [state]);
 
   useEffect(() => {
     if (state.type === 'success' && !isGenerating) {

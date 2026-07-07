@@ -7,6 +7,7 @@ import Footer from '@/components/Footer';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
+import { trackEvent } from '@/lib/analytics';
 
 // This is the URL for your deployed Apps Script Web App
 const SCRIPT_URL = 'https://script.google.com/a/macros/hybridx.club/s/AKfycbxCDBD1B5-1p2fF4_VJs2SCX2HdQm9V3PkWNEr2gn-1_Pedu2ogLmrciyze2iz_LWL4/exec';
@@ -41,11 +42,13 @@ export default function SignUpPage() {
             // In 'no-cors' mode, we cannot read the response. We assume success if no error is thrown.
             setStatus('success');
             setMessage('Thank you for subscribing! Your first email is on its way.');
+            trackEvent('generate_lead', { placement: 'sign_up_page', currency: 'GBP', value: 0 });
 
         } catch (error) {
             setStatus('error');
             const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
             setMessage(`An error occurred: ${errorMessage}. Please try again later.`);
+            trackEvent('lead_submit_error', { placement: 'sign_up_page', message: errorMessage });
             console.error('Submission Error:', error);
         }
     };

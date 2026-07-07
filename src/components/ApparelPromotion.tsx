@@ -3,7 +3,7 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Shirt, ArrowUpRight } from 'lucide-react';
-import Link from 'next/link';
+import TrackedLink from '@/components/TrackedLink';
 import Script from 'next/script';
 import { useEffect } from 'react';
 
@@ -84,9 +84,9 @@ export default function ApparelPromotion() {
           </div>
           <div className="text-center mt-12">
               <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90" asChild>
-                  <Link href="/store">
+                  <TrackedLink href="/store" event="cta_store_click" eventParams={{ location: 'apparel_promotion' }}>
                       Shop The Collection <ArrowUpRight className="ml-2 h-5 w-5" />
-                  </Link>
+                  </TrackedLink>
               </Button>
           </div>
         </div>

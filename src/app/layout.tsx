@@ -151,7 +151,9 @@ export default function RootLayout({
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-XKH1WYE7CQ');
+            gtag('config', 'G-XKH1WYE7CQ', {
+              linker: { domains: ['hybridx.club', 'app.hybridx.club'] }
+            });
           `}
         </Script>
       </head>

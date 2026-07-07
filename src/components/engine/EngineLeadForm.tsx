@@ -7,6 +7,7 @@ import {
   type EngineLeadState,
 } from '@/app/build-a-bigger-engine/actions';
 import Heartbeat from './Heartbeat';
+import { trackEvent } from '@/lib/analytics';
 
 const APP_URL = 'https://app.hybridx.club';
 
@@ -19,15 +20,6 @@ interface EngineLeadFormProps {
   /** Where this form sits, for analytics (e.g. "hero", "mid", "final"). */
   placement: string;
   className?: string;
-}
-
-// Lightweight, typed GA4 / gtag event helper. No-ops if gtag is absent.
-function track(event: string, params: Record<string, unknown> = {}) {
-  if (typeof window === 'undefined') return;
-  const w = window as unknown as { gtag?: (...args: unknown[]) => void };
-  if (typeof w.gtag === 'function') {
-    w.gtag('event', event, params);
-  }
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -71,7 +63,7 @@ export default function EngineLeadForm({
         entries.forEach((entry) => {
           if (entry.isIntersecting && !viewedRef.current) {
             viewedRef.current = true;
-            track('view_lead_form', { placement });
+            trackEvent('view_lead_form', { placement });
             obs.disconnect();
           }
         });
@@ -86,10 +78,10 @@ export default function EngineLeadForm({
   useEffect(() => {
     if (state.status === 'success' && !leadFiredRef.current) {
       leadFiredRef.current = true;
-      track('generate_lead', { placement, currency: 'USD', value: 0 });
+      trackEvent('generate_lead', { placement, currency: 'USD', value: 0 });
     }
     if (state.status === 'error') {
-      track('lead_submit_error', { placement, message: state.message });
+      trackEvent('lead_submit_error', { placement, message: state.message });
     }
   }, [state, placement]);
 
@@ -124,7 +116,7 @@ export default function EngineLeadForm({
             href={state.pdfUrl}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => track('pdf_download_click', { placement })}
+            onClick={() => trackEvent('pdf_download_click', { placement })}
             className="inline-flex items-center justify-center gap-2 rounded-[14px] bg-engine-crimson px-7 py-3.5 font-archivo font-extrabold uppercase tracking-wide text-engine-paper shadow-lg transition-colors duration-150 hover:bg-engine-crimsonD focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-engine-heart"
           >
             <Download className="h-5 w-5" /> Download the guide
@@ -136,7 +128,7 @@ export default function EngineLeadForm({
             href={APP_URL}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => track('cta_app_click', { placement })}
+            onClick={() => trackEvent('cta_app_click', { placement })}
             className={`inline-flex items-center gap-1.5 font-archivo font-bold text-sm uppercase tracking-wider transition-colors ${
               dark ? 'text-engine-heart hover:text-engine-paper' : 'text-engine-crimson hover:text-engine-crimsonD'
             }`}
@@ -161,13 +153,13 @@ export default function EngineLeadForm({
       return;
     }
     setClientError('');
-    track('lead_submit_attempt', { placement });
+    trackEvent('lead_submit_attempt', { placement });
   }
 
   function handleFocus() {
     if (!startedRef.current) {
       startedRef.current = true;
-      track('lead_form_start', { placement });
+      trackEvent('lead_form_start', { placement });
     }
   }
 
