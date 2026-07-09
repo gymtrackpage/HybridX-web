@@ -18,7 +18,7 @@ const APP_URL = 'https://app.hybridx.club';
 export const metadata = createMetadata({
   title: 'HybridX App — Hyrox & Hybrid Training, £5/month',
   description:
-    'Daily workouts, program library, and an AI training coach — built for Hyrox and hybrid athletes. First month free, cancel anytime in two clicks.',
+    'Daily workouts, program library, and an AI training coach — built for Hyrox and hybrid athletes. 14-day free trial, cancel anytime in two clicks.',
   path: '/app',
   keywords: ['hyrox training app', 'hybrid training app', 'hyrox app', 'hyrox coaching app'],
 });
@@ -49,7 +49,7 @@ const features = [
 const faqs = [
   {
     question: 'How much does the app cost?',
-    answer: '£5 per month, with your first month completely free. No setup fee, no long-term contract.',
+    answer: '£5 per month, with a 14-day free trial. No setup fee, no long-term contract.',
   },
   {
     question: 'How do I cancel?',
@@ -79,18 +79,18 @@ export default function AppLandingPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div className="text-center lg:text-left">
                 <div className="inline-flex items-center gap-2 bg-accent/15 border border-accent/40 rounded-full px-4 py-1.5 mb-6 text-sm font-headline font-semibold text-foreground">
-                  First month free
+                  14-day free trial
                 </div>
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-headline font-extrabold text-primary mb-4 leading-tight">
                   Your Hyrox Coach, <span className="text-accent">In Your Pocket.</span>
                 </h1>
                 <p className="text-lg md:text-xl text-muted-foreground font-body max-w-xl mx-auto lg:mx-0 mb-8">
-                  Structured programs, daily workouts, and an AI coach for the questions a PDF can&apos;t answer. £5/month. First month free. Cancel anytime.
+                  Structured programs, daily workouts, and an AI coach for the questions a PDF can&apos;t answer. £5/month. 14-day free trial. Cancel anytime.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
                   <Button size="lg" asChild className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg">
                     <TrackedLink href={APP_URL} target="_blank" rel="noopener noreferrer" event="cta_app_click" eventParams={{ location: 'app_page_hero' }}>
-                      Start Your Free Month <ArrowRight className="ml-2 h-5 w-5" />
+                      Start Your Free Trial <ArrowRight className="ml-2 h-5 w-5" />
                     </TrackedLink>
                   </Button>
                   <Button size="lg" variant="outline" asChild>
@@ -165,7 +165,7 @@ export default function AppLandingPage() {
                 <CardContent className="p-0">
                   <p className="font-headline text-sm uppercase tracking-widest text-accent mb-2">HybridX App</p>
                   <p className="text-5xl font-headline font-extrabold text-primary mb-1">£5<span className="text-lg text-muted-foreground font-body">/month</span></p>
-                  <p className="text-muted-foreground font-body mb-6">First month free. Cancel anytime in two clicks — no calls, no emails.</p>
+                  <p className="text-muted-foreground font-body mb-6">14-day free trial. Cancel anytime in two clicks — no calls, no emails.</p>
                   <ul className="text-left space-y-2 mb-6 font-body">
                     <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-accent flex-shrink-0" /> Full program library</li>
                     <li className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-accent flex-shrink-0" /> Daily workout tracking</li>
@@ -173,7 +173,7 @@ export default function AppLandingPage() {
                   </ul>
                   <Button size="lg" asChild className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
                     <TrackedLink href={APP_URL} target="_blank" rel="noopener noreferrer" event="cta_app_click" eventParams={{ location: 'app_page_pricing' }}>
-                      Start Your Free Month
+                      Start Your Free Trial
                     </TrackedLink>
                   </Button>
                 </CardContent>

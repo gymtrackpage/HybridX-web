@@ -249,7 +249,7 @@ export default function HyroxDominationForm({ initialEvents = [] }: HyroxDominat
           <p className="font-headline font-bold text-primary mb-1">Want it guided, day by day?</p>
           <p className="font-body text-sm text-muted-foreground mb-4">
             The app delivers this plan one session at a time, tracks every rep and run, and adapts as you go.
-            First month free — cancel anytime.
+            14-day free trial — cancel anytime.
           </p>
           <Button asChild className="w-full bg-accent text-accent-foreground hover:bg-accent/90 font-headline">
             <Link
