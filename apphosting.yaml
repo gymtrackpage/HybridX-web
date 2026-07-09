@@ -44,17 +44,10 @@ env:
     availability:
       - RUNTIME
   # Resend API key. When set, all mail goes through Resend instead of Gmail SMTP.
-  # TEMPORARILY DISABLED: the App Hosting backend's service account doesn't yet
-  # have access to this secret, which fails the whole build in the preparer step
-  # ("Misconfigured Secret" / PermissionDenied). Mail falls back to Gmail SMTP
-  # while this is commented out. To re-enable, first grant access:
-  #   firebase apphosting:secrets:grantaccess RESEND_API_KEY --backend <backend-id>
-  # (find the backend id with: firebase apphosting:backends:list)
-  # then uncomment the block below.
-  # - variable: RESEND_API_KEY
-  #   secret: RESEND_API_KEY
-  #   availability:
-  #     - RUNTIME
+  - variable: RESEND_API_KEY
+    secret: RESEND_API_KEY
+    availability:
+      - RUNTIME
   # Comma-separated allow-list for the /admin/leads dashboard. Only Firebase
   # Auth users with one of these emails can view the leads collection.
   - variable: ADMIN_EMAILS
