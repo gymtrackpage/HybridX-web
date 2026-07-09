@@ -165,7 +165,7 @@ const AppUpsellSection = () => (
           <Smartphone className="h-12 w-12 text-accent mx-auto mb-4"/>
           <h2 className="text-2xl md:text-3xl font-headline font-bold text-primary">Want it guided, day by day?</h2>
           <p className="text-lg text-muted-foreground mt-3 font-body max-w-xl mx-auto">
-            The HybridX app delivers this plan one session at a time, tracks every rep and run, and adapts as you progress. Try it free for a month — cancel anytime in two clicks.
+            The HybridX app delivers this plan one session at a time, tracks every rep and run, and adapts as you progress. Try it free for 14 days — cancel anytime in two clicks.
           </p>
           <Button size="lg" asChild className="mt-6 bg-accent text-accent-foreground hover:bg-accent/90">
             <TrackedLink href="/app" event="cta_app_click" eventParams={{ location: 'free_plan_upsell' }}>See the app</TrackedLink>
