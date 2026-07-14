@@ -78,13 +78,7 @@ env:
       - RUNTIME
   # Gemini API key powering the "Describe it, let AI build it" feature on the
   # Treadmill FIT/TCX Generator (src/ai/flows/parse-treadmill-workout-flow.ts).
-  # NOT YET ENABLED here — uncomment only after both of these are done, or the
-  # build will fail the same way RESEND_API_KEY did above:
-  #   1. firebase apphosting:secrets:set GEMINI_API_KEY   (get a key at https://aistudio.google.com/apikey)
-  #   2. firebase apphosting:secrets:grantaccess GEMINI_API_KEY --backend <backend-id>
-  # Until then the AI panel is visible but returns a "Could not generate
-  # workout" error; the rest of the calculator is unaffected.
-  # - variable: GEMINI_API_KEY
-  #   secret: GEMINI_API_KEY
-  #   availability:
-  #     - RUNTIME
+  - variable: GEMINI_API_KEY
+    secret: GEMINI_API_KEY
+    availability:
+      - RUNTIME
