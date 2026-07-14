@@ -70,3 +70,9 @@ env:
     secret: SMTP_PASSWORD
     availability:
       - RUNTIME
+  # Gemini API key powering the "Describe it, let AI build it" feature on the
+  # Treadmill FIT/TCX Generator (src/ai/flows/parse-treadmill-workout-flow.ts).
+  - variable: GEMINI_API_KEY
+    secret: GEMINI_API_KEY
+    availability:
+      - RUNTIME
