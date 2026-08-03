@@ -60,8 +60,12 @@ export async function GET() {
 }
 
 /**
- * Sends a real test message. Defaults to the signed-in admin's own address,
- * so this cannot be used to send mail to anyone else.
+ * Sends a real test message. Defaults to the signed-in admin's own address.
+ *
+ * An override is supported via ?to= because of a specific trap: while a
+ * sending domain is unverified, Resend still accepts mail addressed to the
+ * account owner and rejects everything else. Testing only against the admin's
+ * own address can therefore pass while every real subscriber send fails.
  */
 export async function POST(request: NextRequest) {
   const session = await getAdminSession();
@@ -70,8 +74,13 @@ export async function POST(request: NextRequest) {
   }
 
   const snapshot = configSnapshot();
-  const to = session.email;
+  const requestedTo = request.nextUrl.searchParams.get('to')?.trim();
+  const to = requestedTo || session.email;
   const stamp = new Date().toISOString();
+
+  if (requestedTo && requestedTo !== session.email) {
+    console.warn(`[email-check] Admin ${session.email} sent a test email to ${requestedTo}`);
+  }
 
   try {
     await sendEmail({
