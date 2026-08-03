@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { headers } from 'next/headers';
 import { SITE_CONFIG } from '@/lib/seo';
 import { sendRaceDayCardEmail } from '@/lib/email/send-race-day-card';
+import { checkEmailDeliverable } from '@/lib/email/validate-address';
 import { saveLead } from '@/lib/leads';
 
 // Public path to the lead magnet (served from /public).
@@ -90,6 +91,14 @@ export async function submitRaceCardLead(
       status: 'error',
       message: 'Too many attempts. Please wait a little while and try again.',
     };
+  }
+
+  // Format validation only proves the address is well formed. This checks the
+  // domain can actually receive mail, so typos and throwaway inboxes do not
+  // reach the list. Fails open on inconclusive DNS — see validate-address.ts.
+  const deliverable = await checkEmailDeliverable(email);
+  if (!deliverable.ok) {
+    return { status: 'error', message: deliverable.message };
   }
 
   // Which channel sent them — gyms, social or communities. Forwarded from the
