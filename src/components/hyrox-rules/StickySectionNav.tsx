@@ -12,6 +12,7 @@ const SECTIONS = [
   { id: 'doubles', label: 'Doubles' },
   { id: 'relay', label: 'Relay' },
   { id: 'do-this', label: 'What to do' },
+  { id: 'race-card', label: 'Race day card' },
   { id: 'faq', label: 'FAQ' },
 ];
 

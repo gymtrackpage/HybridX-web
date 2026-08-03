@@ -12,6 +12,7 @@ import {
   Calculator,
   ChevronRight,
   Clock,
+  FileDown,
   Footprints,
   Info,
   ThumbsUp,
@@ -39,6 +40,7 @@ import DoublesGapMeter from '@/components/hyrox-rules/DoublesGapMeter';
 import RaceDayChecklist from '@/components/hyrox-rules/RaceDayChecklist';
 import StickySectionNav from '@/components/hyrox-rules/StickySectionNav';
 import ShareRow from '@/components/hyrox-rules/ShareRow';
+import RaceCardGate from '@/components/hyrox-rules/RaceCardGate';
 
 const PATH = '/hyrox-rule-changes-2026';
 const PUBLISHED = '2026-08-02';
@@ -240,7 +242,14 @@ export default function HyroxRuleChanges2026() {
               and overtaking on the lunges, burpee broad jumps and farmers carry is allowed. The rest
               are mostly clarifications and administrative changes.
             </p>
-            <div className="mt-6">
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              <Link
+                href="#race-card"
+                className="inline-flex items-center gap-2 rounded-full bg-foreground px-4 py-2 font-headline text-xs font-bold text-background transition-opacity hover:opacity-90"
+              >
+                <FileDown className="h-3.5 w-3.5" aria-hidden="true" />
+                Get the printable race day card
+              </Link>
               <ShareRow compact />
             </div>
           </div>
@@ -537,6 +546,28 @@ export default function HyroxRuleChanges2026() {
                 reading of them, not a substitute for them.
               </span>
             </p>
+          </div>
+        </section>
+
+        {/* ── Race day card gate ─────────────────────────────────────────── */}
+        <section id="race-card" className="scroll-mt-32 py-14 md:py-20">
+          <div className="container mx-auto max-w-5xl px-6">
+            <div className="mb-8 max-w-3xl">
+              <span className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 font-headline text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+                <FileDown className="h-3.5 w-3.5" aria-hidden="true" />
+                Printable card
+              </span>
+              <h2 className="mb-4 font-headline text-3xl font-extrabold leading-tight text-foreground md:text-4xl">
+                The race day rules card
+              </h2>
+              <p className="font-body text-lg leading-relaxed text-muted-foreground">
+                None of this is much use on a start line if it is on a page you read three weeks ago.
+                This is the same information on a single sheet that folds into a kit bag pocket, with
+                space to fill in your venue&rsquo;s lap layout when you arrive.
+              </p>
+            </div>
+
+            <RaceCardGate placement="rules_2026_main" />
           </div>
         </section>
 

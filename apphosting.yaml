@@ -54,6 +54,15 @@ env:
     value: jdlee9900@gmail.com
     availability:
       - RUNTIME
+  # HMAC key signing the confirmed-opt-in download links for the HYROX race
+  # day rules card (src/lib/lead-tokens.ts). Any long random string works:
+  #   openssl rand -hex 32
+  # If this is unset the app falls back to a per-process random secret, which
+  # means confirmation links stop working after each restart.
+  - variable: LEAD_TOKEN_SECRET
+    secret: LEAD_TOKEN_SECRET
+    availability:
+      - RUNTIME
   - variable: GOOGLE_SERVICE_ACCOUNT_EMAIL
     secret: GOOGLE_SERVICE_ACCOUNT_EMAIL
     availability:
