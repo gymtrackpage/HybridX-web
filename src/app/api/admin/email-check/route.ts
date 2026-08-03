@@ -1,0 +1,98 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { getAdminSession } from '@/lib/admin-auth';
+import { getEmailProvider, sendEmail, EMAIL_FROM, EMAIL_REPLY_TO } from '@/lib/email/service';
+
+/**
+ * Admin-only email diagnostic.
+ *
+ * "The email did not send" is not something you can act on. This reports
+ * which transport is actually configured and, on POST, performs a real send
+ * and returns the provider's own error verbatim.
+ *
+ * Only ever reports whether a credential is present, never its value.
+ */
+
+function configSnapshot() {
+  return {
+    provider: getEmailProvider(),
+    from: EMAIL_FROM,
+    replyTo: EMAIL_REPLY_TO,
+    present: {
+      RESEND_API_KEY: Boolean(process.env.RESEND_API_KEY),
+      SMTP_HOST: Boolean(process.env.SMTP_HOST),
+      SMTP_PORT: Boolean(process.env.SMTP_PORT),
+      SMTP_USER: Boolean(process.env.SMTP_USER),
+      SMTP_PASSWORD: Boolean(process.env.SMTP_PASSWORD),
+      LEAD_TOKEN_SECRET: Boolean(process.env.LEAD_TOKEN_SECRET),
+    },
+    smtpHost: process.env.SMTP_HOST || null,
+    smtpPort: process.env.SMTP_PORT || null,
+  };
+}
+
+export async function GET() {
+  const session = await getAdminSession();
+  if (!session) {
+    return NextResponse.json({ error: 'Not authorized' }, { status: 403 });
+  }
+
+  const snapshot = configSnapshot();
+  const notes: string[] = [];
+
+  if (snapshot.provider === 'none') {
+    notes.push(
+      'No transport configured. In production every send will now throw rather than silently discard the message.'
+    );
+  }
+  if (snapshot.provider === 'smtp') {
+    notes.push(
+      'Falling back to SMTP because RESEND_API_KEY is not set. Firebase App Hosting runs on Cloud Run, ' +
+        'which restricts outbound SMTP — sends to smtp.gmail.com commonly time out. Prefer Resend.'
+    );
+  }
+  if (!snapshot.present.LEAD_TOKEN_SECRET) {
+    notes.push(
+      'LEAD_TOKEN_SECRET is not set. Race card confirmation links will stop working after each restart.'
+    );
+  }
+
+  return NextResponse.json({ ...snapshot, notes });
+}
+
+/**
+ * Sends a real test message. Defaults to the signed-in admin's own address,
+ * so this cannot be used to send mail to anyone else.
+ */
+export async function POST(request: NextRequest) {
+  const session = await getAdminSession();
+  if (!session) {
+    return NextResponse.json({ error: 'Not authorized' }, { status: 403 });
+  }
+
+  const snapshot = configSnapshot();
+  const to = session.email;
+  const stamp = new Date().toISOString();
+
+  try {
+    await sendEmail({
+      to,
+      subject: `HybridX email test — ${stamp}`,
+      html: `<p>Email transport test.</p><p>Provider: <strong>${snapshot.provider}</strong><br/>From: ${snapshot.from}<br/>Sent: ${stamp}</p>`,
+      text: `Email transport test.\n\nProvider: ${snapshot.provider}\nFrom: ${snapshot.from}\nSent: ${stamp}`,
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error('[email-check] Test send failed:', message);
+    return NextResponse.json({ ok: false, to, ...snapshot, error: message }, { status: 200 });
+  }
+
+  return NextResponse.json({
+    ok: true,
+    to,
+    ...snapshot,
+    note: 'Accepted by the provider. If it does not arrive, check spam and the provider dashboard for a bounce.',
+  });
+}
+
+// Never cache a diagnostic.
+export const dynamic = 'force-dynamic';
