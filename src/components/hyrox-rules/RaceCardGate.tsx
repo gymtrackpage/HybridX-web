@@ -2,7 +2,7 @@
 
 import React, { useActionState, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { ArrowRight, CheckCircle2, Download, Loader2, Printer } from 'lucide-react';
+import { ArrowRight, Loader2, MailCheck } from 'lucide-react';
 import { submitRaceCardLead, type RaceCardLeadState } from '@/app/hyrox-rule-changes-2026/actions';
 import { trackEvent } from '@/lib/analytics';
 
@@ -19,10 +19,13 @@ const CARD_CONTENTS = [
 /**
  * Email gate for the printable race day rules card.
  *
- * Follows the same server-action pattern as the VO2max funnel: honeypot,
- * rate limiting and UTM forwarding on the action side, optimistic-free
- * pending state here. The card is emailed and also offered as a direct
- * download in the success state, so a slow inbox never blocks delivery.
+ * Confirmed opt-in: submitting sends a confirmation link rather than the
+ * file. The card lives behind a signed token at /api/race-card/download, so
+ * clicking that link is the only route to it — which is what makes the
+ * address real rather than merely well formed.
+ *
+ * Shares the VO2max funnel's server-action shape otherwise: honeypot, rate
+ * limiting and UTM forwarding on the action side.
  */
 export default function RaceCardGate({ placement = 'rules_2026' }: { placement?: string }) {
   const initialState: RaceCardLeadState = { status: '', message: '' };
@@ -72,12 +75,10 @@ export default function RaceCardGate({ placement = 'rules_2026' }: { placement?:
   useEffect(() => {
     if (state.status === 'success' && !leadFiredRef.current) {
       leadFiredRef.current = true;
-      trackEvent('generate_lead', {
-        placement,
-        magnet: 'hyrox-race-day-card',
-        currency: 'GBP',
-        value: 0,
-      });
+      // Not generate_lead — that fires on the confirm page, so the conversion
+      // metric counts confirmed subscribers rather than submitted addresses.
+      // The gap between these two events is the confirmation rate.
+      trackEvent('lead_pending_confirmation', { placement, magnet: 'hyrox-race-day-card' });
     }
     if (state.status === 'error') {
       trackEvent('lead_submit_error', { placement, message: state.message });
@@ -137,33 +138,34 @@ export default function RaceCardGate({ placement = 'rules_2026' }: { placement?:
           {succeeded ? (
             <div role="status" aria-live="polite">
               <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-accent/20">
-                <CheckCircle2 className="h-8 w-8 text-accent" aria-hidden="true" />
+                <MailCheck className="h-8 w-8 text-accent" aria-hidden="true" />
               </div>
-              <h3 className="mb-2 font-headline text-2xl font-extrabold">Check your inbox</h3>
-              <p className="mb-1 font-body text-white/75">
-                Your card is on its way. It should land in under a minute.
+              <h3 className="mb-2 font-headline text-2xl font-extrabold">One click to go</h3>
+              <p className="mb-4 font-body text-white/75">
+                We have sent a confirmation link to{' '}
+                <strong className="text-white">{state.email || 'your inbox'}</strong>. Click it and
+                the card downloads straight away.
               </p>
-              <p className="mb-6 font-body text-sm text-white/50">
-                No email? Check your spam or promotions tab, then grab it directly below.
+              <p className="mb-6 font-body text-sm leading-relaxed text-white/50">
+                We confirm addresses so the card only goes to people who asked for it. If nothing
+                arrives in a minute or two, check your spam or promotions tab.
               </p>
 
-              {state.pdfUrl && (
-                <a
-                  href={state.pdfUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => trackEvent('pdf_download_click', { placement, magnet: 'hyrox-race-day-card' })}
-                  className="inline-flex h-14 items-center justify-center gap-2 rounded-xl bg-accent px-7 font-headline text-base font-extrabold text-black transition-opacity hover:opacity-90"
-                >
-                  <Download className="h-5 w-5" aria-hidden="true" /> Download the card
-                </a>
-              )}
-
-              <p className="mt-6 flex items-start gap-2 border-t border-white/10 pt-6 font-body text-sm leading-relaxed text-white/60">
-                <Printer className="mt-0.5 h-4 w-4 flex-shrink-0" aria-hidden="true" />
-                Print A4 landscape, single sided, at 100% scale, then fold with the print facing
-                outwards.
-              </p>
+              <ol className="space-y-2 border-t border-white/10 pt-6">
+                {['Open the email from HybridX', 'Click “Confirm and download the card”', 'Print it A4 landscape, single sided, at 100% scale, then fold'].map(
+                  (step, i) => (
+                    <li key={step} className="flex items-start gap-3 font-body text-sm text-white/70">
+                      <span
+                        className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-white/10 font-headline text-[11px] font-bold text-white"
+                        aria-hidden="true"
+                      >
+                        {i + 1}
+                      </span>
+                      {step}
+                    </li>
+                  )
+                )}
+              </ol>
             </div>
           ) : (
             <>
@@ -286,8 +288,8 @@ export default function RaceCardGate({ placement = 'rules_2026' }: { placement?:
                 </div>
 
                 <p className="mt-2 font-body text-xs leading-relaxed text-white/40">
-                  We will email the card, then a short series on racing the 2026/27 rules well.
-                  Unsubscribe any time.
+                  We will email you a link to confirm, then the card. After that, a short series on
+                  racing the 2026/27 rules well. Unsubscribe any time.
                 </p>
               </form>
             </>

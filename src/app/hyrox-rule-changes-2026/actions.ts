@@ -5,10 +5,12 @@ import { headers } from 'next/headers';
 import { SITE_CONFIG } from '@/lib/seo';
 import { sendRaceDayCardEmail } from '@/lib/email/send-race-day-card';
 import { checkEmailDeliverable } from '@/lib/email/validate-address';
-import { saveLead } from '@/lib/leads';
+import { upsertPendingLead } from '@/lib/leads';
+import { createLeadToken } from '@/lib/lead-tokens';
 
-// Public path to the lead magnet (served from /public).
-const PDF_PATH = '/hyrox-rule-changes-2026/hyrox-race-day-card-fold.pdf';
+// The card is NOT public. It is served from /api/race-card/download behind a
+// signed token, so the only route to it is a confirmed email address.
+const CONFIRM_PATH = '/hyrox-rule-changes-2026/confirm';
 const PAGE_PATH = '/hyrox-rule-changes-2026';
 
 // Tag the ESP / sheet uses to route these leads into the race day nurture
@@ -20,8 +22,8 @@ const ESP_TAG = 'hyrox-rules-card-2026';
 export type RaceCardLeadState = {
   status: '' | 'success' | 'error';
   message: string;
-  /** Absolute URL to the card, returned so the success state can offer a direct download. */
-  pdfUrl?: string;
+  /** Echoed back so the success state can tell them which inbox to check. */
+  email?: string;
 };
 
 const LeadSchema = z.object({
@@ -57,12 +59,10 @@ export async function submitRaceCardLead(
   _prevState: RaceCardLeadState,
   formData: FormData
 ): Promise<RaceCardLeadState> {
-  const pdfUrl = `${SITE_CONFIG.url}${PDF_PATH}`;
-
   // Honeypot: if the hidden "company" field is filled, silently drop (pretend success).
   const honeypot = (formData.get('company') as string) || '';
   if (honeypot.trim() !== '') {
-    return { status: 'success', message: '', pdfUrl };
+    return { status: 'success', message: '' };
   }
 
   const parsed = LeadSchema.safeParse({
@@ -112,9 +112,11 @@ export async function submitRaceCardLead(
     term: (formData.get('utm_term') as string) || '',
   };
 
-  // 1) Persist the lead (best effort, never blocks delivery).
+  // 1) Record the pending lead (best effort, never blocks the email).
+  //    Upserts on (source, email), so requesting the card twice does not
+  //    inflate the denominator of the confirmation rate.
   try {
-    await saveLead({
+    await upsertPendingLead({
       source: 'hyrox_rules_card',
       email,
       name: firstName,
@@ -129,26 +131,30 @@ export async function submitRaceCardLead(
       userAgent,
     });
   } catch (error) {
-    console.error('[race-card-lead] Failed to save lead:', error);
+    console.error('[race-card-lead] Failed to save pending lead:', error);
   }
 
-  // 2) Deliver the card. This is the action the visitor is waiting on.
+  // 2) Send the confirmation link. This is the action the visitor is waiting
+  //    on, and the click is what proves the address is real.
+  const token = createLeadToken(email, 'hyrox_rules_card');
+  const confirmUrl = `${SITE_CONFIG.url}${CONFIRM_PATH}?token=${encodeURIComponent(token)}`;
+
   try {
     await sendRaceDayCardEmail({
       to: email,
-      pdfUrl,
+      confirmUrl,
       pageUrl: `${SITE_CONFIG.url}${PAGE_PATH}`,
       siteUrl: SITE_CONFIG.url,
       firstName,
     });
   } catch (error) {
-    console.error('[race-card-lead] Failed to send card email:', error);
+    console.error('[race-card-lead] Failed to send confirmation email:', error);
     return {
       status: 'error',
       message:
-        'We could not email your card just now. Please try again in a moment, or email us if it keeps happening.',
+        'We could not send your confirmation email just now. Please try again in a moment, or email us if it keeps happening.',
     };
   }
 
-  return { status: 'success', message: '', pdfUrl };
+  return { status: 'success', message: '', email };
 }

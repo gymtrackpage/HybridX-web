@@ -5,6 +5,13 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
+  // The race day card is served from /private (outside /public) so it can only
+  // be reached with a signed token. Nothing imports it, so file tracing cannot
+  // infer it — the download route needs it declared explicitly or the file is
+  // missing from the deployed bundle.
+  outputFileTracingIncludes: {
+    '/api/race-card/download': ['./private/**'],
+  },
   async headers() {
     return [
       {
