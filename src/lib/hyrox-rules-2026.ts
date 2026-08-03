@@ -1,5 +1,5 @@
 /**
- * Structured data for the 2026/27 HYROX rule-change briefing
+ * Structured data for the 2026/27 HYROX rule-change guide
  * (/hyrox-rule-changes-2026).
  *
  * Everything the interactive components render lives here so the page copy,
@@ -25,7 +25,7 @@ export interface RuleChange {
   summary: string;
   /** The detail, as short paragraphs. */
   detail: string[];
-  /** The habit that protects you. */
+  /** What to do about it in training or on race day. */
   doThis?: string;
   /** True for changes that are new or materially tightened this season. */
   isNew?: boolean;
@@ -38,22 +38,22 @@ export const SEVERITY_META: Record<
   dq: {
     label: 'Ends your race',
     short: 'DQ',
-    blurb: 'Get this wrong and there is no time on the board at all.',
+    blurb: 'No time is recorded if you get this wrong.',
   },
   time: {
     label: 'Costs you time',
     short: 'Penalty',
-    blurb: 'A published penalty gets added to your finish time. No warnings.',
+    blurb: 'A published penalty is added to your finish time.',
   },
   good: {
     label: 'In your favour',
-    short: 'Good news',
-    blurb: 'Things you are now explicitly allowed to do. Use them.',
+    short: 'Allowed',
+    blurb: 'Things you are now explicitly allowed to do.',
   },
   know: {
     label: 'Worth knowing',
     short: 'Context',
-    blurb: 'Unlikely to bite you on race day, but it shapes the season.',
+    blurb: 'Unlikely to affect your race, but useful to know.',
   },
 };
 
@@ -74,48 +74,48 @@ export const RULE_CHANGES: RuleChange[] = [
     cost: 'Disqualification',
     isNew: true,
     summary:
-      'Every one of the eight workout stations must be completed in full. Leave one unfinished and you are out — not penalised, not given a time with an asterisk.',
+      'All eight workout stations must be completed in full. Leaving one unfinished is a disqualification rather than a time penalty.',
     detail: [
-      'This is written as a blanket standard now, and the rulebook spells out where it bites: leaving the SkiErg or the rower before the full 1,000 metres, leaving the wall balls before 100 valid reps, missing a sled lane on the push or the pull, missing a lap on the farmers carry, or missing an entire station or an entire 1km run.',
-      'The SkiErg and rower are the traps. You are deep in a race, your eyes are streaming, the monitor is a blur, and you decide you have done enough. Under the old interpretation there was room for argument. There is none now.',
-      'Expect this to catch the most people at the wall balls, because that is where judgement is worst and the temptation to walk away is highest. If the screen has not gone green and your judge has not confirmed, you are not finished.',
+      'The rulebook lists where this applies: leaving the SkiErg or rower before the full 1,000 metres, leaving the wall balls before 100 valid reps, missing a sled lane on the push or the pull, missing a lap on the farmers carry, and missing an entire station or an entire 1km run.',
+      'The two ergs are the most likely places to get caught, because the monitor is easy to misread when you are tired. Previously there was some room for interpretation. There is none now.',
+      'Wall balls are the other one to watch. The rep count is the hardest thing to keep track of late in a race, and the standard is 100 valid reps rather than 100 attempts.',
     ],
     doThis:
-      'Do not leave any station until a judge confirms you are done. If you genuinely cannot tell whether you have finished, ask. Ten seconds of asking beats a DQ.',
+      'Do not leave a station until a judge confirms you are done. If you are not sure whether you have finished, ask — a few seconds costs far less than a disqualification.',
   },
   {
     id: 'missed-run-lap',
-    title: 'Missed run laps now have a published scale',
+    title: 'Missed run laps now have a published penalty scale',
     severity: 'time',
     formats: ALL_FORMATS,
     cost: '3–7 min, or DQ at one-lap venues',
     isNew: true,
     summary:
-      'What used to be a vague range is now a fixed scale that depends on how your venue lays out its 1km loop — and at single-loop venues a missed lap is a disqualification.',
+      'The penalty used to be a vague range. It is now fixed, and it depends on how many laps your venue uses per kilometre.',
     detail: [
-      'Four laps per kilometre costs 3 minutes per missed lap. Three laps costs 5 minutes. Two laps costs 7 minutes. One lap per kilometre is a straight disqualification.',
-      'The one-lap venues are the ones to watch. If your race is a big arena with a single long loop, a missed lap is not a penalty, it is the end of your day.',
+      'Four laps per kilometre costs 3 minutes per missed lap. Three laps costs 5 minutes. Two laps costs 7 minutes. At one lap per kilometre a missed lap is a disqualification.',
+      'One-lap venues are worth checking for specifically, because there is no time penalty option at all.',
       'The lap screens at the venue are a convenience, not an official record, and the rulebook says so directly.',
     ],
     doThis:
-      'Find out before you start whether your venue is a one, two, three or four lap setup, and count your own laps.',
+      'Check the athlete map before you start so you know how many laps make up a kilometre, then count them yourself.',
   },
   {
     id: 'sandbag-support',
-    title: 'The sandbag rule got better, then stricter',
+    title: 'Sandbag drops cost 15 seconds instead of a disqualification',
     severity: 'time',
     formats: ALL_FORMATS,
     cost: '15 sec per infringement',
     isNew: true,
     summary:
-      'Dropping the sandbag twice no longer disqualifies you — each infringement is 15 seconds instead. But the support standard is tighter than most people realise, and there are no warnings.',
+      'Dropping the sandbag twice no longer disqualifies you. Each infringement is 15 seconds instead, but the support standard is stricter than most people expect.',
     detail: [
-      'Good news first: the two-drop disqualification is gone. Each infringement is a 15 second penalty. That is a fairer outcome.',
-      'The catch is that the sandbag has to stay fully supported by you for the whole 100 metres. Not resting on a barricade, not propped on your feet, not on the floor while you catch your breath. If it is bearing its weight anywhere other than on you, that is 15 seconds.',
-      'If your lunges fall apart at 60 metres and you have been getting away with a cheeky rest on the barrier, that habit now has a price.',
+      'The two-drop disqualification is gone, which is a more proportionate outcome for what is usually a fatigue error rather than an advantage.',
+      'The standard is that the bag stays fully supported by you for the whole 100 metres. Resting it on a barricade, propping it on your feet, or putting it down to catch your breath all count as infringements.',
+      'There are no warnings, so the penalty applies from the first occurrence.',
     ],
     doThis:
-      'Train the back half of the lunges under load so you never need the barrier. Rest standing, with the bag still on you.',
+      'Train the second half of the lunges under load so you can rest standing, with the bag still supported.',
   },
   {
     id: 'chalk',
@@ -125,108 +125,107 @@ export const RULE_CHANGES: RuleChange[] = [
     cost: '2 min',
     isNew: true,
     summary:
-      'Sled pull and farmers carry. Using chalk anywhere else is a 2 minute penalty, and powdered chalk at the wall balls is called out specifically.',
+      'Chalk is permitted at the sled pull and the farmers carry. Using it anywhere else is a 2 minute penalty.',
     detail: [
       'It has to be the chalk the event provides, and you cannot carry it from one station to another.',
-      'Powdered chalk at the wall balls is a specific 2 minute penalty.',
+      'Powdered chalk at the wall balls is listed separately, with its own 2 minute penalty.',
     ],
     doThis:
-      'Chalk up at the sled pull and the farmers carry, and leave it there. Nothing in a pocket, nothing on a wrist band.',
+      'Chalk up at the sled pull and the farmers carry and leave it there. Do not carry any in a pocket or on a wristband.',
   },
   {
     id: 'water',
-    title: 'Aid station water is for drinking',
+    title: 'Aid station water is for drinking only',
     severity: 'time',
     formats: ALL_FORMATS,
-    cost: '2 min per go',
+    cost: '2 min per occurrence',
     isNew: true,
     summary:
-      'You can no longer tip aid station water over your head. It is a slip hazard for everyone behind you, and it costs 2 minutes each time.',
+      'Tipping aid station water over your head is now a 2 minute penalty each time.',
     detail: [
-      'Fair enough as rules go — a wet floor on a run lane is a genuine hazard for the athletes following you.',
-      'If you race hot, sort your cooling before you start rather than mid-race.',
+      'The reasoning is that wet flooring on the run lanes is a hazard for the athletes behind you.',
+      'If you tend to overheat, plan your cooling before the start rather than relying on the aid stations.',
     ],
-    doThis:
-      'Pre-cool before the start, and use your own kit for cooling rather than the aid station cups.',
+    doThis: 'Pre-cool before the race and bring your own kit for cooling rather than using the cups.',
   },
   {
     id: 'skierg-jump',
-    title: 'You can jump on the SkiErg',
+    title: 'A jumping motion on the SkiErg is allowed',
     severity: 'good',
     formats: ALL_FORMATS,
     cost: 'No penalty — explicitly allowed',
     isNew: true,
     summary:
-      'A dynamic or jumping motion on the SkiErg is now explicitly allowed. Your feet may leave the base plate during the movement.',
+      'A dynamic or jumping stroke is now explicitly legal, and your feet may leave the base plate during the movement.',
     detail: [
-      'The only requirement is that your feet land back on the base plate and not on the floor.',
-      'Plenty of strong skiers have been coached out of that technique because they were not sure it was legal. It is. If jumping suits you, use it.',
+      'The only requirement is that your feet land back on the base plate rather than on the floor.',
+      'This was unclear enough previously that a lot of athletes were coached away from it. If a jumping stroke suits you, it is legal.',
     ],
     doThis:
-      'If you have been suppressing a natural jumping ski stroke, test it in training and see what it does to your 1,000m split.',
+      'If you have been holding back a natural jumping stroke, try it in training and compare your 1,000m split.',
   },
   {
     id: 'overtaking',
-    title: 'Overtaking is officially fine',
+    title: 'Overtaking at three stations is explicitly allowed',
     severity: 'good',
     formats: ALL_FORMATS,
     cost: 'No penalty — explicitly allowed',
     isNew: true,
     summary:
-      'On the lunges, burpee broad jumps and farmers carry you may pass a slower athlete whenever it is safe to do so.',
+      'You may pass a slower athlete on the lunges, burpee broad jumps and farmers carry whenever it is safe to do so.',
     detail: [
-      'Grid lines and lane markings at those stations are orientation only. You are not obliged to stay inside them.',
-      'Anyone who has been stuck behind someone on a burpee lane knows why this matters.',
+      'Grid lines and lane markings at those stations are for orientation only. You are not required to stay inside them.',
+      'It matters most on the burpee broad jumps, where being stuck behind someone previously meant matching their pace.',
     ],
-    doThis: 'Look up, pick your line, and pass early rather than shuffling in someone else’s rhythm.',
+    doThis: 'Move out and pass early rather than settling into a pace that does not suit you.',
   },
   {
     id: 'doubles-togetherness',
-    title: 'Doubles togetherness is down to a 10 second gap',
+    title: 'Doubles partners must stay within ten seconds',
     severity: 'time',
     formats: ['doubles'],
     cost: 'Out of ranking after 3 infringements',
     isNew: true,
     summary:
-      'The maximum gap between partners is now ten seconds, measured by the timing equipment going in and out of the RoxZone. You still cannot start a station until you are both there.',
+      'The maximum gap between partners is now ten seconds, measured by the timing equipment in and out of the RoxZone. Neither of you can start a station until you are both there.',
     detail: [
-      'If you race doubles, this is the change to actually train for. Ten seconds is not much when one of you is having a rough run.',
-      'The teams that get punished here are the mismatched ones, where the stronger runner drifts off without noticing.',
-      'The ceiling is low. Rack up more than three togetherness infringements and you are marked out of competition with no ranking at all. Three is your entire budget for the race.',
+      'Ten seconds is a small margin when one partner is having a harder day than the other.',
+      'It tends to catch mismatched teams, where the stronger runner gets ahead without realising.',
+      'More than three togetherness infringements and the team is marked out of competition with no ranking, so three is the limit for the whole race.',
     ],
     doThis:
-      'Practise running together at the pace of whoever is having the worse day — not at the average of your two paces.',
+      'Practise running together at the pace of whichever partner is having the worse day, rather than at your average pace.',
   },
   {
     id: 'relay-transition-chip',
-    title: 'Relay: you still run the transition zone when you go back-to-back',
+    title: 'Relay: back-to-back legs still run the transition zone',
     severity: 'time',
     formats: ['relay'],
     cost: 'Automatic penalty',
     isNew: true,
     summary:
-      'If one member does two runs and two stations back to back, they still have to run through the transition zone after each workout so their chip gets read.',
+      'If one member does two runs and two stations back to back, they still have to run through the transition zone after each workout so their chip is read.',
     detail: [
-      'It feels wrong, because you have not swapped with anyone. But the timing system needs to see you, and missing that read is an automatic penalty.',
-      'This is the relay rule that most teams do not know exists until it costs them.',
+      'It is easy to skip, because you have not swapped with anyone. The timing system still needs the read, and missing it is an automatic penalty.',
+      'This is the relay rule teams are most likely not to know about.',
     ],
     doThis:
-      'Brief it before the race: every workout ends with a transition zone pass, swap or no swap.',
+      'Agree it as a team beforehand: every workout finishes with a pass through the transition zone, whether you swap or not.',
   },
   {
     id: 'relay-finish',
-    title: 'Relay: the finish has a protocol',
+    title: 'Relay: the finish follows a set route',
     severity: 'know',
     formats: ['relay'],
-    cost: 'Scattered team, missed photo',
+    cost: 'Team split up at the finish',
     summary:
-      'Once your fourth member leaves the transition zone for the last run, the other three have a specific route to the wall ball rig — and all four cross the line together.',
+      'Once your fourth member leaves the transition zone for the last run, the other three follow a set route to the wall ball rig, and all four cross the line together.',
     detail: [
-      'The three finished members head to the wall ball station through the spectator pathways, come in via the marked relay entry point once their teammate has started throwing, and stand under the rig.',
+      'The three finished members go to the wall ball station through the spectator pathways, enter via the marked relay entry point once their teammate has started throwing, and wait under the rig.',
       'All four then run to the finisher stage and cross the line together.',
-      'Most teams do not know this and end up scattered across the venue for the photo.',
+      'Teams that do not know this tend to be spread around the venue when their teammate finishes.',
     ],
-    doThis: 'Walk the route as a team during your venue recce, and agree a meeting point under the rig.',
+    doThis: 'Walk the route together during your venue recce and agree where to meet under the rig.',
   },
   {
     id: 'out-of-ranking',
@@ -236,22 +235,22 @@ export const RULE_CHANGES: RuleChange[] = [
     cost: 'Time stands, but does not count',
     isNew: true,
     summary:
-      'An event or a single day can now be declared out of ranking for qualification and world record purposes if conditions affect performance or safety.',
+      'An event, or a single day of one, can be declared out of ranking for qualification and world record purposes if conditions affect performance or safety.',
     detail: [
-      'Wet turf, extreme heat, that sort of thing.',
-      'Your time still stands. It just will not count towards Worlds qualification or a record.',
+      'Wet flooring and extreme heat are the examples given.',
+      'Your time still stands. It just does not count towards Worlds qualification or a record.',
     ],
   },
   {
     id: 'fast-lane',
-    title: 'Sub 4:00/km must use the fast lane',
+    title: 'Sub 4:00/km runners must use the fast lane',
     severity: 'know',
     formats: ALL_FORMATS,
-    cost: 'Traffic management',
+    cost: 'Lane requirement',
     summary:
-      'If you are running 4:00 per kilometre or quicker you are required to use the inside fast lane. Everyone else stays outside.',
+      'Athletes running 4:00 per kilometre or quicker are required to use the inside fast lane. Everyone else stays outside it.',
     detail: [
-      'Worth knowing which side of that line you fall on before the gun, so you are not the person drifting across a lane at 6km.',
+      'Worth knowing which side of that pace you are on before you start, so you are not moving across lanes mid-race.',
     ],
   },
   {
@@ -262,22 +261,22 @@ export const RULE_CHANGES: RuleChange[] = [
     cost: 'Banned equipment',
     isNew: true,
     summary:
-      'Along with headphones, phones, body cameras and ear plugs. Anything with a camera, recording, streaming or augmented reality function is out.',
+      'Smart glasses join headphones, phones, body cameras and ear plugs on the banned list.',
     detail: [
-      'The category is deliberately broad — it is about the function, not the form factor.',
+      'The wording covers anything with a camera, recording, streaming or augmented reality function, so it applies to the function rather than a specific device.',
     ],
   },
   {
     id: 'challenger-division',
-    title: 'The Challenger Division',
+    title: 'New Challenger Division for athletes ranked 16 to 30',
     severity: 'know',
     formats: ['singles'],
-    cost: 'New pathway',
+    cost: 'New qualification route',
     isNew: true,
     summary:
-      'New this season for athletes ranked 16 to 30. Each Challenger race winner earns a slot in the Elite 15 at the next elite event.',
+      'Each Challenger race winner earns a place in the Elite 15 at the next elite event.',
     detail: [
-      'Not relevant to most of us, but it is a proper pathway that did not exist before.',
+      'It affects a small number of athletes, but it is a route into elite racing that did not previously exist.',
     ],
   },
   {
@@ -285,11 +284,13 @@ export const RULE_CHANGES: RuleChange[] = [
     title: 'Elite qualification is points based',
     severity: 'know',
     formats: ['singles', 'doubles'],
-    cost: 'Licence required',
+    cost: 'Athlete licence required',
     isNew: true,
     summary:
-      'A rolling 365 day window, best five singles results or best three doubles results, and you need an athlete licence for any of it to count.',
-    detail: ['Licences cannot be applied retrospectively, so buy it before the race you want to count.'],
+      'Qualification runs on a rolling 365 day window, counting your best five singles results or best three doubles results.',
+    detail: [
+      'You need an athlete licence for a result to count, and licences cannot be applied retrospectively. Buy one before the race you want counted.',
+    ],
   },
   {
     id: 'doubles-nationality',
@@ -300,11 +301,13 @@ export const RULE_CHANGES: RuleChange[] = [
     isNew: true,
     summary:
       'For Pro doubles chasing elite qualification, both partners must hold the same nationality, evidenced by passport.',
-    detail: ['This is the rule that breaks up some well known partnerships.'],
+    detail: [
+      'It affects a number of existing partnerships, which will need to change to stay eligible for qualification.',
+    ],
   },
   {
     id: 'age-60',
-    title: 'Age 60 and over',
+    title: 'Age 60 and over qualify through Open',
     severity: 'know',
     formats: ['singles', 'doubles'],
     cost: 'Qualification route',
@@ -336,23 +339,23 @@ export const STATIONS: StationSpec[] = [
     name: 'SkiErg',
     order: 1,
     standard: 'The full 1,000 metres on the monitor.',
-    trap: 'Station one, fresh legs, and a monitor you can still read. Later in the race you cannot — but this is where people leave early because the number "looked close enough".',
+    trap: 'Stopping when the count is close rather than complete. That used to be arguable and is now a disqualification, so read the monitor instead of estimating.',
     namedInRulebook: true,
   },
   {
     id: 'sled-push',
     name: 'Sled Push',
     order: 2,
-    standard: 'Every lane of the push, in full. 50 metres.',
-    trap: 'Missing a lane. In the fog of a heavy push it is genuinely easy to lose count of which lane you are on.',
+    standard: 'Every lane of the push, for the full 50 metres.',
+    trap: 'Losing track of which lane you are on. The push is hard enough that it happens, and a missed lane is now a disqualification rather than something you go back and redo.',
     namedInRulebook: true,
   },
   {
     id: 'sled-pull',
     name: 'Sled Pull',
     order: 3,
-    standard: 'Every lane of the pull, in full. 50 metres.',
-    trap: 'Same as the push — a missed lane is now a DQ rather than a redo. Chalk is allowed here, which makes this one of only two legal chalk stations.',
+    standard: 'Every lane of the pull, for the full 50 metres.',
+    trap: 'Same as the push — a missed lane is a disqualification. This is also one of only two stations where chalk is allowed.',
     namedInRulebook: true,
   },
   {
@@ -360,7 +363,7 @@ export const STATIONS: StationSpec[] = [
     name: 'Burpee Broad Jump',
     order: 4,
     standard: 'The full 80 metres, chest to floor, jumping from two feet.',
-    trap: 'Stopping short of the line because the lane ahead is blocked. You are now explicitly allowed to overtake here — use that instead of waiting.',
+    trap: 'Stopping short of the line, often because the lane ahead is blocked. Overtaking here is explicitly allowed, so move around rather than waiting.',
     namedInRulebook: false,
   },
   {
@@ -368,15 +371,15 @@ export const STATIONS: StationSpec[] = [
     name: 'Rowing',
     order: 5,
     standard: 'The full 1,000 metres on the monitor.',
-    trap: 'The classic. Eyes streaming, monitor blurred, and you decide you have done enough. There is no room for argument under the new standard.',
+    trap: 'The same error as the SkiErg, but more common, because you are further into the race and the monitor is harder to read. There is no room for interpretation now.',
     namedInRulebook: true,
   },
   {
     id: 'farmers-carry',
     name: 'Farmers Carry',
     order: 6,
-    standard: 'The full 200 metres — which may be two laps or four, depending on the venue.',
-    trap: 'Depending on the venue, 200 metres might be two laps or four. It is your job to know the athlete map. Nobody is going to count for you, and being wrong is now a race ender rather than a penalty.',
+    standard: 'The full 200 metres, which is two laps at some venues and four at others.',
+    trap: 'Assuming the lap count from a previous race. Check the athlete map before you start — nobody will count for you, and a missed lap is now a disqualification rather than a penalty.',
     namedInRulebook: true,
   },
   {
@@ -384,15 +387,15 @@ export const STATIONS: StationSpec[] = [
     name: 'Sandbag Lunges',
     order: 7,
     standard: 'The full 100 metres, with the bag supported by you the whole way.',
-    trap: 'Resting the bag on a barricade, on your feet, or on the floor. Each of those is now 15 seconds, with no warning first.',
+    trap: 'Resting the bag on a barricade, on your feet or on the floor. Each of those is 15 seconds, applied without a warning first.',
     namedInRulebook: false,
   },
   {
     id: 'wall-balls',
     name: 'Wall Balls',
     order: 8,
-    standard: '100 valid reps. Every division. Women included.',
-    trap: 'This is where judgement is worst and the temptation to walk away is highest. If the screen has not gone green and your judge has not confirmed, you are not finished.',
+    standard: '100 valid reps, in every division.',
+    trap: 'Rep count is the hardest thing to track at the end of a race, and no reps do not count towards the total. If the screen has not gone green and your judge has not confirmed, you are not finished.',
     namedInRulebook: true,
   },
 ];
@@ -415,28 +418,28 @@ export const LAP_CONFIGS: LapConfig[] = [
     label: '4 laps per km',
     penaltySeconds: 180,
     penaltyLabel: '3 min',
-    note: 'Short loops. 32 laps across the race — the most counting, the cheapest mistake.',
+    note: 'Short loops, 32 laps across the race. The most counting to do, and the smallest penalty if you get it wrong.',
   },
   {
     lapsPerKm: 3,
     label: '3 laps per km',
     penaltySeconds: 300,
     penaltyLabel: '5 min',
-    note: '24 laps across the race. A single miscount costs more than most athletes’ wall ball split.',
+    note: '24 laps across the race. Five minutes is more than most athletes spend on the wall balls.',
   },
   {
     lapsPerKm: 2,
     label: '2 laps per km',
     penaltySeconds: 420,
     penaltyLabel: '7 min',
-    note: '16 laps across the race. Seven minutes is a season’s worth of training gains, gone.',
+    note: '16 laps across the race, and the largest time penalty on the scale.',
   },
   {
     lapsPerKm: 1,
     label: '1 lap per km',
     penaltySeconds: null,
     penaltyLabel: 'Disqualification',
-    note: 'Big arena, single long loop. A missed lap is not a penalty here — it is the end of your day.',
+    note: 'A single long loop, usually a large arena. There is no time penalty option here.',
   },
 ];
 
@@ -462,7 +465,7 @@ export const PENALTY_ITEMS: PenaltyItem[] = [
   {
     id: 'sandbag',
     label: 'Sandbag unsupported',
-    hint: 'Rested on a barricade, your feet, or the floor. 15 sec each, no warnings.',
+    hint: 'Rested on a barricade, your feet or the floor. 15 seconds each, with no warning first.',
     seconds: 15,
     formats: ALL_FORMATS,
     max: 6,
@@ -480,7 +483,7 @@ export const PENALTY_ITEMS: PenaltyItem[] = [
   {
     id: 'water',
     label: 'Aid station water over your head',
-    hint: 'Drinking only. Tipping it over yourself is 2 min a go.',
+    hint: 'Drinking is fine. Tipping it over yourself is 2 minutes each time.',
     seconds: 120,
     formats: ALL_FORMATS,
     max: 4,
@@ -489,7 +492,7 @@ export const PENALTY_ITEMS: PenaltyItem[] = [
   {
     id: 'missed-lap',
     label: 'Missed run lap',
-    hint: 'Cost depends entirely on your venue layout — set it above.',
+    hint: 'The cost depends on your venue layout — set it in step 2.',
     seconds: 0, // resolved from the selected lap configuration
     formats: ALL_FORMATS,
     max: 4,
@@ -498,7 +501,7 @@ export const PENALTY_ITEMS: PenaltyItem[] = [
   {
     id: 'togetherness',
     label: 'Togetherness infringement',
-    hint: 'More than a 10 sec gap in or out of the RoxZone. Three is your whole budget.',
+    hint: 'More than a ten second gap in or out of the RoxZone. Three is the limit for the race.',
     seconds: null,
     outcome: 'ranking',
     formats: ['doubles'],
@@ -508,7 +511,7 @@ export const PENALTY_ITEMS: PenaltyItem[] = [
   {
     id: 'transition-zone',
     label: 'Missed transition zone chip read',
-    hint: 'Back-to-back legs still have to run through the zone after every workout.',
+    hint: 'Back-to-back legs still pass through the zone after every workout.',
     seconds: null,
     formats: ['relay'],
     max: 4,
@@ -517,7 +520,7 @@ export const PENALTY_ITEMS: PenaltyItem[] = [
   {
     id: 'incomplete',
     label: 'Left a station unfinished',
-    hint: 'The one change this season that ends your race outright.',
+    hint: 'The change most likely to end a race this season.',
     seconds: null,
     outcome: 'dq',
     formats: ALL_FORMATS,
@@ -531,7 +534,7 @@ export const PENALTY_ITEMS: PenaltyItem[] = [
 export const DOUBLES_STANDARDS: { title: string; body: string }[] = [
   {
     title: 'The resting partner stays on their feet',
-    body: 'No kneeling, sitting or lying down at any station. Rest standing, however bad it feels.',
+    body: 'No kneeling, sitting or lying down at any station. Rest standing.',
   },
   {
     title: 'Nothing gets passed forward',
@@ -539,11 +542,11 @@ export const DOUBLES_STANDARDS: { title: string; body: string }[] = [
   },
   {
     title: 'No flying wall ball transitions',
-    body: 'One of you throwing while the other catches in the squat is a no rep. Complete the rep, then swap.',
+    body: 'One partner throwing while the other catches in the squat is a no rep. Finish the rep, then swap.',
   },
   {
     title: 'Hands off the rope on the sled pull',
-    body: 'You can shout, gesture and guide, but you cannot touch the rope or step into the Racer’s Box.',
+    body: 'You can talk to your partner and gesture, but you cannot touch the rope or step into the Racer’s Box.',
   },
 ];
 
@@ -551,24 +554,24 @@ export const DOUBLES_STANDARDS: { title: string; body: string }[] = [
 
 export const RELAY_FINISH_STEPS: { step: string; body: string }[] = [
   {
-    step: 'Fourth member leaves for the last run',
-    body: 'The clock is still running. This is the trigger for everyone else to move.',
+    step: 'Your fourth member leaves for the last run',
+    body: 'This is the cue for the rest of the team to move.',
   },
   {
-    step: 'The other three head for the wall balls',
-    body: 'Through the spectator pathways — not across the race floor.',
+    step: 'The other three head to the wall balls',
+    body: 'Through the spectator pathways, not across the race floor.',
   },
   {
-    step: 'Enter via the marked relay entry point',
-    body: 'Only once your teammate has started throwing. Not before.',
+    step: 'Enter at the marked relay entry point',
+    body: 'Only once your teammate has started throwing.',
   },
   {
-    step: 'Stand under the rig, together',
-    body: 'All four of you in one place, ready to move as a unit.',
+    step: 'Wait under the rig together',
+    body: 'All four of you in one place, ready to move.',
   },
   {
     step: 'Run to the finisher stage and cross together',
-    body: 'One team, one line, one photo. This is the bit most teams get wrong.',
+    body: 'The whole team crosses the line at the same time.',
   },
 ];
 
@@ -578,7 +581,7 @@ export const RULE_FAQS: { question: string; answer: string }[] = [
   {
     question: 'What are the biggest HYROX rule changes for the 2026/27 season?',
     answer:
-      'The single biggest change is that failing to complete any workout station in full is now a disqualification rather than a penalty. Alongside that: missed run laps have a published penalty scale (3 minutes at four-lap venues, 5 minutes at three-lap, 7 minutes at two-lap, and disqualification at one-lap venues), the sandbag two-drop disqualification has been replaced by a 15 second penalty per infringement, chalk is restricted to the sled pull and farmers carry, tipping aid station water over your head costs 2 minutes, and the doubles togetherness gap has been reduced to ten seconds.',
+      'The largest change is that failing to complete any workout station in full is now a disqualification rather than a penalty. Alongside that: missed run laps have a published penalty scale (3 minutes at four-lap venues, 5 minutes at three-lap, 7 minutes at two-lap, and disqualification at one-lap venues), the sandbag two-drop disqualification has been replaced by a 15 second penalty per infringement, chalk is restricted to the sled pull and farmers carry, tipping aid station water over your head costs 2 minutes, and the doubles togetherness gap has been reduced to ten seconds.',
   },
   {
     question: 'Can you be disqualified for not finishing a HYROX station?',
@@ -588,7 +591,7 @@ export const RULE_FAQS: { question: string; answer: string }[] = [
   {
     question: 'What is the penalty for a missed run lap in HYROX?',
     answer:
-      'It depends on how many laps your venue uses per kilometre. Four laps per kilometre is 3 minutes per missed lap, three laps is 5 minutes, two laps is 7 minutes, and at one-lap venues a missed lap is a straight disqualification. Venue lap screens are a convenience, not an official record, so count your own laps.',
+      'It depends on how many laps your venue uses per kilometre. Four laps per kilometre is 3 minutes per missed lap, three laps is 5 minutes, two laps is 7 minutes, and at one-lap venues a missed lap is a disqualification. Venue lap screens are a convenience rather than an official record, so count your own laps.',
   },
   {
     question: 'Is dropping the sandbag still a disqualification in HYROX?',
@@ -608,7 +611,7 @@ export const RULE_FAQS: { question: string; answer: string }[] = [
   {
     question: 'How many wall balls do women do in HYROX?',
     answer:
-      'Women do 100 wall balls in every division, and have done since September 2024. Any page claiming 75 reps is working from outdated information.',
+      'Women do 100 wall balls in every division, and have done since September 2024. Any page listing 75 reps is out of date.',
   },
   {
     question: 'Where can I read the official HYROX rulebooks?',

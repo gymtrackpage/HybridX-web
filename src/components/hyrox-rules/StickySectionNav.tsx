@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import { trackEvent } from '@/lib/analytics';
 
 const SECTIONS = [
-  { id: 'the-big-one', label: 'The big one' },
+  { id: 'incomplete-stations', label: 'Incomplete stations' },
   { id: 'all-changes', label: 'Every change' },
   { id: 'penalty-calculator', label: 'Penalty calculator' },
   { id: 'laps', label: 'Lap map' },

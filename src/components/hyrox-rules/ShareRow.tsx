@@ -5,7 +5,7 @@ import { Check, Link2, MessageCircle, Share2 } from 'lucide-react';
 import { trackEvent } from '@/lib/analytics';
 
 const SHARE_TEXT =
-  'One 2026/27 HYROX rule change can end your race outright — and it is the sort of thing a tired athlete does without thinking. Interactive breakdown of every change:';
+  'The 2026/27 HYROX rules make an incomplete station a disqualification, and set a published penalty scale for missed run laps. Interactive breakdown of every change:';
 
 /**
  * Share row. Uses the native share sheet where the browser has one (most

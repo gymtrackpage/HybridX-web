@@ -10,25 +10,25 @@ const STORAGE_KEY = 'hybridx-rules-2026-checklist';
 const HABITS = [
   {
     id: 'judge',
-    title: 'Never leave a station until a judge tells you you are finished',
-    body: 'That single habit protects you from the only rule here that can end your race. If you genuinely cannot tell whether you are done, ask — ten seconds of asking beats a disqualification.',
+    title: 'Do not leave a station until a judge confirms you are finished',
+    body: 'This covers the only change that can end your race. If you are not sure whether you have finished, ask — it costs a few seconds rather than a disqualification.',
   },
   {
     id: 'laps',
-    title: 'Count your own run laps, and know your venue before the gun',
-    body: 'One, two, three or four laps per kilometre changes a missed lap from a 3 minute penalty to the end of your day. The lap screens at the venue are a convenience, not an official record.',
+    title: 'Check your venue’s lap layout, then count the laps yourself',
+    body: 'One, two, three or four laps per kilometre changes a missed lap from a 3 minute penalty to a disqualification. The lap screens at the venue are not an official record.',
   },
   {
     id: 'together',
-    title: 'If you race doubles, train at the pace of whoever is having the worse day',
-    body: 'Ten seconds is not much when one of you is struggling, and three infringements is your entire budget for the race.',
+    title: 'If you race doubles, train at the pace of the slower partner',
+    body: 'Ten seconds is a small margin when one of you is struggling, and three infringements is the limit for the whole race.',
   },
 ];
 
 /**
- * The three habits that cover almost all of the 2026/27 downside risk.
- * Ticks persist in localStorage so an athlete can come back to this page in
- * race week and see what they already sorted.
+ * The three habits that cover most of the 2026/27 downside risk. Ticks
+ * persist in localStorage so an athlete can come back in race week and see
+ * what they have already sorted.
  */
 export default function RaceDayChecklist() {
   const [done, setDone] = useState<string[]>([]);
@@ -107,7 +107,7 @@ export default function RaceDayChecklist() {
 
       <p className="mt-4 text-center font-body text-xs text-muted-foreground" aria-live="polite">
         {hydrated && done.length === HABITS.length
-          ? 'All three sorted. Everything else on this page is worth knowing, but those were the ones that decide whether you get a finish time.'
+          ? 'All three ticked. The rest of the page is useful context, but these are the ones that affect whether you get a finish time.'
           : `Tap to tick off. Saved on this device — ${hydrated ? done.length : 0} of ${HABITS.length} done.`}
       </p>
     </div>
