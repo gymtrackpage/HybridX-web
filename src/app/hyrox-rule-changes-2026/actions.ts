@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { headers } from 'next/headers';
 import { SITE_CONFIG } from '@/lib/seo';
 import { sendRaceDayCardEmail } from '@/lib/email/send-race-day-card';
+import { getEmailProvider } from '@/lib/email/service';
 import { checkEmailDeliverable } from '@/lib/email/validate-address';
 import { upsertPendingLead } from '@/lib/leads';
 import { createLeadToken } from '@/lib/lead-tokens';
@@ -148,7 +149,13 @@ export async function submitRaceCardLead(
       firstName,
     });
   } catch (error) {
-    console.error('[race-card-lead] Failed to send confirmation email:', error);
+    // Log the provider and the underlying message, not just the object — this
+    // is the only place the real cause (unverified domain, blocked SMTP,
+    // missing credentials) is visible.
+    const detail = error instanceof Error ? error.message : String(error);
+    console.error(
+      `[race-card-lead] Confirmation email failed (provider: ${getEmailProvider()}): ${detail}`
+    );
     return {
       status: 'error',
       message:

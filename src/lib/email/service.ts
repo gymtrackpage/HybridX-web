@@ -63,18 +63,22 @@ function getResend(): Resend | null {
 
 // ── SMTP / nodemailer (fallback) ───────────────────────────────────────────
 
+function hasSmtpConfig(): boolean {
+  return Boolean(
+    process.env.SMTP_HOST &&
+      process.env.SMTP_PORT &&
+      process.env.SMTP_USER &&
+      process.env.SMTP_PASSWORD
+  );
+}
+
 let transporter: nodemailer.Transporter | null = null;
 function getTransporter(): nodemailer.Transporter {
   if (!transporter) {
-    if (
-      !process.env.SMTP_HOST ||
-      !process.env.SMTP_PORT ||
-      !process.env.SMTP_USER ||
-      !process.env.SMTP_PASSWORD
-    ) {
-      console.error('Missing SMTP environment variables');
-      // jsonTransport does not send; it just serialises the message so the app
-      // does not crash in environments without mail configured.
+    if (!hasSmtpConfig()) {
+      // Development convenience only. jsonTransport serialises the message and
+      // reports success without sending, so the app is usable locally without
+      // mail credentials. sendEmail() refuses to use this in production.
       return nodemailer.createTransport({ jsonTransport: true });
     }
 
@@ -89,6 +93,19 @@ function getTransporter(): nodemailer.Transporter {
     });
   }
   return transporter;
+}
+
+export type EmailProvider = 'resend' | 'smtp' | 'none';
+
+/**
+ * Which transport outbound mail will actually use. Exposed so the admin email
+ * diagnostic and the error logs agree on what was attempted — "it didn't
+ * send" is not a diagnosis, "Resend rejected the From domain" is.
+ */
+export function getEmailProvider(): EmailProvider {
+  if (process.env.RESEND_API_KEY) return 'resend';
+  if (hasSmtpConfig()) return 'smtp';
+  return 'none';
 }
 
 function buildHeaders(opts: SendEmailOptions): Record<string, string> | undefined {
@@ -113,9 +130,25 @@ export async function sendEmail(opts: SendEmailOptions): Promise<void> {
   const from = opts.from || EMAIL_FROM;
   const replyTo = opts.replyTo || EMAIL_REPLY_TO;
   const headers = buildHeaders(opts);
+  const provider = getEmailProvider();
 
-  const resend = getResend();
-  if (resend) {
+  // Refuse to silently discard mail in production. jsonTransport reports
+  // success without sending, which previously turned a misconfigured deploy
+  // into invisible data loss — subscribers who never got what they asked for.
+  if (provider === 'none') {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error(
+        'No email transport configured: set RESEND_API_KEY, or all of SMTP_HOST, ' +
+          'SMTP_PORT, SMTP_USER and SMTP_PASSWORD.'
+      );
+    }
+    console.warn('[email] No transport configured — message discarded (development only).');
+  }
+
+  if (provider === 'resend') {
+    const resend = getResend();
+    if (!resend) throw new Error('Resend client could not be created from RESEND_API_KEY.');
+
     const { error } = await resend.emails.send({
       from,
       to: opts.to,
@@ -131,21 +164,32 @@ export async function sendEmail(opts: SendEmailOptions): Promise<void> {
       })),
     });
     if (error) {
-      throw new Error(`Resend send failed: ${error.name} - ${error.message}`);
+      // Include the From identity: an unverified sending domain is the most
+      // common cause, and the message alone does not always say which.
+      throw new Error(
+        `Resend rejected the send (from: ${from}): ${error.name} - ${error.message}`
+      );
     }
     return;
   }
 
-  // Fallback: SMTP.
+  // SMTP.
   const tx = getTransporter();
-  await tx.sendMail({
-    from,
-    to: opts.to,
-    subject: opts.subject,
-    html: opts.html,
-    text: opts.text,
-    replyTo,
-    headers,
-    attachments: opts.attachments,
-  });
+  try {
+    await tx.sendMail({
+      from,
+      to: opts.to,
+      subject: opts.subject,
+      html: opts.html,
+      text: opts.text,
+      replyTo,
+      headers,
+      attachments: opts.attachments,
+    });
+  } catch (error) {
+    const detail = error instanceof Error ? error.message : String(error);
+    throw new Error(
+      `SMTP send failed via ${process.env.SMTP_HOST}:${process.env.SMTP_PORT} — ${detail}`
+    );
+  }
 }
