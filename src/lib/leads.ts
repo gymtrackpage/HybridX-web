@@ -1,7 +1,11 @@
 import { FieldValue } from 'firebase-admin/firestore';
 import { adminFirestore } from '@/lib/firebase-admin';
 
-export type LeadSource = 'free_hyrox_plan' | 'sign_up' | 'build_a_bigger_engine';
+export type LeadSource =
+  | 'free_hyrox_plan'
+  | 'sign_up'
+  | 'build_a_bigger_engine'
+  | 'hyrox_rules_card';
 
 export interface LeadInput {
   source: LeadSource;

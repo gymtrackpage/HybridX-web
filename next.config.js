@@ -5,6 +5,17 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
+  async headers() {
+    return [
+      {
+        // Gated lead magnets: keep the PDFs out of search results so visitors
+        // arrive via the page (and the email capture) rather than landing on a
+        // bare file. Direct links still work for anyone we send one to.
+        source: '/:path*.pdf',
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex' }],
+      },
+    ];
+  },
   async redirects() {
     return [
       // Old long-form sales page — duplicated /free-hyrox-plan and split
