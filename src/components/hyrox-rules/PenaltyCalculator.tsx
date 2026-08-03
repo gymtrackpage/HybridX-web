@@ -38,14 +38,14 @@ const VERDICT_META: Record<
 > = {
   clean: {
     label: 'Clean race',
-    sub: 'No penalties logged. This is the target.',
+    sub: 'No penalties logged.',
     icon: Check,
     panel: 'border-emerald-500/40 bg-emerald-500/[0.06]',
     badge: 'bg-emerald-600 text-white',
   },
   penalised: {
     label: 'Finish, with penalties',
-    sub: 'Your time stands — the penalties are added to it.',
+    sub: 'Your time stands, with the penalties added to it.',
     icon: Timer,
     panel: 'border-amber-500/40 bg-amber-500/[0.06]',
     badge: 'bg-amber-500 text-black',
@@ -59,7 +59,7 @@ const VERDICT_META: Record<
   },
   dq: {
     label: 'Disqualified',
-    sub: 'No time on the board. This is the one that ends your day.',
+    sub: 'No time is recorded.',
     icon: AlertOctagon,
     panel: 'border-rose-500/40 bg-rose-500/[0.06]',
     badge: 'bg-rose-600 text-white',
@@ -105,7 +105,7 @@ export default function PenaltyCalculator() {
         disqualified = true;
         lines.push({
           label: `${item.label} × ${n}`,
-          detail: 'Disqualification — the station standard is now all-or-nothing.',
+          detail: 'Disqualification — every station must be completed in full.',
           seconds: null,
         });
         return;
@@ -127,8 +127,8 @@ export default function PenaltyCalculator() {
         lines.push({
           label: `${item.label} × ${n}`,
           detail: overBudget
-            ? 'Over the three-infringement budget — marked out of competition, no ranking.'
-            : `${3 - n} of your three-infringement budget left.`,
+            ? 'Over the limit of three — the team is marked out of competition with no ranking.'
+            : `${3 - n} of the three permitted infringements left.`,
           seconds: null,
         });
         return;
@@ -137,7 +137,7 @@ export default function PenaltyCalculator() {
       if (item.id === 'transition-zone') {
         lines.push({
           label: `${item.label} × ${n}`,
-          detail: 'Automatic penalty applied by the timing system at the officials’ discretion.',
+          detail: 'Automatic penalty. The rulebook does not publish a figure for it.',
           seconds: null,
         });
         return;
@@ -188,13 +188,13 @@ export default function PenaltyCalculator() {
 
   const copySummary = async () => {
     const parts = [
-      `My HYROX 2026/27 bad day: ${verdictMeta.label}`,
+      `HYROX 2026/27 penalty check: ${verdictMeta.label}`,
       `Format: ${FORMAT_META[format].label} · Venue: ${lapConfig.label}`,
       `Target ${formatSeconds(targetSeconds)}${
         isRaceOver ? ' → no time on the board' : ` → ${formatSeconds(adjustedSeconds)}`
       }`,
       ...result.lines.map((line) => `• ${line.label}${line.seconds ? ` (+${formatSeconds(line.seconds)})` : ''}`),
-      'Work out yours: hybridx.club/hyrox-rule-changes-2026',
+      'Check yours: hybridx.club/hyrox-rule-changes-2026',
     ];
     try {
       await navigator.clipboard.writeText(parts.join('\n'));
@@ -238,7 +238,7 @@ export default function PenaltyCalculator() {
         {/* Venue laps */}
         <Panel
           title="2. How does your venue lay out a kilometre?"
-          hint="Check the athlete map before race day. This single setting changes a missed lap from 3 minutes to a disqualification."
+          hint="Check the athlete map before race day. This setting changes a missed lap from a 3 minute penalty to a disqualification."
         >
           <div className="grid gap-2 sm:grid-cols-2">
             {LAP_CONFIGS.map((config) => {
@@ -308,8 +308,8 @@ export default function PenaltyCalculator() {
 
         {/* Infringements */}
         <Panel
-          title="4. Now log the mistakes"
-          hint="No warnings exist in the 2026/27 rulebooks. Every one of these applies on first offence."
+          title="4. Log the mistakes"
+          hint="There are no warnings in the 2026/27 rulebooks. Each of these applies from the first occurrence."
         >
           <div className="space-y-2">
             {items.map((item) => {
@@ -444,8 +444,8 @@ export default function PenaltyCalculator() {
             </h3>
             {result.lines.length === 0 ? (
               <p className="mt-2 font-body text-sm leading-relaxed text-muted-foreground">
-                Nothing logged yet. Add an infringement on the left and watch what it does to your
-                finish time — the missed run lap at a two-lap venue is the one that surprises people.
+                Nothing logged yet. Add an infringement on the left to see what it does to your
+                finish time.
               </p>
             ) : (
               <ul className="mt-2 space-y-2">
@@ -506,7 +506,7 @@ export default function PenaltyCalculator() {
           <TriangleAlert className="mt-0.5 h-3.5 w-3.5 flex-shrink-0" aria-hidden="true" />
           Penalty values are taken from the 2026/27 rulebooks. Where a rulebook states an automatic
           penalty without publishing a figure — the relay transition zone, for instance — this tool
-          flags it rather than inventing a number.
+          flags it rather than estimating a number.
         </p>
       </div>
     </div>

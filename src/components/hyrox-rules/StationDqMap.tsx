@@ -79,8 +79,8 @@ export default function StationDqMap() {
 
         <p className="mt-3 flex items-start gap-2 font-body text-xs leading-relaxed text-muted-foreground">
           <Flag className="mt-0.5 h-3.5 w-3.5 flex-shrink-0" aria-hidden="true" />
-          There is a 1km run before every station and after the last one. Missing an entire run is
-          treated the same way as missing an entire station.
+          There is a 1km run before each of the eight stations. Missing an entire run is treated the
+          same way as missing an entire station.
         </p>
       </div>
 
@@ -113,16 +113,16 @@ export default function StationDqMap() {
           <div className="rounded-xl border-l-2 border-rose-500 bg-rose-500/[0.06] p-4">
             <p className="mb-1.5 flex items-center gap-1.5 font-headline text-[11px] uppercase tracking-[0.12em] text-rose-700 dark:text-rose-300">
               <AlertOctagon className="h-3.5 w-3.5" aria-hidden="true" />
-              Where it goes wrong
+              Common mistake
             </p>
             <p className="font-body text-sm leading-relaxed text-foreground">{active.trap}</p>
           </div>
         </div>
 
         <p className="mt-4 rounded-xl border-l-2 border-accent bg-accent/10 px-4 py-3 font-body text-sm leading-relaxed text-foreground">
-          <strong className="font-headline">The habit that covers all eight: </strong>
-          do not leave any station until a judge confirms you are done. That is in the rules anyway,
-          and it exists precisely to stop this.
+          <strong className="font-headline">One habit covers all eight: </strong>
+          do not leave a station until a judge confirms you are done. That is already in the rules,
+          and it exists for exactly this reason.
         </p>
       </div>
 

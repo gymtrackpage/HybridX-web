@@ -9,9 +9,8 @@ const MAX_GAP = 25;
 const LIMIT = 10;
 
 /**
- * The doubles togetherness limit, made physical. Ten seconds sounds generous
- * until you drag the slider and see it is roughly forty metres of running at
- * race pace.
+ * The doubles togetherness limit shown as distance rather than time, since
+ * ten seconds is easier to judge as a gap on the run lane.
  */
 export default function DoublesGapMeter() {
   const [gap, setGap] = useState(6);
@@ -27,10 +26,10 @@ export default function DoublesGapMeter() {
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h3 className="font-headline text-lg font-bold text-foreground">
-            Ten seconds, in the flesh
+            How big is a ten second gap?
           </h3>
           <p className="font-body text-sm text-muted-foreground">
-            Drag the gap between you and your partner.
+            Drag to set the gap between you and your partner.
           </p>
         </div>
         <span
@@ -112,22 +111,22 @@ export default function DoublesGapMeter() {
         <Stat label="Gap" value={`${gap}s`} />
         <Stat label="At 5:00/km that is" value={`${metres}m apart`} />
         <Stat
-          label="Verdict"
-          value={legal ? 'Legal' : 'Logged against you'}
+          label="Result"
+          value={legal ? 'Within the limit' : 'Infringement logged'}
           tone={legal ? 'good' : 'bad'}
         />
       </div>
 
       <p className="mt-4 font-body text-sm leading-relaxed text-muted-foreground">
         The gap is measured by the timing equipment going in and out of the RoxZone, and neither of
-        you may start a station until you are both there. The teams that get punished are the
-        mismatched ones, where the stronger runner drifts off without noticing.
+        you may start a station until you are both there. It tends to catch mismatched teams, where
+        the stronger runner gets ahead without realising.
       </p>
 
       {/* Budget */}
       <div className="mt-5 rounded-xl border border-border bg-background p-4">
         <p className="mb-3 font-headline text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
-          Your infringement budget for the whole race
+          Infringements permitted for the whole race
         </p>
         <div className="flex flex-wrap items-center gap-2">
           {[1, 2, 3].map((n) => (

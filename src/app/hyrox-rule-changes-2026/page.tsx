@@ -46,7 +46,7 @@ const PUBLISHED = '2026-08-02';
 export const metadata: Metadata = {
   title: 'HYROX Rule Changes 2026/27 — What Actually Matters (Interactive Guide)',
   description:
-    'Every 2026/27 HYROX rule change, triaged by what it costs you. An incomplete station is now a disqualification, missed run laps have a published penalty scale, and the doubles gap is down to 10 seconds. Includes a free penalty calculator.',
+    'Every 2026/27 HYROX rule change, sorted by what it costs you. An incomplete station is now a disqualification, missed run laps have a published penalty scale, and the doubles gap is down to 10 seconds. Includes a free penalty calculator.',
   keywords: [
     'hyrox rule changes 2026',
     'hyrox rules 2026/27',
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'HYROX Rule Changes 2026/27 — What Actually Matters',
     description:
-      'One change this season can end your race outright. Every 2026/27 rule change, triaged by what it costs you, plus an interactive penalty calculator.',
+      'An incomplete station is now a disqualification. Every 2026/27 rule change, sorted by what it costs you, plus an interactive penalty calculator.',
     type: 'article',
     publishedTime: PUBLISHED,
   },
@@ -72,14 +72,14 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'HYROX Rule Changes 2026/27 — What Actually Matters',
     description:
-      'One change this season can end your race outright. Every 2026/27 rule change, triaged by what it costs you.',
+      'An incomplete station is now a disqualification. Every 2026/27 rule change, sorted by what it costs you.',
   },
 };
 
 const articleSchema = createArticleSchema({
   title: 'The 2026/27 HYROX Rule Changes: What Actually Matters',
   description:
-    'A practical reading of the 2026/27 HYROX Singles, Doubles and Team Relay rulebooks, triaged into what will cost you the race, what will cost you time, and what is worth knowing.',
+    'A practical reading of the 2026/27 HYROX Singles, Doubles and Team Relay rulebooks, sorted into what can end your race, what costs you time, and what is worth knowing.',
   url: PATH,
   datePublished: PUBLISHED,
 });
@@ -169,9 +169,9 @@ export default function HyroxRuleChanges2026() {
             </h1>
 
             <p className="mb-8 max-w-3xl font-body text-lg text-white/75 md:text-xl">
-              One change this season can end your race outright, and it is the sort of thing a tired
-              athlete does without thinking. Here is all three rulebooks, triaged into what will cost
-              you the race, what will cost you time, and what you can safely ignore.
+              One change this season turns a common mistake into a disqualification. Most of the rest
+              are small adjustments, and two are in your favour. All three rulebooks, sorted by what
+              each change actually costs you.
             </p>
 
             <div className="mb-10 flex flex-wrap gap-3">
@@ -180,8 +180,8 @@ export default function HyroxRuleChanges2026() {
                 className="bg-accent font-headline text-black hover:bg-accent/90"
                 asChild
               >
-                <Link href="#the-big-one">
-                  Start with the one that ends races <ArrowRight className="ml-2 h-4 w-4" />
+                <Link href="#incomplete-stations">
+                  Start with the disqualification rule <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
               <Button
@@ -226,19 +226,19 @@ export default function HyroxRuleChanges2026() {
             </h2>
             <p className="mb-4 font-body text-lg leading-relaxed text-foreground">
               <strong className="font-headline">
-                Every workout station must now be completed in full — an incomplete station is a
-                disqualification, not a penalty.
+                Every workout station must now be completed in full. An incomplete station is a
+                disqualification rather than a penalty.
               </strong>{' '}
-              That is the change that matters. Alongside it: missed run laps now carry a published
-              penalty scale that runs from 3 minutes to disqualification depending on your venue, the
-              sandbag two-drop disqualification has been replaced by 15 seconds per infringement,
-              chalk is restricted to the sled pull and farmers carry, tipping aid station water over
-              your head costs 2 minutes, and the doubles togetherness gap is down to ten seconds.
+              Alongside that: missed run laps carry a published penalty scale running from 3 minutes
+              to disqualification depending on your venue, the sandbag two-drop disqualification has
+              been replaced by 15 seconds per infringement, chalk is restricted to the sled pull and
+              farmers carry, tipping aid station water over your head costs 2 minutes, and the
+              doubles togetherness gap is down to ten seconds.
             </p>
             <p className="border-l-2 border-accent/60 pl-4 font-body leading-relaxed text-foreground/80">
-              Two changes go the other way and are genuinely good news: a jumping motion on the
-              SkiErg is now explicitly legal, and overtaking on the lunges, burpee broad jumps and
-              farmers carry is officially fine. Most of the rest are small, sensible tidy-ups.
+              Two changes go the other way. A jumping motion on the SkiErg is now explicitly legal,
+              and overtaking on the lunges, burpee broad jumps and farmers carry is allowed. The rest
+              are mostly clarifications and administrative changes.
             </p>
             <div className="mt-6">
               <ShareRow compact />
@@ -247,7 +247,7 @@ export default function HyroxRuleChanges2026() {
         </section>
 
         {/* ── The big one ────────────────────────────────────────────────── */}
-        <section id="the-big-one" className="scroll-mt-32 py-14 md:py-20">
+        <section id="incomplete-stations" className="scroll-mt-32 py-14 md:py-20">
           <div className="container mx-auto max-w-5xl px-6">
             <div className="mb-8 max-w-3xl">
               <span className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-rose-600 px-3 py-1 font-headline text-[11px] font-bold uppercase tracking-wider text-white">
@@ -258,16 +258,14 @@ export default function HyroxRuleChanges2026() {
                 An incomplete station is now a disqualification
               </h2>
               <p className="mb-4 font-body text-lg leading-relaxed text-muted-foreground">
-                Every workout station must be completed in full. All eight of them. If you do not
-                finish a station, you are out. Not penalised, not given a time with an asterisk.
-                Disqualified.
+                All eight workout stations must be completed in full. If you do not finish one, you
+                are disqualified rather than given a time penalty.
               </p>
               <p className="font-body leading-relaxed text-muted-foreground">
-                The SkiErg and the rower are the traps. You are deep in a race, your eyes are
-                streaming, the monitor is a blur, and you decide you have done enough. Under the old
-                interpretation there was room for argument. There is none now. Tap through the map
-                below to see what &ldquo;finished&rdquo; means at each station — and where each one
-                catches people out.
+                The SkiErg and the rower are where this is most likely to catch people, because the
+                monitor is easy to misread when you are tired and stopping a few metres short used to
+                be arguable. It is not now. Tap through the stations below for the completion
+                standard at each one and the mistake it tends to produce.
               </p>
             </div>
 
@@ -283,10 +281,10 @@ export default function HyroxRuleChanges2026() {
                 Every change, triaged by what it costs you
               </h2>
               <p className="font-body text-lg leading-relaxed text-muted-foreground">
-                Filter by consequence, or by the format you actually race. {countBySeverity('dq')}{' '}
-                change can end your race, {countBySeverity('time')} will cost you time,{' '}
-                {countBySeverity('good')} are in your favour, and the rest are worth knowing but will
-                probably never affect you.
+                Filter by consequence, or by the format you race. {countBySeverity('dq')} change can
+                end your race, {countBySeverity('time')} carry time penalties,{' '}
+                {countBySeverity('good')} are in your favour, and the remaining{' '}
+                {countBySeverity('know')} are worth knowing but unlikely to affect your race.
               </p>
             </div>
 
@@ -303,12 +301,12 @@ export default function HyroxRuleChanges2026() {
                 Free tool
               </span>
               <h2 className="mb-4 font-headline text-3xl font-extrabold leading-tight text-foreground md:text-4xl">
-                The cost of a bad day
+                What a mistake actually costs
               </h2>
               <p className="font-body text-lg leading-relaxed text-muted-foreground">
-                A 7 minute penalty means nothing until you watch it move your 1:29 to a 1:36. Set
-                your format, your venue layout and your target time, then log the mistakes and see
-                what lands on the board.
+                Penalties are easier to judge against your own target time than in the abstract. Set
+                your format, venue layout and target finish, then add the mistakes to see the
+                result.
               </p>
             </div>
 
@@ -325,12 +323,11 @@ export default function HyroxRuleChanges2026() {
                 Costs you time
               </span>
               <h2 className="mb-4 font-headline text-3xl font-extrabold leading-tight text-foreground md:text-4xl">
-                Know your lap map before the gun
+                Check your venue&rsquo;s lap layout
               </h2>
               <p className="font-body text-lg leading-relaxed text-muted-foreground">
-                Missed run laps used to sit in a vague range. Now the penalty is published, and it
-                depends entirely on how your venue lays out a kilometre. Same mistake, four very
-                different outcomes.
+                The missed lap penalty is now published, and it depends on how your venue lays out a
+                kilometre. The same mistake has four different outcomes.
               </p>
             </div>
 
@@ -382,10 +379,10 @@ export default function HyroxRuleChanges2026() {
             </div>
 
             <p className="mt-6 rounded-2xl border-l-2 border-accent bg-accent/10 px-5 py-4 font-body leading-relaxed text-foreground">
-              <strong className="font-headline">One-lap venues are the ones to watch. </strong>
-              If your race is a big arena with a single long loop, a missed lap is not a penalty, it
-              is the end of your day. And the lap screens at the venue are a convenience, not an
-              official record — the rulebook says so directly. Count your own.
+              <strong className="font-headline">Check for a one-lap layout specifically. </strong>
+              At a large arena with a single long loop there is no time penalty option — a missed lap
+              is a disqualification. And the lap screens at the venue are a convenience rather than
+              an official record, which the rulebook states directly, so count your own laps.
             </p>
           </div>
         </section>
@@ -399,19 +396,18 @@ export default function HyroxRuleChanges2026() {
                 Doubles
               </span>
               <h2 className="mb-4 font-headline text-3xl font-extrabold leading-tight text-foreground md:text-4xl">
-                The gap just got tighter
+                The togetherness gap is now ten seconds
               </h2>
               <p className="font-body text-lg leading-relaxed text-muted-foreground">
-                The togetherness standard is down to a maximum ten second gap between partners. If
-                you race doubles, this is the change to actually train for — ten seconds is not much
-                when one of you is having a rough run.
+                If you race doubles, this is the change worth training for. Ten seconds is a small
+                margin when one partner is having a harder day than the other.
               </p>
             </div>
 
             <DoublesGapMeter />
 
             <h3 className="mb-4 mt-10 font-headline text-xl font-bold text-foreground">
-              Four standards that are not new, but catch people every single event
+              Four standards that are not new, but still catch people out
             </h3>
             <div className="grid gap-4 sm:grid-cols-2">
               {DOUBLES_STANDARDS.map((standard) => (
@@ -441,10 +437,11 @@ export default function HyroxRuleChanges2026() {
                 Team Relay
               </span>
               <h2 className="mb-4 font-headline text-3xl font-extrabold leading-tight text-foreground md:text-4xl">
-                The transition zone rule nobody knows
+                The transition zone rule teams miss
               </h2>
               <p className="font-body text-lg leading-relaxed text-muted-foreground">
-                If you are doing a relay this season, read this bit even if you skip everything else.
+                Two relay details are worth reading before race day: when the transition zone applies
+                to a back-to-back leg, and how the finish is organised.
               </p>
             </div>
 
@@ -455,17 +452,17 @@ export default function HyroxRuleChanges2026() {
               </h3>
               <p className="mb-3 font-body leading-relaxed text-muted-foreground">
                 If one member does two runs and two stations back to back, they still have to run
-                through the transition zone after each workout so their chip gets read. Missing that
-                is an automatic penalty.
+                through the transition zone after each workout so their chip is read. Missing it is
+                an automatic penalty.
               </p>
               <p className="font-body leading-relaxed text-muted-foreground">
-                It feels wrong, because you have not swapped with anyone. But the timing system needs
-                to see you.
+                It is easy to skip, because you have not swapped with anyone. The timing system still
+                needs the read.
               </p>
             </div>
 
             <h3 className="mb-5 font-headline text-xl font-bold text-foreground">
-              And the finish has a protocol
+              The finish follows a set route
             </h3>
             <ol className="relative space-y-4 border-l-2 border-border pl-6">
               {RELAY_FINISH_STEPS.map((step, index) => (
@@ -486,7 +483,8 @@ export default function HyroxRuleChanges2026() {
               ))}
             </ol>
             <p className="mt-5 font-body leading-relaxed text-muted-foreground">
-              Most teams do not know this and end up scattered across the venue for the photo.
+              Teams that have not read this tend to be spread around the venue when their teammate
+              finishes, which usually means missing the finish line photo together.
             </p>
           </div>
         </section>
@@ -497,13 +495,12 @@ export default function HyroxRuleChanges2026() {
             <div className="rounded-2xl border-2 border-emerald-500/40 bg-emerald-500/[0.06] p-6">
               <h2 className="mb-3 flex items-start gap-2 font-headline text-xl font-bold text-foreground">
                 <ThumbsUp className="mt-1 h-5 w-5 flex-shrink-0 text-emerald-600" aria-hidden="true" />
-                While we are here: women&rsquo;s wall balls are 100 reps
+                One correction: women&rsquo;s wall balls are 100 reps
               </h2>
               <p className="font-body leading-relaxed text-muted-foreground">
-                Rules change between seasons, and a few sites this year have confidently repeated a
-                change that never happened. Women&rsquo;s wall balls are 100 reps in every division,
-                and have been since September 2024. If you see somebody claiming 75, they are working
-                from an old page.
+                Several sites this year have repeated a change that never happened. Women&rsquo;s
+                wall balls are 100 reps in every division, and have been since September 2024. Any
+                page listing 75 is out of date.
               </p>
             </div>
           </div>
@@ -514,11 +511,11 @@ export default function HyroxRuleChanges2026() {
           <div className="container mx-auto max-w-3xl px-6">
             <div className="mb-8">
               <h2 className="mb-4 font-headline text-3xl font-extrabold leading-tight text-foreground md:text-4xl">
-                What I would actually do about it
+                What to do about it
               </h2>
               <p className="font-body text-lg leading-relaxed text-muted-foreground">
-                Everything above is worth knowing. These three are the ones that decide whether you
-                get a finish time at all.
+                Everything above is worth reading, but these three habits cover most of the risk in
+                the 2026/27 changes.
               </p>
             </div>
 
@@ -572,8 +569,8 @@ export default function HyroxRuleChanges2026() {
               Know someone racing this season?
             </h2>
             <p className="mb-6 font-body leading-relaxed text-muted-foreground">
-              The incomplete-station rule is the one that will catch people out. Send this to your
-              training group before their next race.
+              The incomplete station rule is the one most athletes have not read yet. Worth sending
+              to your training group before their next race.
             </p>
             <ShareRow />
           </div>
