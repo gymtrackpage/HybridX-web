@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminSession } from '@/lib/admin-auth';
-import { getEmailProvider, sendEmail, EMAIL_FROM, EMAIL_REPLY_TO } from '@/lib/email/service';
+import {
+  getEmailProvider,
+  sendEmail,
+  describeResendKey,
+  EMAIL_FROM,
+  EMAIL_REPLY_TO,
+} from '@/lib/email/service';
 
 /**
  * Admin-only email diagnostic.
@@ -25,6 +31,7 @@ function configSnapshot() {
       SMTP_PASSWORD: Boolean(process.env.SMTP_PASSWORD),
       LEAD_TOKEN_SECRET: Boolean(process.env.LEAD_TOKEN_SECRET),
     },
+    resendKey: describeResendKey(),
     smtpHost: process.env.SMTP_HOST || null,
     smtpPort: process.env.SMTP_PORT || null,
   };
@@ -55,13 +62,27 @@ export async function GET() {
       'LEAD_TOKEN_SECRET is not set. Race card confirmation links will stop working after each restart.'
     );
   }
+  if (snapshot.resendKey?.present && !snapshot.resendKey.looksLikeResendKey) {
+    notes.push(
+      'RESEND_API_KEY does not start with "re_". The stored value is probably not a Resend API key.'
+    );
+  }
+  if (snapshot.resendKey?.hadSurroundingWhitespace) {
+    notes.push(
+      'RESEND_API_KEY had surrounding whitespace (usually a trailing newline from setting the secret via a file or pipe). It is trimmed before use, but worth re-saving cleanly.'
+    );
+  }
 
   return NextResponse.json({ ...snapshot, notes });
 }
 
 /**
- * Sends a real test message. Defaults to the signed-in admin's own address,
- * so this cannot be used to send mail to anyone else.
+ * Sends a real test message. Defaults to the signed-in admin's own address.
+ *
+ * An override is supported via ?to= because of a specific trap: while a
+ * sending domain is unverified, Resend still accepts mail addressed to the
+ * account owner and rejects everything else. Testing only against the admin's
+ * own address can therefore pass while every real subscriber send fails.
  */
 export async function POST(request: NextRequest) {
   const session = await getAdminSession();
@@ -70,8 +91,13 @@ export async function POST(request: NextRequest) {
   }
 
   const snapshot = configSnapshot();
-  const to = session.email;
+  const requestedTo = request.nextUrl.searchParams.get('to')?.trim();
+  const to = requestedTo || session.email;
   const stamp = new Date().toISOString();
+
+  if (requestedTo && requestedTo !== session.email) {
+    console.warn(`[email-check] Admin ${session.email} sent a test email to ${requestedTo}`);
+  }
 
   try {
     await sendEmail({
