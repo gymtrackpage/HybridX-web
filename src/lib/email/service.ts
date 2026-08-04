@@ -55,10 +55,36 @@ export interface SendEmailOptions {
 
 let resendClient: Resend | null = null;
 function getResend(): Resend | null {
-  if (!resendClient && process.env.RESEND_API_KEY) {
-    resendClient = new Resend(process.env.RESEND_API_KEY);
+  // .trim() matters: secrets set from a file or piped on stdin routinely pick
+  // up a trailing newline, and the key is then rejected as invalid. That
+  // failure is near-invisible — the request never authenticates, so it does
+  // not even appear in the Resend dashboard's logs.
+  const key = process.env.RESEND_API_KEY?.trim();
+  if (!resendClient && key) {
+    resendClient = new Resend(key);
   }
   return resendClient;
+}
+
+/**
+ * Shape of the configured Resend key, for diagnostics. Reports only what is
+ * needed to spot a malformed value — never enough to use it.
+ */
+export function describeResendKey(): {
+  present: boolean;
+  looksLikeResendKey: boolean;
+  hadSurroundingWhitespace: boolean;
+  length: number;
+} | null {
+  const raw = process.env.RESEND_API_KEY;
+  if (!raw) return { present: false, looksLikeResendKey: false, hadSurroundingWhitespace: false, length: 0 };
+  const trimmed = raw.trim();
+  return {
+    present: true,
+    looksLikeResendKey: trimmed.startsWith('re_'),
+    hadSurroundingWhitespace: raw !== trimmed,
+    length: trimmed.length,
+  };
 }
 
 // ── SMTP / nodemailer (fallback) ───────────────────────────────────────────
