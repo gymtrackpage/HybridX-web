@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer';
 import { Resend } from 'resend';
+import { getSuppressionState } from '@/lib/marketing-bridge';
 import dotenv from 'dotenv';
 
 // Load environment variables from .env file for local development
@@ -31,6 +32,12 @@ export interface EmailAttachment {
 
 export interface SendEmailOptions {
   to: string;
+  /**
+   * Skip the shared suppression check. Only for internal diagnostics that need
+   * to prove the transport works regardless of list state — never for anything
+   * a visitor receives.
+   */
+  ignoreSuppression?: boolean;
   subject: string;
   html: string;
   /** Plain-text alternative. Always provide one: HTML-only mail is a spam signal. */
@@ -147,12 +154,43 @@ function buildHeaders(opts: SendEmailOptions): Record<string, string> | undefine
 }
 
 /**
- * Single entry point for all outbound email. Routes to Resend when
- * RESEND_API_KEY is set, otherwise falls back to SMTP. Centralising here means
- * From identity, Reply-To, plain-text, and unsubscribe headers are applied
- * consistently to every message we send.
+ * Single entry point for all outbound email.
+ *
+ * Transport is Brevo SMTP, the same relay and sending domain the app
+ * (app.hybridx.club) uses. The two properties were previously on different
+ * providers with separate suppression lists, which meant an unsubscribe on one
+ * was invisible to the other and reputation was being built in two places for
+ * one brand.
+ *
+ * The Resend path is retained as a rollback: getEmailProvider() prefers it
+ * whenever RESEND_API_KEY is present, so unsetting the secret is the switch and
+ * re-setting it is the way back.
+ *
+ * Centralising here means From identity, Reply-To, plain-text, unsubscribe
+ * headers and the shared suppression check apply to every message.
  */
 export async function sendEmail(opts: SendEmailOptions): Promise<void> {
+  // One suppression list across both properties. Checked here rather than at
+  // each call site so nothing can bypass it by accident.
+  //
+  // Only a spam complaint blocks the send. Everything this site sends is
+  // something the recipient asked for seconds earlier — a guide, a
+  // confirmation link — and withholding that because they once unsubscribed
+  // from a campaign would fail the person while solving nothing. A complaint
+  // is different: mailing a complainant again endangers delivery for every
+  // other recipient on a domain both properties share.
+  //
+  // Fails open. If the bridge is unreachable the visitor still gets the thing
+  // they requested; the alternative is an outage in one service silently
+  // breaking lead magnets in another.
+  if (!opts.ignoreSuppression) {
+    const state = await getSuppressionState(opts.to);
+    if (state.complained) {
+      console.warn('[email] refusing to send: recipient previously reported spam');
+      return;
+    }
+  }
+
   const from = opts.from || EMAIL_FROM;
   const replyTo = opts.replyTo || EMAIL_REPLY_TO;
   const headers = buildHeaders(opts);
