@@ -37,10 +37,20 @@ function configSnapshot() {
   };
 }
 
+// Never let this be cached. `dynamic = 'force-dynamic'` (below) only stops
+// Next.js from caching it at build/ISR time — it says nothing to a browser or
+// an intermediate CDN, either of which will happily cache a plain GET. That
+// gap is exactly what makes a fixed secret look like it never took effect:
+// the diagnostic keeps serving the response it cached before the fix.
+const NO_STORE_HEADERS = {
+  'Cache-Control': 'no-store, no-cache, must-revalidate',
+  Pragma: 'no-cache',
+};
+
 export async function GET() {
   const session = await getAdminSession();
   if (!session) {
-    return NextResponse.json({ error: 'Not authorized' }, { status: 403 });
+    return NextResponse.json({ error: 'Not authorized' }, { status: 403, headers: NO_STORE_HEADERS });
   }
 
   const snapshot = configSnapshot();
@@ -73,7 +83,7 @@ export async function GET() {
     );
   }
 
-  return NextResponse.json({ ...snapshot, notes });
+  return NextResponse.json({ ...snapshot, notes }, { headers: NO_STORE_HEADERS });
 }
 
 /**
@@ -87,7 +97,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   const session = await getAdminSession();
   if (!session) {
-    return NextResponse.json({ error: 'Not authorized' }, { status: 403 });
+    return NextResponse.json({ error: 'Not authorized' }, { status: 403, headers: NO_STORE_HEADERS });
   }
 
   const snapshot = configSnapshot();
@@ -109,15 +119,21 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.error('[email-check] Test send failed:', message);
-    return NextResponse.json({ ok: false, to, ...snapshot, error: message }, { status: 200 });
+    return NextResponse.json(
+      { ok: false, to, ...snapshot, error: message },
+      { status: 200, headers: NO_STORE_HEADERS }
+    );
   }
 
-  return NextResponse.json({
-    ok: true,
-    to,
-    ...snapshot,
-    note: 'Accepted by the provider. If it does not arrive, check spam and the provider dashboard for a bounce.',
-  });
+  return NextResponse.json(
+    {
+      ok: true,
+      to,
+      ...snapshot,
+      note: 'Accepted by the provider. If it does not arrive, check spam and the provider dashboard for a bounce.',
+    },
+    { headers: NO_STORE_HEADERS }
+  );
 }
 
 // Never cache a diagnostic.
