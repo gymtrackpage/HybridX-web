@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import { FieldValue } from 'firebase-admin/firestore';
 import { adminFirestore } from '@/lib/firebase-admin';
+import { forwardLeadAsync } from '@/lib/marketing-bridge';
 
 export type LeadSource =
   | 'free_hyrox_plan'
@@ -36,6 +37,19 @@ export async function saveLead(input: LeadInput): Promise<void> {
     userAgent: input.userAgent || '',
     ip: input.ip || '',
     createdAt: FieldValue.serverTimestamp(),
+  });
+
+  // Push into the mailing system so this person can actually be nurtured.
+  // Single opt-in magnets carry consent: the forms state that signing up means
+  // ongoing email and that they can unsubscribe at any time, which is what the
+  // consent flag records. Fire-and-forget — the lead is already saved here.
+  forwardLeadAsync({
+    email,
+    name: input.name?.trim() || undefined,
+    source: input.source,
+    consent: true,
+    consentMethod: `magnet:${input.source}`,
+    utm: input.utm,
   });
 }
 
@@ -75,6 +89,19 @@ export async function upsertPendingLead(input: LeadInput): Promise<void> {
       // Never let a repeat request downgrade an already-confirmed lead.
       { mergeFields: ['source', 'email', 'name', 'extra', 'utm', 'userAgent', 'ip', 'createdAt'] }
     );
+
+  // Forwarded WITHOUT consent. This magnet uses confirmed opt-in, and someone
+  // who has requested a confirmation link has not yet given it — recording
+  // consent now would defeat the point of asking twice. They land on the list
+  // as a known contact, and markLeadConfirmed grants consent if they click.
+  forwardLeadAsync({
+    email,
+    name: input.name?.trim() || undefined,
+    source: input.source,
+    consent: false,
+    consentMethod: `magnet:${input.source}:pending`,
+    utm: input.utm,
+  });
 }
 
 /**
@@ -83,6 +110,15 @@ export async function upsertPendingLead(input: LeadInput): Promise<void> {
  */
 export async function markLeadConfirmed(source: LeadSource, email: string): Promise<void> {
   const normalised = email.trim().toLowerCase();
+
+  // A clicked confirmation link is the strongest consent evidence available,
+  // so this is where the mailing system is told they may be emailed.
+  forwardLeadAsync({
+    email: normalised,
+    source,
+    consent: true,
+    consentMethod: `magnet:${source}:confirmed`,
+  });
 
   await adminFirestore
     .collection('leads')
