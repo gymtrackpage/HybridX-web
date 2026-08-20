@@ -142,3 +142,34 @@ export async function getSuppressionState(email: string): Promise<SuppressionSta
     return UNKNOWN;
   }
 }
+
+export interface BridgeContract {
+  version: string;
+  endpoint: string;
+  auth: string;
+  fields: Record<string, { type: string; required?: boolean; note?: string }>;
+  responds: Record<string, string>;
+}
+
+/**
+ * Read the mailing system's published payload contract.
+ *
+ * Worth having as more than a health check: it is the answer to "what can a new
+ * funnel send", retrieved from the system that will actually parse it rather
+ * than inferred from whichever existing caller was copied. The two halves of
+ * this bridge previously disagreed about UTM field names for months without
+ * anything failing, because each side had only ever read its own definition.
+ *
+ * Returns null when unreachable or unauthorised — the caller decides whether
+ * that is worth reporting.
+ */
+export async function getBridgeContract(): Promise<BridgeContract | null> {
+  const response = await bridgeFetch('/api/marketing/leads', { method: 'GET' });
+  if (!response?.ok) return null;
+
+  try {
+    return (await response.json()) as BridgeContract;
+  } catch {
+    return null;
+  }
+}

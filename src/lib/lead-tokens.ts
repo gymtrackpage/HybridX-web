@@ -108,3 +108,50 @@ export function verifyLeadToken(token: string | undefined, expectedSource: strin
 
   return { valid: true, email: payload.e, source: payload.s };
 }
+
+export type ReadToken =
+  | { valid: true; email: string; source: string }
+  | { valid: false; reason: 'malformed' | 'bad-signature' | 'expired' };
+
+/**
+ * Verify a token and read the funnel it was issued for, rather than checking it
+ * against a source the caller already knows.
+ *
+ * This is what lets one confirmation page serve every funnel. `verifyLeadToken`
+ * requires the expected source, which means a page per magnet — fine when there
+ * were two, a tax on every future promotion once double opt-in is the norm.
+ *
+ * It is not weaker: the signature still proves we issued the token, and the
+ * source is read from the signed payload, so it cannot be substituted. The
+ * dropped check was only ever "is this the magnet I think it is", which a
+ * generic page has no opinion about.
+ */
+export function readLeadToken(token: string | undefined): ReadToken {
+  if (!token || typeof token !== 'string' || !token.includes('.')) {
+    return { valid: false, reason: 'malformed' };
+  }
+
+  const [payloadB64, signature] = token.split('.');
+  if (!payloadB64 || !signature) return { valid: false, reason: 'malformed' };
+
+  const expected = sign(payloadB64);
+  const a = Buffer.from(signature);
+  const b = Buffer.from(expected);
+  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) {
+    return { valid: false, reason: 'bad-signature' };
+  }
+
+  let payload: TokenPayload;
+  try {
+    payload = JSON.parse(Buffer.from(payloadB64, 'base64url').toString('utf8'));
+  } catch {
+    return { valid: false, reason: 'malformed' };
+  }
+
+  if (!payload?.e || !payload?.s || typeof payload.x !== 'number') {
+    return { valid: false, reason: 'malformed' };
+  }
+  if (Date.now() > payload.x) return { valid: false, reason: 'expired' };
+
+  return { valid: true, email: payload.e, source: payload.s };
+}

@@ -107,12 +107,13 @@ export async function submitFunnelLead(
     console.error(`[funnel] malformed source slug "${source}" — capturing as unclassified`);
   }
 
+  // Prefixed keys, matching the mailing system's published contract.
   const utm = {
-    source: (formData.get('utm_source') as string) || '',
-    medium: (formData.get('utm_medium') as string) || '',
-    campaign: (formData.get('utm_campaign') as string) || '',
-    content: (formData.get('utm_content') as string) || '',
-    term: (formData.get('utm_term') as string) || '',
+    utm_source: (formData.get('utm_source') as string) || '',
+    utm_medium: (formData.get('utm_medium') as string) || '',
+    utm_campaign: (formData.get('utm_campaign') as string) || '',
+    utm_content: (formData.get('utm_content') as string) || '',
+    utm_term: (formData.get('utm_term') as string) || '',
   };
 
   try {

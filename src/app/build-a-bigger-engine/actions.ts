@@ -87,12 +87,15 @@ export async function submitEngineLead(
   }
 
   const source = (formData.get('src') as string) || 'direct';
+  // Prefixed keys, matching the mailing system's contract. The bare spelling
+  // (`source`, `medium`) was silently dropped on arrival for months, because
+  // the two sides had each declared their own shape and neither knew.
   const utm = {
-    source: (formData.get('utm_source') as string) || '',
-    medium: (formData.get('utm_medium') as string) || '',
-    campaign: (formData.get('utm_campaign') as string) || '',
-    content: (formData.get('utm_content') as string) || '',
-    term: (formData.get('utm_term') as string) || '',
+    utm_source: (formData.get('utm_source') as string) || '',
+    utm_medium: (formData.get('utm_medium') as string) || '',
+    utm_campaign: (formData.get('utm_campaign') as string) || '',
+    utm_content: (formData.get('utm_content') as string) || '',
+    utm_term: (formData.get('utm_term') as string) || '',
   };
 
   const pdfUrl = `${SITE_CONFIG.url}${PDF_PATH}`;
