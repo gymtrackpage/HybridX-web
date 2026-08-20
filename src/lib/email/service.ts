@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 import { Resend } from 'resend';
-import { getSuppressionState } from '@/lib/marketing-bridge';
+import { getSuppressionState, getUnsubscribeLink } from '@/lib/marketing-bridge';
 import dotenv from 'dotenv';
 
 // Load environment variables from .env file for local development
@@ -56,6 +56,16 @@ export interface SendEmailOptions {
    * Enables one-click unsubscribe (List-Unsubscribe-Post).
    */
   oneClickUnsubscribe?: boolean;
+  /**
+   * Mark a message as genuinely transactional — a password reset, an admin
+   * diagnostic — so no unsubscribe header is attached.
+   *
+   * Use it sparingly and honestly. A lead magnet is *not* transactional in the
+   * eyes of a mailbox provider just because the person asked for it seconds
+   * earlier; it is list mail, and list mail without a working unsubscribe is
+   * what gets a sending domain filtered.
+   */
+  transactional?: boolean;
 }
 
 // ── Resend (preferred) ─────────────────────────────────────────────────────
@@ -153,6 +163,48 @@ function buildHeaders(opts: SendEmailOptions): Record<string, string> | undefine
   return Object.keys(headers).length ? headers : undefined;
 }
 
+/** Fallback when the mailing system cannot mint a signed link. */
+const MAILTO_UNSUBSCRIBE = '<mailto:training@hybridx.club?subject=Unsubscribe>';
+
+/**
+ * Work out the unsubscribe headers for a message.
+ *
+ * Every list message gets a real one-click HTTPS endpoint, minted by the
+ * mailing system so the opt-out lands in the shared suppression list rather
+ * than in somebody's inbox. Callers no longer have to remember: forgetting was
+ * how `send-training-plan.ts` came to send no unsubscribe header at all.
+ *
+ * Falls back to the mailto rather than failing the send. An unsubscribe header
+ * that is merely inconvenient for an afternoon beats a guide that never arrives.
+ */
+async function resolveUnsubscribe(
+  opts: SendEmailOptions,
+): Promise<{ listUnsubscribe?: string; oneClickUnsubscribe?: boolean }> {
+  if (opts.transactional) return {};
+
+  // An explicit header from the caller wins — it may be doing something
+  // deliberate this function knows nothing about.
+  if (opts.listUnsubscribe) {
+    return {
+      listUnsubscribe: opts.listUnsubscribe,
+      oneClickUnsubscribe: opts.oneClickUnsubscribe,
+    };
+  }
+
+  const link = await getUnsubscribeLink(opts.to);
+  if (!link) {
+    console.warn('[email] no signed unsubscribe link available; falling back to mailto');
+    return { listUnsubscribe: MAILTO_UNSUBSCRIBE, oneClickUnsubscribe: false };
+  }
+
+  // Both forms: the HTTPS endpoint for clients that honour RFC 8058, and the
+  // mailto for older ones that only understand that.
+  return {
+    listUnsubscribe: `<${link.url}>, ${MAILTO_UNSUBSCRIBE}`,
+    oneClickUnsubscribe: link.oneClick,
+  };
+}
+
 /**
  * Single entry point for all outbound email.
  *
@@ -193,7 +245,7 @@ export async function sendEmail(opts: SendEmailOptions): Promise<void> {
 
   const from = opts.from || EMAIL_FROM;
   const replyTo = opts.replyTo || EMAIL_REPLY_TO;
-  const headers = buildHeaders(opts);
+  const headers = buildHeaders({ ...opts, ...(await resolveUnsubscribe(opts)) });
   const provider = getEmailProvider();
 
   // Refuse to silently discard mail in production. jsonTransport reports

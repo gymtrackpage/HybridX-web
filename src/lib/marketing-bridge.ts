@@ -173,3 +173,47 @@ export async function getBridgeContract(): Promise<BridgeContract | null> {
     return null;
   }
 }
+
+export interface UnsubscribeLink {
+  url: string;
+  oneClick: boolean;
+}
+
+/**
+ * Ask the mailing system for a one-click unsubscribe URL for an address.
+ *
+ * Mail this site sends previously offered only `mailto:unsubscribe@…`, which
+ * fails twice: Gmail and Yahoo have required a one-click HTTPS endpoint of bulk
+ * senders since February 2024, and an opt-out arriving in a human inbox never
+ * reaches the shared suppression list. Someone could unsubscribe from a magnet
+ * email and keep receiving campaigns, which is how a sending domain earns spam
+ * complaints from people who did everything right.
+ *
+ * The token is minted there rather than here on purpose: the signing key that
+ * makes every unsubscribe link unforgeable should live in one project, not two.
+ *
+ * Returns null when unavailable, so the caller can fall back rather than fail.
+ * A magnet that does not arrive is a worse outcome than one whose unsubscribe
+ * header is a mailto for an afternoon.
+ */
+export async function getUnsubscribeLink(email: string): Promise<UnsubscribeLink | null> {
+  const response = await bridgeFetch('/api/marketing/unsubscribe-link', {
+    method: 'POST',
+    body: JSON.stringify({ email }),
+  });
+
+  if (!response?.ok) {
+    if (response) {
+      console.error(`[marketing-bridge] unsubscribe link refused: ${response.status}`);
+    }
+    return null;
+  }
+
+  try {
+    const data = (await response.json()) as { url?: string; oneClick?: boolean };
+    if (!data.url) return null;
+    return { url: data.url, oneClick: data.oneClick === true };
+  } catch {
+    return null;
+  }
+}
