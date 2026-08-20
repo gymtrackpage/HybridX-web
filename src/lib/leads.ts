@@ -3,11 +3,39 @@ import { FieldValue } from 'firebase-admin/firestore';
 import { adminFirestore } from '@/lib/firebase-admin';
 import { forwardLeadAsync } from '@/lib/marketing-bridge';
 
-export type LeadSource =
-  | 'free_hyrox_plan'
-  | 'sign_up'
-  | 'build_a_bigger_engine'
-  | 'hyrox_rules_card';
+/**
+ * A funnel identifier.
+ *
+ * Deliberately a slug rather than a union. A closed union meant every new
+ * promotion needed a type change here, a bespoke server action, and a deploy of
+ * this project *and* the app before its leads could be nurtured — five
+ * touchpoints across two repositories to launch a landing page. Funnels change
+ * at marketing speed; that made this file the bottleneck on the thing it exists
+ * to serve.
+ *
+ * The mailing system registers a slug it has never seen on the first lead that
+ * carries it, so a new funnel is a new page and nothing else.
+ */
+export type LeadSource = string;
+
+/** The funnels that predate slugs. Kept only so their spellings stay stable. */
+export const LEGACY_LEAD_SOURCES = [
+  'free_hyrox_plan',
+  'sign_up',
+  'build_a_bigger_engine',
+  'hyrox_rules_card',
+] as const;
+
+/**
+ * Shape check for a funnel slug, matching the mailing system's own rule. A slug
+ * that fails this is still captured locally — it becomes a route the app files
+ * as unclassified rather than a lost lead — but it will not get its own route.
+ */
+const SLUG = /^[a-z0-9][a-z0-9_-]{1,48}$/;
+
+export function isValidLeadSource(source: string): boolean {
+  return SLUG.test(source);
+}
 
 export interface LeadInput {
   source: LeadSource;
