@@ -15,6 +15,12 @@ export interface LeadInput {
   name?: string;
   /** Free-form extra fields specific to the source (event, eventDate, tag, etc). */
   extra?: Record<string, unknown>;
+  /**
+   * Tags to carry into the mailing system alongside the ones its own intake
+   * registry applies for this source. Lowercase, `[a-z0-9:-]`, at most five —
+   * the receiving end validates and drops anything else.
+   */
+  tags?: string[];
   utm?: Record<string, string>;
   userAgent?: string;
   ip?: string;
@@ -50,6 +56,7 @@ export async function saveLead(input: LeadInput): Promise<void> {
     consent: true,
     consentMethod: `magnet:${input.source}`,
     utm: input.utm,
+    tags: input.tags,
   });
 }
 
@@ -101,6 +108,7 @@ export async function upsertPendingLead(input: LeadInput): Promise<void> {
     consent: false,
     consentMethod: `magnet:${input.source}:pending`,
     utm: input.utm,
+    tags: input.tags,
   });
 }
 
@@ -108,16 +116,24 @@ export async function upsertPendingLead(input: LeadInput): Promise<void> {
  * Marks an address as having clicked the confirmation link. Upserts, so a
  * confirmation still lands even if the pending write failed earlier.
  */
-export async function markLeadConfirmed(source: LeadSource, email: string): Promise<void> {
+export async function markLeadConfirmed(
+  source: LeadSource,
+  email: string,
+  tags?: string[],
+): Promise<void> {
   const normalised = email.trim().toLowerCase();
 
   // A clicked confirmation link is the strongest consent evidence available,
-  // so this is where the mailing system is told they may be emailed.
+  // so this is where the mailing system is told they may be emailed. That
+  // grant is also what raises `consentGranted` there, which is the trigger a
+  // confirmed opt-in nurture sequence starts from — so this call is not merely
+  // bookkeeping, it is what actually begins the sequence.
   forwardLeadAsync({
     email: normalised,
     source,
     consent: true,
     consentMethod: `magnet:${source}:confirmed`,
+    tags,
   });
 
   await adminFirestore

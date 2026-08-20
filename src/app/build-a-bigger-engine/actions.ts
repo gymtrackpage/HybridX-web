@@ -104,6 +104,7 @@ export async function submitEngineLead(
       email,
       name: firstName,
       extra: { magnet: 'build-a-bigger-engine', tag: ESP_TAG, src: source },
+      tags: [ESP_TAG],
       utm,
       ip,
       userAgent,

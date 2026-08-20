@@ -49,7 +49,7 @@ export default async function ConfirmRaceCardPage({
   // between a confirmed subscriber and the file they came for.
   if (verified.valid) {
     try {
-      await markLeadConfirmed(SOURCE, verified.email);
+      await markLeadConfirmed(SOURCE, verified.email, ['hyrox-rules-card-2026']);
     } catch (err) {
       console.error('[race-card] Failed to mark lead confirmed:', err);
     }

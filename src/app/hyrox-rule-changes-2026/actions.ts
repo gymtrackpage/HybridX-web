@@ -127,6 +127,7 @@ export async function submitRaceCardLead(
         src,
         raceDate: raceDate || null,
       },
+      tags: [ESP_TAG],
       utm,
       ip,
       userAgent,
