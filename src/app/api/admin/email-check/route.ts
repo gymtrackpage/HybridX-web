@@ -120,6 +120,11 @@ export async function POST(request: NextRequest) {
       // the *transport* works, so a marketing-system outage should not change
       // what this test does or add a round trip to it.
       transactional: true,
+      // And bypass the shared suppression list. Without this the diagnostic is
+      // not isolated at all: a complained-on admin address makes sendEmail
+      // return silently, the route sees no error, and the one tool built to
+      // prove the transport works reports green for a message that never left.
+      ignoreSuppression: true,
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);

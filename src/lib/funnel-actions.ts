@@ -22,7 +22,13 @@
 
 import { headers } from 'next/headers';
 import { z } from 'zod';
-import { isValidLeadSource, saveLead } from '@/lib/leads';
+import { saveLead } from '@/lib/leads';
+
+/** Must match the mailing system's own slug rule. See lib/leads.ts. */
+const SLUG = /^[a-z0-9][a-z0-9_-]{1,48}$/;
+
+/** Where a lead from a misconfigured form is filed, so it is never simply lost. */
+const UNCLASSIFIED_SOURCE = 'website-other';
 
 export type FunnelLeadState = {
   status: '' | 'success' | 'error';
@@ -36,7 +42,13 @@ const FunnelSchema = z.object({
     .toLowerCase()
     .email({ message: 'That email looks incomplete. Please check and try again.' }),
   firstName: z.string().trim().max(80).optional(),
-  source: z.string().trim().min(2).max(49),
+  // Validated here, not merely checked later: this becomes a permanent route in
+  // the mailing system, so a mistyped `source` prop would otherwise create a
+  // parallel funnel that no journey is attached to.
+  source: z
+    .string()
+    .trim()
+    .regex(SLUG, 'This form is misconfigured — its funnel name is not a valid slug.'),
 });
 
 // Small in-memory limiter. App Hosting runs a single instance for this project,
@@ -79,10 +91,16 @@ export async function submitFunnelLead(
     return { status: 'success', message: 'Thanks — check your inbox.' };
   }
 
+  const rawSource = ((formData.get('source') as string) || '').trim();
+
   const parsed = FunnelSchema.safeParse({
     email: formData.get('email'),
     firstName: formData.get('firstName') || undefined,
-    source: formData.get('source'),
+    // Substituted rather than rejected. A bad slug is the page author's mistake,
+    // and failing the submission would show the visitor a nonsense error under
+    // the email field while the funnel silently captured nobody. The lead is
+    // filed as unclassified and the misconfiguration is logged for us instead.
+    source: SLUG.test(rawSource) ? rawSource : UNCLASSIFIED_SOURCE,
   });
 
   if (!parsed.success) {
@@ -90,6 +108,13 @@ export async function submitFunnelLead(
       status: 'error',
       message: parsed.error.errors[0]?.message || 'Please enter a valid email address.',
     };
+  }
+
+  if (!SLUG.test(rawSource)) {
+    console.error(
+      `[funnel] misconfigured form: source "${rawSource}" is not a valid slug; ` +
+        `filing this lead as ${UNCLASSIFIED_SOURCE}`,
+    );
   }
 
   const { email, firstName, source } = parsed.data;
@@ -101,10 +126,6 @@ export async function submitFunnelLead(
 
   if (isRateLimited(ip)) {
     return { status: 'error', message: 'Too many attempts. Please wait a little while and try again.' };
-  }
-
-  if (!isValidLeadSource(source)) {
-    console.error(`[funnel] malformed source slug "${source}" — capturing as unclassified`);
   }
 
   // Prefixed keys, matching the mailing system's published contract.

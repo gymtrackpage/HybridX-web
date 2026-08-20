@@ -5,8 +5,8 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { readLeadToken } from '@/lib/lead-tokens';
-import { markLeadConfirmed } from '@/lib/leads';
-import { SITE_CONFIG } from '@/lib/seo';
+import { confirmLead } from '@/lib/confirm-actions';
+import ConfirmButton from '@/components/ConfirmButton';
 
 // One confirmation page for every funnel.
 //
@@ -19,6 +19,13 @@ import { SITE_CONFIG } from '@/lib/seo';
 // `consentGranted` in the mailing system — the trigger a confirmed opt-in
 // nurture sequence begins from. So this page is not a receipt. It is the step
 // that starts the sequence.
+//
+// Which is exactly why the page load must not perform it. Corporate mail
+// security — Outlook Safe Links, Proofpoint, Gmail's prefetch — issues a GET
+// against every URL in an inbound message, so confirming on render means a
+// scanner produces the strongest consent evidence in the system for someone who
+// never opened the email. Double opt-in that a machine can complete is not
+// double opt-in. The grant is behind the button below, which POSTs.
 
 export const dynamic = 'force-dynamic';
 
@@ -51,18 +58,6 @@ export default async function ConfirmPage({
   const { token } = await searchParams;
   const verified = readLeadToken(token);
 
-  // Best effort: a Firestore problem must not stand between someone who has
-  // just confirmed and being told that it worked. The forward to the mailing
-  // system is itself fire-and-forget, so a failure here costs a delay in
-  // nurturing, never the confirmation.
-  if (verified.valid) {
-    try {
-      await markLeadConfirmed(verified.source, verified.email);
-    } catch (err) {
-      console.error('[confirm] could not mark lead confirmed:', err);
-    }
-  }
-
   const error = verified.valid ? null : (ERROR_COPY[verified.reason] ?? ERROR_COPY['bad-signature']);
 
   return (
@@ -79,22 +74,11 @@ export default async function ConfirmPage({
             </Button>
           </>
         ) : (
-          <>
-            <CheckCircle2 className="h-12 w-12 text-green-500" aria-hidden="true" />
-            <h1 className="mt-6 font-headline text-3xl font-bold">You are confirmed</h1>
-            <p className="mt-3 text-muted-foreground">
-              Thanks — {verified.valid ? verified.email : 'your address'} is on the list. Your
-              first email is on its way, and every one after it has a one-click unsubscribe.
-            </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-3">
-              <Button asChild>
-                <Link href={`${SITE_CONFIG.url}/app`}>Start training</Link>
-              </Button>
-              <Button asChild variant="outline">
-                <Link href="/">Back to HYBRIDX</Link>
-              </Button>
-            </div>
-          </>
+          <ConfirmButton
+            email={verified.valid ? verified.email : ''}
+            token={token ?? ''}
+            action={confirmLead}
+          />
         )}
       </main>
       <Footer />

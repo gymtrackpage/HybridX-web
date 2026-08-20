@@ -77,36 +77,19 @@ export type VerifiedToken =
   | { valid: true; email: string; source: string }
   | { valid: false; reason: 'malformed' | 'bad-signature' | 'expired' | 'wrong-source' };
 
-/** Verifies a token and returns the address it was issued to. */
+/**
+ * Verify a token and check it was issued for the funnel the caller expects.
+ *
+ * Delegates the signature and expiry work to readLeadToken rather than
+ * repeating it. The two were briefly near-identical copies differing by one
+ * line, which is how a fix to constant-time comparison gets applied to one and
+ * not the other, leaving a bypass on whichever page uses the stale copy.
+ */
 export function verifyLeadToken(token: string | undefined, expectedSource: string): VerifiedToken {
-  if (!token || typeof token !== 'string' || !token.includes('.')) {
-    return { valid: false, reason: 'malformed' };
-  }
-
-  const [payloadB64, signature] = token.split('.');
-  if (!payloadB64 || !signature) return { valid: false, reason: 'malformed' };
-
-  const expected = sign(payloadB64);
-  const a = Buffer.from(signature);
-  const b = Buffer.from(expected);
-  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) {
-    return { valid: false, reason: 'bad-signature' };
-  }
-
-  let payload: TokenPayload;
-  try {
-    payload = JSON.parse(Buffer.from(payloadB64, 'base64url').toString('utf8'));
-  } catch {
-    return { valid: false, reason: 'malformed' };
-  }
-
-  if (!payload?.e || !payload?.s || typeof payload.x !== 'number') {
-    return { valid: false, reason: 'malformed' };
-  }
-  if (payload.s !== expectedSource) return { valid: false, reason: 'wrong-source' };
-  if (Date.now() > payload.x) return { valid: false, reason: 'expired' };
-
-  return { valid: true, email: payload.e, source: payload.s };
+  const result = readLeadToken(token);
+  if (!result.valid) return result;
+  if (result.source !== expectedSource) return { valid: false, reason: 'wrong-source' };
+  return result;
 }
 
 export type ReadToken =

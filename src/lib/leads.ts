@@ -66,6 +66,11 @@ export async function saveLead(input: LeadInput): Promise<void> {
     source: input.source,
     email,
     name: input.name?.trim() || null,
+    // Stored here as well as forwarded. The forward is fire-and-forget and
+    // swallows its failures, so tags that existed only in that payload would be
+    // gone for good on any bridge outage — with no way to replay the window and
+    // recover which nurture sequence these people belonged to.
+    tags: input.tags || [],
     extra: input.extra || {},
     utm: input.utm || {},
     userAgent: input.userAgent || '',
@@ -118,11 +123,12 @@ export async function upsertPendingLead(input: LeadInput): Promise<void> {
         utm: input.utm || {},
         userAgent: input.userAgent || '',
         ip: input.ip || '',
+        tags: input.tags || [],
         confirmed: false,
         createdAt: FieldValue.serverTimestamp(),
       },
       // Never let a repeat request downgrade an already-confirmed lead.
-      { mergeFields: ['source', 'email', 'name', 'extra', 'utm', 'userAgent', 'ip', 'createdAt'] }
+      { mergeFields: ['source', 'email', 'name', 'tags', 'extra', 'utm', 'userAgent', 'ip', 'createdAt'] }
     );
 
   // Forwarded WITHOUT consent. This magnet uses confirmed opt-in, and someone

@@ -77,14 +77,25 @@ export async function GET() {
   //     `utm.utm_source`, and every lead's attribution was discarded for months
   //     with nothing failing anywhere.
   if (contract) {
-    const required = ['email', 'source', 'consent', 'utm', 'tags'];
-    const missing = required.filter((f) => !(f in (contract.fields ?? {})));
+    // Every field this site actually puts on the wire — see lib/leads.ts. The
+    // first version of this list omitted `name` and `consentMethod`, which would
+    // have let the very failure this check exists for repeat on those two.
+    const required = ['email', 'name', 'source', 'consent', 'consentMethod', 'utm', 'tags'];
+
+    // The remote body is unvalidated JSON, so `fields` may be anything. Using
+    // `in` against a primitive throws, and a diagnostic that 500s reports
+    // nothing at all — the worst possible behaviour for a drift check.
+    const fields = contract.fields;
+    const usable = typeof fields === 'object' && fields !== null;
+    const missing = usable ? required.filter((f) => !(f in fields)) : required;
     checks.push({
       name: 'Payload contract',
       ok: missing.length === 0,
-      detail: missing.length
-        ? `The mailing system no longer documents: ${missing.join(', ')}. This site may be sending fields that are now ignored.`
-        : `All ${required.length} fields this site sends are still in the contract.`,
+      detail: !usable
+        ? 'The mailing system returned a contract with no readable field list, so drift cannot be checked.'
+        : missing.length
+          ? `The mailing system no longer documents: ${missing.join(', ')}. This site may be sending fields that are now ignored.`
+          : `All ${required.length} fields this site sends are still in the contract.`,
     });
   }
 

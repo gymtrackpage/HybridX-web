@@ -180,7 +180,10 @@ const MAILTO_UNSUBSCRIBE = '<mailto:training@hybridx.club?subject=Unsubscribe>';
 async function resolveUnsubscribe(
   opts: SendEmailOptions,
 ): Promise<{ listUnsubscribe?: string; oneClickUnsubscribe?: boolean }> {
-  if (opts.transactional) return {};
+  // Explicitly cleared, not merely skipped. The result is spread over `opts`,
+  // so returning {} would leave a caller-supplied listUnsubscribe in place and
+  // attach the header to a message this flag promises will carry none.
+  if (opts.transactional) return { listUnsubscribe: undefined, oneClickUnsubscribe: false };
 
   // An explicit header from the caller wins — it may be doing something
   // deliberate this function knows nothing about.
@@ -235,17 +238,25 @@ export async function sendEmail(opts: SendEmailOptions): Promise<void> {
   // Fails open. If the bridge is unreachable the visitor still gets the thing
   // they requested; the alternative is an outage in one service silently
   // breaking lead magnets in another.
-  if (!opts.ignoreSuppression) {
-    const state = await getSuppressionState(opts.to);
-    if (state.complained) {
-      console.warn('[email] refusing to send: recipient previously reported spam');
-      return;
-    }
+  // Both bridge round trips at once. Each carries its own 4s timeout, and they
+  // are independent — run back to back they add up to eight seconds of dead
+  // time to a form submission the visitor is waiting on, which is enough to
+  // trip a server-action timeout on a slow day.
+  const [suppression, unsubscribe] = await Promise.all([
+    opts.ignoreSuppression
+      ? Promise.resolve(null)
+      : getSuppressionState(opts.to).catch(() => null),
+    resolveUnsubscribe(opts),
+  ]);
+
+  if (suppression?.complained) {
+    console.warn('[email] refusing to send: recipient previously reported spam');
+    return;
   }
 
   const from = opts.from || EMAIL_FROM;
   const replyTo = opts.replyTo || EMAIL_REPLY_TO;
-  const headers = buildHeaders({ ...opts, ...(await resolveUnsubscribe(opts)) });
+  const headers = buildHeaders({ ...opts, ...unsubscribe });
   const provider = getEmailProvider();
 
   // Refuse to silently discard mail in production. jsonTransport reports
