@@ -23,6 +23,7 @@
 import { headers } from 'next/headers';
 import { z } from 'zod';
 import { saveLead } from '@/lib/leads';
+import { isCaptureRateLimited } from '@/lib/rate-limit';
 
 /** Must match the mailing system's own slug rule. See lib/leads.ts. */
 const SLUG = /^[a-z0-9][a-z0-9_-]{1,48}$/;
@@ -51,24 +52,6 @@ const FunnelSchema = z.object({
     .regex(SLUG, 'This form is misconfigured — its funnel name is not a valid slug.'),
 });
 
-// Small in-memory limiter. App Hosting runs a single instance for this project,
-// so this is a cheap first line of defence; it stops being effective the moment
-// maxInstances rises, at which point it needs to move to Firestore.
-const RATE_LIMIT = 8;
-const RATE_WINDOW_MS = 60 * 60 * 1000;
-const hits = new Map<string, { count: number; windowStart: number }>();
-
-function isRateLimited(ip: string): boolean {
-  if (!ip || ip === 'unknown') return false;
-  const now = Date.now();
-  const entry = hits.get(ip);
-  if (!entry || now - entry.windowStart > RATE_WINDOW_MS) {
-    hits.set(ip, { count: 1, windowStart: now });
-    return false;
-  }
-  entry.count += 1;
-  return entry.count > RATE_LIMIT;
-}
 
 /**
  * Capture a lead from any funnel.
@@ -124,7 +107,7 @@ export async function submitFunnelLead(
     hdrs.get('x-forwarded-for')?.split(',')[0]?.trim() || hdrs.get('x-real-ip') || 'unknown';
   const userAgent = hdrs.get('user-agent') || '';
 
-  if (isRateLimited(ip)) {
+  if (isCaptureRateLimited(ip, 'funnel')) {
     return { status: 'error', message: 'Too many attempts. Please wait a little while and try again.' };
   }
 
