@@ -7,6 +7,7 @@ import { sendRaceDayCardEmail } from '@/lib/email/send-race-day-card';
 import { getEmailProvider } from '@/lib/email/service';
 import { checkEmailDeliverable } from '@/lib/email/validate-address';
 import { upsertPendingLead } from '@/lib/leads';
+import { isCaptureRateLimited } from '@/lib/rate-limit';
 import { createLeadToken } from '@/lib/lead-tokens';
 
 // The card is NOT public. It is served from /api/race-card/download behind a
@@ -38,23 +39,6 @@ const LeadSchema = z.object({
   raceDate: z.string().trim().max(20).optional(),
 });
 
-// Very small in-memory rate limiter, matching the VO2max funnel. App Hosting
-// runs a single instance here, so this is a cheap first line of defence.
-const RATE_LIMIT = 8; // submissions
-const RATE_WINDOW_MS = 60 * 60 * 1000; // per hour per IP
-const hits = new Map<string, { count: number; windowStart: number }>();
-
-function isRateLimited(ip: string): boolean {
-  if (!ip || ip === 'unknown') return false;
-  const now = Date.now();
-  const entry = hits.get(ip);
-  if (!entry || now - entry.windowStart > RATE_WINDOW_MS) {
-    hits.set(ip, { count: 1, windowStart: now });
-    return false;
-  }
-  entry.count += 1;
-  return entry.count > RATE_LIMIT;
-}
 
 export async function submitRaceCardLead(
   _prevState: RaceCardLeadState,
@@ -87,7 +71,7 @@ export async function submitRaceCardLead(
     hdrs.get('x-forwarded-for')?.split(',')[0]?.trim() || hdrs.get('x-real-ip') || 'unknown';
   const userAgent = hdrs.get('user-agent') || '';
 
-  if (isRateLimited(ip)) {
+  if (isCaptureRateLimited(ip, 'race-card')) {
     return {
       status: 'error',
       message: 'Too many attempts. Please wait a little while and try again.',
@@ -105,12 +89,15 @@ export async function submitRaceCardLead(
   // Which channel sent them — gyms, social or communities. Forwarded from the
   // page's query string so the three distribution channels stay separable.
   const src = (formData.get('src') as string) || 'direct';
+  // Prefixed keys, matching the mailing system's contract. The bare spelling
+  // (`source`, `medium`) was silently dropped on arrival for months, because
+  // the two sides had each declared their own shape and neither knew.
   const utm = {
-    source: (formData.get('utm_source') as string) || '',
-    medium: (formData.get('utm_medium') as string) || '',
-    campaign: (formData.get('utm_campaign') as string) || '',
-    content: (formData.get('utm_content') as string) || '',
-    term: (formData.get('utm_term') as string) || '',
+    utm_source: (formData.get('utm_source') as string) || '',
+    utm_medium: (formData.get('utm_medium') as string) || '',
+    utm_campaign: (formData.get('utm_campaign') as string) || '',
+    utm_content: (formData.get('utm_content') as string) || '',
+    utm_term: (formData.get('utm_term') as string) || '',
   };
 
   // 1) Record the pending lead (best effort, never blocks the email).
@@ -127,6 +114,7 @@ export async function submitRaceCardLead(
         src,
         raceDate: raceDate || null,
       },
+      tags: [ESP_TAG],
       utm,
       ip,
       userAgent,

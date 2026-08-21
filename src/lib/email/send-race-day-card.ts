@@ -120,6 +120,8 @@ export async function sendRaceDayCardEmail({
     subject: 'Confirm your email to get the HYROX race day card',
     html,
     text,
-    listUnsubscribe: '<mailto:training@hybridx.club?subject=Unsubscribe>',
+    // Unsubscribe headers are attached by sendEmail: a signed one-click
+    // HTTPS endpoint whose opt-out reaches the shared suppression list,
+    // with the mailto retained as a fallback for older clients.
   });
 }

@@ -115,6 +115,16 @@ export async function POST(request: NextRequest) {
       subject: `HybridX email test — ${stamp}`,
       html: `<p>Email transport test.</p><p>Provider: <strong>${snapshot.provider}</strong><br/>From: ${snapshot.from}<br/>Sent: ${stamp}</p>`,
       text: `Email transport test.\n\nProvider: ${snapshot.provider}\nFrom: ${snapshot.from}\nSent: ${stamp}`,
+      // A diagnostic to the admin's own inbox is genuinely transactional, and
+      // it must not depend on the bridge: the whole point is to isolate whether
+      // the *transport* works, so a marketing-system outage should not change
+      // what this test does or add a round trip to it.
+      transactional: true,
+      // And bypass the shared suppression list. Without this the diagnostic is
+      // not isolated at all: a complained-on admin address makes sendEmail
+      // return silently, the route sees no error, and the one tool built to
+      // prove the transport works reports green for a message that never left.
+      ignoreSuppression: true,
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);

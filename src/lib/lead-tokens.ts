@@ -77,8 +77,39 @@ export type VerifiedToken =
   | { valid: true; email: string; source: string }
   | { valid: false; reason: 'malformed' | 'bad-signature' | 'expired' | 'wrong-source' };
 
-/** Verifies a token and returns the address it was issued to. */
+/**
+ * Verify a token and check it was issued for the funnel the caller expects.
+ *
+ * Delegates the signature and expiry work to readLeadToken rather than
+ * repeating it. The two were briefly near-identical copies differing by one
+ * line, which is how a fix to constant-time comparison gets applied to one and
+ * not the other, leaving a bypass on whichever page uses the stale copy.
+ */
 export function verifyLeadToken(token: string | undefined, expectedSource: string): VerifiedToken {
+  const result = readLeadToken(token);
+  if (!result.valid) return result;
+  if (result.source !== expectedSource) return { valid: false, reason: 'wrong-source' };
+  return result;
+}
+
+export type ReadToken =
+  | { valid: true; email: string; source: string }
+  | { valid: false; reason: 'malformed' | 'bad-signature' | 'expired' };
+
+/**
+ * Verify a token and read the funnel it was issued for, rather than checking it
+ * against a source the caller already knows.
+ *
+ * This is what lets one confirmation page serve every funnel. `verifyLeadToken`
+ * requires the expected source, which means a page per magnet — fine when there
+ * were two, a tax on every future promotion once double opt-in is the norm.
+ *
+ * It is not weaker: the signature still proves we issued the token, and the
+ * source is read from the signed payload, so it cannot be substituted. The
+ * dropped check was only ever "is this the magnet I think it is", which a
+ * generic page has no opinion about.
+ */
+export function readLeadToken(token: string | undefined): ReadToken {
   if (!token || typeof token !== 'string' || !token.includes('.')) {
     return { valid: false, reason: 'malformed' };
   }
@@ -103,7 +134,6 @@ export function verifyLeadToken(token: string | undefined, expectedSource: strin
   if (!payload?.e || !payload?.s || typeof payload.x !== 'number') {
     return { valid: false, reason: 'malformed' };
   }
-  if (payload.s !== expectedSource) return { valid: false, reason: 'wrong-source' };
   if (Date.now() > payload.x) return { valid: false, reason: 'expired' };
 
   return { valid: true, email: payload.e, source: payload.s };
