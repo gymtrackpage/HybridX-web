@@ -86,20 +86,31 @@ export interface ForwardLeadInput {
  * nurturing, not the lead itself. Losing the visitor's submission because a
  * downstream integration is unavailable would be a far worse trade.
  */
-export async function forwardLead(input: ForwardLeadInput): Promise<void> {
+export async function forwardLead(input: ForwardLeadInput): Promise<boolean> {
   const response = await bridgeFetch('/api/marketing/leads', {
     method: 'POST',
     body: JSON.stringify(input),
   });
 
-  if (!response) return;
+  // Unreachable. Retryable — the app may simply be redeploying.
+  if (!response) return false;
 
   if (!response.ok) {
     console.error(`[marketing-bridge] lead forward rejected: ${response.status}`);
-    return;
+
+    // A 4xx other than 429 is the payload's fault, and replaying it will fail
+    // exactly the same way for ever. Reported as delivered so the outbox stops
+    // retrying it; the error is on the document and in the log for whoever
+    // looks. Retrying a permanently-malformed lead until the attempt ceiling
+    // just delays every lead behind it.
+    if (response.status >= 400 && response.status < 500 && response.status !== 429) {
+      return true;
+    }
+    return false;
   }
 
   console.log(`[marketing-bridge] forwarded ${input.source} lead`);
+  return true;
 }
 
 /** Fire-and-forget wrapper, making the intent explicit at the call site. */
@@ -213,6 +224,42 @@ export async function getUnsubscribeLink(email: string): Promise<UnsubscribeLink
     const data = (await response.json()) as { url?: string; oneClick?: boolean };
     if (!data.url) return null;
     return { url: data.url, oneClick: data.oneClick === true };
+  } catch {
+    return null;
+  }
+}
+
+export interface ComplaintList {
+  hashes: string[];
+  count: number;
+  truncated: boolean;
+  syncedAt: string;
+}
+
+/**
+ * Fetch the mailing system's complainant list, for local mirroring.
+ *
+ * Addresses come back as sha256 hashes — the same derivation the mailing system
+ * already uses for its document ids — so a mirror living in this project is not
+ * a plaintext list of the people who have reported us.
+ *
+ * Only complaints. An unsubscribe does not belong here: everything this site
+ * sends was requested seconds earlier, and withholding a guide because someone
+ * once opted out of a campaign fails the person while solving nothing.
+ */
+export async function getComplaintHashes(): Promise<ComplaintList | null> {
+  const response = await bridgeFetch('/api/marketing/complaints', { method: 'GET' });
+  if (!response?.ok) return null;
+
+  try {
+    const data = (await response.json()) as Partial<ComplaintList>;
+    if (!Array.isArray(data.hashes)) return null;
+    return {
+      hashes: data.hashes.filter((h): h is string => typeof h === 'string'),
+      count: data.count ?? data.hashes.length,
+      truncated: data.truncated === true,
+      syncedAt: data.syncedAt ?? new Date().toISOString(),
+    };
   } catch {
     return null;
   }

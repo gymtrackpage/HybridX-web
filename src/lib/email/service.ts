@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer';
 import { Resend } from 'resend';
 import { getSuppressionState, getUnsubscribeLink } from '@/lib/marketing-bridge';
+import { checkComplaintMirror } from '@/lib/suppression-mirror';
 import dotenv from 'dotenv';
 
 // Load environment variables from .env file for local development
@@ -238,18 +239,31 @@ export async function sendEmail(opts: SendEmailOptions): Promise<void> {
   // Fails open. If the bridge is unreachable the visitor still gets the thing
   // they requested; the alternative is an outage in one service silently
   // breaking lead magnets in another.
-  // Both bridge round trips at once. Each carries its own 4s timeout, and they
-  // are independent — run back to back they add up to eight seconds of dead
-  // time to a form submission the visitor is waiting on, which is enough to
-  // trip a server-action timeout on a slow day.
-  const [suppression, unsubscribe] = await Promise.all([
+  // The complainant check comes from the local mirror when it can, which is
+  // almost always: the list is small, changes slowly, and is refreshed hourly.
+  // Only a stale or missing mirror costs a cross-project round trip, and the
+  // fallback is never removed — a mirror that quietly stopped refreshing would
+  // answer "not a complainant" for everybody, which is the one wrong answer
+  // that matters here.
+  const [complaint, unsubscribe] = await Promise.all([
     opts.ignoreSuppression
-      ? Promise.resolve(null)
-      : getSuppressionState(opts.to).catch(() => null),
+      ? Promise.resolve({ complained: false, source: 'mirror' as const })
+      : checkComplaintMirror(opts.to).catch(
+          () => ({ complained: false, source: 'unknown' as const }),
+        ),
     resolveUnsubscribe(opts),
   ]);
 
-  if (suppression?.complained) {
+  let complained = complaint.complained;
+
+  if (!opts.ignoreSuppression && complaint.source === 'unknown') {
+    // Fails open, as before. An outage in the marketing system must not break
+    // lead magnets; the mirror exists so this path is rare rather than routine.
+    const live = await getSuppressionState(opts.to).catch(() => null);
+    complained = live?.complained === true;
+  }
+
+  if (complained) {
     console.warn('[email] refusing to send: recipient previously reported spam');
     return;
   }

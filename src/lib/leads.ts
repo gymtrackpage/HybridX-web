@@ -1,7 +1,8 @@
 import { createHash } from 'node:crypto';
 import { FieldValue } from 'firebase-admin/firestore';
 import { adminFirestore } from '@/lib/firebase-admin';
-import { forwardLeadAsync } from '@/lib/marketing-bridge';
+import type { ForwardLeadInput } from '@/lib/marketing-bridge';
+import { attemptForwardAsync, pendingOutbox } from '@/lib/lead-outbox';
 
 /**
  * A funnel identifier.
@@ -62,7 +63,21 @@ export interface LeadInput {
 export async function saveLead(input: LeadInput): Promise<void> {
   const email = input.email.trim().toLowerCase();
 
-  await adminFirestore.collection('leads').add({
+  // Push into the mailing system so this person can actually be nurtured.
+  // Single opt-in magnets carry consent: the forms state that signing up means
+  // ongoing email and that they can unsubscribe at any time, which is what the
+  // consent flag records.
+  const payload: ForwardLeadInput = {
+    email,
+    name: input.name?.trim() || undefined,
+    source: input.source,
+    consent: true,
+    consentMethod: `magnet:${input.source}`,
+    utm: input.utm,
+    tags: input.tags,
+  };
+
+  const ref = await adminFirestore.collection('leads').add({
     source: input.source,
     email,
     name: input.name?.trim() || null,
@@ -76,21 +91,17 @@ export async function saveLead(input: LeadInput): Promise<void> {
     userAgent: input.userAgent || '',
     ip: input.ip || '',
     createdAt: FieldValue.serverTimestamp(),
+    // The outbox entry is written with the lead, in the same operation. Any
+    // ordering where the forward is attempted before the entry exists is an
+    // ordering where a crash loses the lead.
+    ...pendingOutbox(payload),
   });
 
-  // Push into the mailing system so this person can actually be nurtured.
-  // Single opt-in magnets carry consent: the forms state that signing up means
-  // ongoing email and that they can unsubscribe at any time, which is what the
-  // consent flag records. Fire-and-forget — the lead is already saved here.
-  forwardLeadAsync({
-    email,
-    name: input.name?.trim() || undefined,
-    source: input.source,
-    consent: true,
-    consentMethod: `magnet:${input.source}`,
-    utm: input.utm,
-    tags: input.tags,
-  });
+  // Attempted immediately and not awaited, so the visitor waits for nothing —
+  // but the entry survives the attempt failing, and the drain will finish the
+  // job. This is the difference between a bridge outage costing a delay and
+  // costing the lead.
+  attemptForwardAsync(ref.path, payload);
 }
 
 /**
@@ -111,9 +122,25 @@ function leadDocId(source: LeadSource, email: string): string {
 export async function upsertPendingLead(input: LeadInput): Promise<void> {
   const email = input.email.trim().toLowerCase();
 
+  // Forwarded WITHOUT consent. This magnet uses confirmed opt-in, and someone
+  // who has requested a confirmation link has not yet given it — recording
+  // consent now would defeat the point of asking twice. They land on the list
+  // as a known contact, and markLeadConfirmed grants consent if they click.
+  const payload: ForwardLeadInput = {
+    email,
+    name: input.name?.trim() || undefined,
+    source: input.source,
+    consent: false,
+    consentMethod: `magnet:${input.source}:pending`,
+    utm: input.utm,
+    tags: input.tags,
+  };
+
+  const docId = leadDocId(input.source, email);
+
   await adminFirestore
     .collection('leads')
-    .doc(leadDocId(input.source, email))
+    .doc(docId)
     .set(
       {
         source: input.source,
@@ -126,24 +153,20 @@ export async function upsertPendingLead(input: LeadInput): Promise<void> {
         tags: input.tags || [],
         confirmed: false,
         createdAt: FieldValue.serverTimestamp(),
+        ...pendingOutbox(payload),
       },
-      // Never let a repeat request downgrade an already-confirmed lead.
-      { mergeFields: ['source', 'email', 'name', 'tags', 'extra', 'utm', 'userAgent', 'ip', 'createdAt'] }
+      // Never let a repeat request downgrade an already-confirmed lead — and
+      // never let it reset an outbox entry that has already been delivered, or
+      // a second request for the card would re-forward the pending (consent
+      // false) payload after the confirmation had granted consent.
+      {
+        mergeFields: [
+          'source', 'email', 'name', 'tags', 'extra', 'utm', 'userAgent', 'ip', 'createdAt',
+        ],
+      }
     );
 
-  // Forwarded WITHOUT consent. This magnet uses confirmed opt-in, and someone
-  // who has requested a confirmation link has not yet given it — recording
-  // consent now would defeat the point of asking twice. They land on the list
-  // as a known contact, and markLeadConfirmed grants consent if they click.
-  forwardLeadAsync({
-    email,
-    name: input.name?.trim() || undefined,
-    source: input.source,
-    consent: false,
-    consentMethod: `magnet:${input.source}:pending`,
-    utm: input.utm,
-    tags: input.tags,
-  });
+  attemptForwardAsync(`leads/${docId}`, payload);
 }
 
 /**
@@ -162,24 +185,35 @@ export async function markLeadConfirmed(
   // grant is also what raises `consentGranted` there, which is the trigger a
   // confirmed opt-in nurture sequence starts from — so this call is not merely
   // bookkeeping, it is what actually begins the sequence.
-  forwardLeadAsync({
+  //
+  // Which makes it the forward that most needs to survive an outage: losing it
+  // means somebody completed a double opt-in and is then never mailed, with the
+  // pending record still saying they never confirmed.
+  const payload: ForwardLeadInput = {
     email: normalised,
     source,
     consent: true,
     consentMethod: `magnet:${source}:confirmed`,
     tags,
-  });
+  };
+
+  const docId = leadDocId(source, normalised);
 
   await adminFirestore
     .collection('leads')
-    .doc(leadDocId(source, normalised))
+    .doc(docId)
     .set(
       {
         source,
         email: normalised,
         confirmed: true,
         confirmedAt: FieldValue.serverTimestamp(),
+        // Replaces whatever the pending write left, so the outbox now carries
+        // the consent-granting payload rather than the one that withheld it.
+        ...pendingOutbox(payload),
       },
       { merge: true }
     );
+
+  attemptForwardAsync(`leads/${docId}`, payload);
 }

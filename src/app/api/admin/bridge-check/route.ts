@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { getAdminSession } from '@/lib/admin-auth';
 import { getBridgeContract, getSuppressionState, isBridgeConfigured } from '@/lib/marketing-bridge';
+import { adminFirestore } from '@/lib/firebase-admin';
+import { MAX_FORWARD_ATTEMPTS } from '@/lib/lead-outbox';
+import { checkComplaintMirror } from '@/lib/suppression-mirror';
 
 /**
  * Admin-only diagnostic for the link between this site and the mailing system.
@@ -98,6 +101,49 @@ export async function GET() {
           : `All ${required.length} fields this site sends are still in the contract.`,
     });
   }
+
+  // 5 — Is anything stuck in the outbox? A backlog here is the visible form of
+  //     a bridge problem: leads captured but not yet nurtured.
+  try {
+    const stuck = await adminFirestore
+      .collection('leads')
+      .where('forwarded', '==', false)
+      .count()
+      .get();
+    const pending = stuck.data().count;
+    checks.push({
+      name: 'Lead outbox',
+      // A handful in flight is normal — a lead is un-forwarded for the moment
+      // between capture and delivery. A pile is not.
+      ok: pending < 25,
+      detail:
+        pending === 0
+          ? 'Every captured lead has reached the mailing system.'
+          : `${pending} lead${pending === 1 ? '' : 's'} not yet forwarded. The hourly drain ` +
+            `retries with backoff and gives up after ${MAX_FORWARD_ATTEMPTS} attempts; a ` +
+            'persistent backlog means the bridge has been failing.',
+    });
+  } catch (err) {
+    checks.push({
+      name: 'Lead outbox',
+      ok: false,
+      detail: `Could not read the outbox: ${err instanceof Error ? err.message : String(err)}. ` +
+        'The composite index on (forwarded, forwardNextAttemptAt) may not be deployed.',
+    });
+  }
+
+  // 6 — Is the complainant mirror answering locally? When it is not, every send
+  //     falls back to a cross-project lookup on the visitor's critical path.
+  const mirror = await checkComplaintMirror('bridge-diagnostic@hybridx.club').catch(() => null);
+  checks.push({
+    name: 'Complainant mirror',
+    ok: mirror?.source === 'mirror',
+    detail:
+      mirror?.source === 'mirror'
+        ? 'Fresh. Complainant checks are answered locally, off the send path.'
+        : 'Stale, absent or truncated, so every send falls back to a live lookup. Check that ' +
+          'the marketing-maintenance cron is scheduled and reaching the mailing system.',
+  });
 
   const ok = checks.every((c) => c.ok);
 
